@@ -1,0 +1,68 @@
+<!-- frontend/public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>StonkHub</title>
+   <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-[#222831] font-sans text-[#EEEEEE] h-screen overflow-hidden">
+   <div id="app" class="h-full flex flex-col">
+       <!-- Navbar -->
+       <nav class="bg-[#31363F] px-6 py-4 flex justify-between items-center shadow-lg">
+           <div class="flex space-x-4">
+               <button onclick="loadLobbying()" id="lobbying-btn" class="bg-[#76ABAE] hover:bg-[#76ABAE]/80 text-[#222831] px-6 py-2 rounded-lg font-semibold transition-colors active-tab">
+                   Lobbying
+               </button>
+               <button onclick="loadCongress()" id="congress-btn" class="bg-transparent hover:bg-[#76ABAE]/20 text-[#EEEEEE] hover:text-[#76ABAE] px-6 py-2 rounded-lg font-semibold transition-colors border border-[#76ABAE]/30">
+                   Congress
+               </button>
+               <button onclick="loadContracts()" id="contracts-btn" class="bg-transparent hover:bg-[#76ABAE]/20 text-[#EEEEEE] hover:text-[#76ABAE] px-6 py-2 rounded-lg font-semibold transition-colors border border-[#76ABAE]/30">
+                   Awarded Contracts
+               </button>
+               <button id="na-btn" class="bg-transparent hover:bg-[#76ABAE]/20 text-[#EEEEEE] hover:text-[#76ABAE] px-6 py-2 rounded-lg font-semibold transition-colors border border-[#76ABAE]/30">
+                   News
+               </button>
+               <button id="na-btn" class="bg-transparent hover:bg-[#76ABAE]/20 text-[#EEEEEE] hover:text-[#76ABAE] px-6 py-2 rounded-lg font-semibold transition-colors border border-[#76ABAE]/30">
+                   My Watchlist
+               </button>
+           </div>
+           <div class="flex items-center">
+               <input type="text" placeholder="Search tickers..." class="bg-[#222831] text-[#EEEEEE] px-4 py-2 rounded-lg border border-[#76ABAE]/30 focus:border-[#76ABAE] focus:outline-none w-64">
+           </div>
+       </nav>
+
+       <!-- Main Content -->
+       <div class="flex-1 p-6 overflow-hidden">
+           <div class="bg-[#31363F] rounded-lg shadow-lg h-full flex flex-col">
+               <!-- Table Header with Filter -->
+               <div class="p-4 border-b border-[#76ABAE]/20">
+                   <div class="flex justify-between items-center">
+                       <h2 id="table-title" class="text-2xl font-bold text-[#76ABAE]">Lobbying Data</h2>
+                       <input type="text" id="filter-input" placeholder="Filter data..." class="bg-[#222831] text-[#EEEEEE] px-4 py-2 rounded-lg border border-[#76ABAE]/30 focus:border-[#76ABAE] focus:outline-none w-64">
+                   </div>
+               </div>
+
+               <!-- Table Container -->
+               <div class="flex-1 overflow-auto">
+                   <div id="loading" class="flex items-center justify-center h-full">
+                       <div class="text-[#76ABAE] text-xl">Loading data...</div>
+                   </div>
+                   <table id="data-table" class="w-full hidden">
+                       <thead class="bg-[#222831] sticky top-0">
+                           <tr id="table-headers">
+                               <!-- Headers will be populated by JS -->
+                           </tr>
+                       </thead>
+                       <tbody id="table-body">
+                           <!-- Data will be populated by JS -->
+                       </tbody>
+                   </table>
+               </div>
+           </div>
+       </div>
+   </div>
+   <script src="script.js"></script>
+</body>
+</html>
