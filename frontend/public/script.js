@@ -3,24 +3,28 @@ const API_BASE = '/api';
 let currentData = [];
 let filteredData = [];
 let currentDataType = 'lobbying';
+const lobbyingHeaders = ['Ticker', 'Client', 'Date', 'Amount', 'Issue', 'Specific_Issue', 'Registrant'];
+const congressHeaders = ['Representative', 'Ticker', 'Transaction', 'Amount', 'Range', 'TransactionDate', 'ReportDate', 'Party', 'House'];
+const contractHeaders = ['Ticker', 'Agency', 'Date', 'Amount', 'Description'];
+const newsHeaders = ['Title', 'Description', 'Type', 'URL'];
 // navbar search iteration 
 let placeholderIndex = 0;
 const placeholders = ["Search tickers...", "Search politicians...", "Search greatness..."];
-
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
     loadLobbying();
     setupFilterListener();
-
     setInterval(animatePlaceholder, 3000); // Change every 3 seconds
 });
+
 function setupFilterListener() {
     const filterInput = document.getElementById('filter-input');
     filterInput.addEventListener('input', function(e) {
         filterData(e.target.value);
     });
 }
+
 function setActiveTab(activeButton) {
     // Remove active class from all buttons
     document.querySelectorAll('nav button').forEach(btn => {
@@ -31,6 +35,27 @@ function setActiveTab(activeButton) {
     // Add active class to clicked button
     activeButton.classList.add('active-tab', 'bg-[#76ABAE]', 'text-[#222831]');
     activeButton.classList.remove('bg-transparent', 'text-[#EEEEEE]', 'border', 'border-[#76ABAE]/30');
+}
+
+// Helper function to determine if a row should be highlighted
+function shouldHighlightRow(item, dataType) {
+
+    if (dataType != 'news') {
+        const amount = parseFloat(item.Amount) || 0;
+        
+        switch(dataType) {
+            case 'lobbying':
+                return amount >= 100000;
+            case 'congress':
+                return amount >= 50001;
+            case 'contracts':
+                return amount >= 1000000;
+            default:
+                return false;
+        }
+    } else {
+        return false;
+    }
 }
 
 // Load data and setup headers accordingly
@@ -44,7 +69,7 @@ async function loadLobbying() {
         const data = await response.json();
         currentData = data;
         currentDataType = 'lobbying';
-        displayTableData(data, getLobbyingHeaders());
+        displayTableData(data, lobbyingHeaders);
     } catch (error) {
         console.error('Error loading lobbying data:', error);
         showError('Failed to load lobbying data');
@@ -60,7 +85,7 @@ async function loadCongress() {
         const data = await response.json();
         currentData = data;
         currentDataType = 'congress';
-        displayTableData(data, getCongressHeaders());
+        displayTableData(data, congressHeaders);
     } catch (error) {
         console.error('Error loading congress data:', error);
         showError('Failed to load congress trading data');
@@ -76,25 +101,43 @@ async function loadContracts() {
         const data = await response.json();
         currentData = data;
         currentDataType = 'contracts';
-        displayTableData(data, getContractsHeaders());
+        displayTableData(data, contractHeaders);
     } catch (error) {
         console.error('Error loading contracts data:', error);
         showError('Failed to load government contracts data');
     }
 }
+async function loadNews() {
 
-function getLobbyingHeaders() {
-    return ['Ticker', 'Client', 'Date', 'Amount', 'Issue', 'Specific_Issue', 'Registrant'];
-}
-function getCongressHeaders() {
-    return ['Representative', 'Ticker', 'Transaction', 'Amount', 'Range', 'TransactionDate', 'ReportDate', 'Party', 'House'];
-}
-function getContractsHeaders() {
-    return ['Ticker', 'Agency', 'Date', 'Amount', 'Description'];
+    try {
+        setActiveTab(document.getElementById('news-btn'));
+        document.getElementById('table-title').textContent = 'Top Headlines & Tech News';
+        showLoading();
+        console.log("Should be showing loading");
+        
+        const response = await fetch(`${API_BASE}/news`);
+        const data = await response.json();
+        currentData = data;
+        currentDataType = 'news';
+        console.log("data right before calling displayTableData:")
+        console.log(data);
+        displayTableData(data, newsHeaders);
+    } catch (error) {
+        console.error('Error loading news', error);
+        showError('Failed to load news data');
+    }
 }
 
-// Display base information
+// Load watchlist and e
+async function loadWatchlist() {
+
+}
+
+// Display base information with highlighting
 function displayTableData(data, headers) {
+    console.log("data inside of the displaytabledata:");
+    console.log(data);
+
     const table = document.getElementById('data-table');
     const tableHeaders = document.getElementById('table-headers');
     const tableBody = document.getElementById('table-body');
@@ -115,20 +158,52 @@ function displayTableData(data, headers) {
     // Create rows
     data.forEach(item => {
         const tr = document.createElement('tr');
-        tr.className = 'border-b border-[#76ABAE]/10 hover:bg-[#222831]/50';
         
+        // Check if row should be highlighted
+        const isHighlighted = shouldHighlightRow(item, currentDataType);
+        tr.className = isHighlighted 
+            ? 'border-b border-[#76ABAE]/10 hover:bg-[#76ABAE]/30 bg-[#76ABAE]/20' 
+            : 'border-b border-[#76ABAE]/10 hover:bg-[#222831]/50';
+        
+        // Create table data cell for each header iterating through the data
         headers.forEach(header => {
             const td = document.createElement('td');
-            td.className = 'px-4 py-3 text-[#EEEEEE]';
+            td.className = isHighlighted 
+                ? 'px-4 py-3 text-[#EEEEEE] font-medium' 
+                : 'px-4 py-3 text-[#EEEEEE]';
             
+            // get value from data list based on header (news is lowercase)
             let value = item[header];
+            if (currentDataType == 'news') {
+                value = item[header.toLowerCase()];
+            }
+
+            // Tranform text if amount, date, or URL
             if (header === 'Amount' && value) {
                 value = '$' + Number(value).toLocaleString();
+                // Make the amount bold if highlighted
+                if (isHighlighted) {
+                    td.classList.add('font-bold');
+                }
+                td.textContent = value || 'N/A';
             } else if (header.includes('Date') && value) {
                 value = new Date(value).toLocaleDateString();
+                td.textContent = value || 'N/A';
+            } else if (header === 'URL') {
+                const alpha = document.createElement('a');
+                alpha.href = value;
+                alpha.textContent = "View Article";
+                alpha.target = "_blank";
+                alpha.rel = "noopener noreferrer";
+                alpha.classList.add('newsArticleBtn');
+
+                console.log(alpha);
+
+                td.appendChild(alpha);
+            } else {
+                td.textContent = value || 'N/A';
             }
-            
-            td.textContent = value || 'N/A';
+        
             tr.appendChild(td);
         });
         
@@ -143,7 +218,7 @@ function displayTableData(data, headers) {
     document.getElementById('filter-input').value = '';
 }
 
-// Filtering functionality
+// Filtering functionality with highlighting
 function filterData(searchTerm) {
     if (!searchTerm.trim()) {
         filteredData = currentData;
@@ -164,21 +239,33 @@ function filterData(searchTerm) {
     
     displayFilteredData(filteredData, headers);
 }
+
 function displayFilteredData(data, headers) {
     const tableBody = document.getElementById('table-body');
     tableBody.innerHTML = '';
     
     data.forEach(item => {
         const tr = document.createElement('tr');
-        tr.className = 'border-b border-[#76ABAE]/10 hover:bg-[#222831]/50';
+        
+        // Check if row should be highlighted
+        const isHighlighted = shouldHighlightRow(item, currentDataType);
+        tr.className = isHighlighted 
+            ? 'border-b border-[#76ABAE]/10 hover:bg-[#76ABAE]/30 bg-[#76ABAE]/20' 
+            : 'border-b border-[#76ABAE]/10 hover:bg-[#222831]/50';
         
         headers.forEach(header => {
             const td = document.createElement('td');
-            td.className = 'px-4 py-3 text-[#EEEEEE]';
+            td.className = isHighlighted 
+                ? 'px-4 py-3 text-[#EEEEEE] font-medium' 
+                : 'px-4 py-3 text-[#EEEEEE]';
             
             let value = item[header];
             if (header === 'Amount' && value) {
                 value = '$' + Number(value).toLocaleString();
+                // Make the amount bold if highlighted
+                if (isHighlighted) {
+                    td.classList.add('font-bold');
+                }
             } else if (header.includes('Date') && value) {
                 value = new Date(value).toLocaleDateString();
             }

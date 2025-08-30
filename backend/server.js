@@ -10,6 +10,7 @@ const {
    fetchGovContracts,
    fetchHistoricalGovContracts
 } = require('./services/quiverService');
+const { fetchNewsData } = require('./services/newsService');
 
 // App setup
 const app = express();
@@ -107,6 +108,46 @@ app.get('/api/contracts/:ticker', async (req, res) => {
        res.status(500).json({ error: `Failed to fetch historical government contracts data for ${ticker}` });
    }
 });
+
+// News endpoint 
+app.get('/api/news', async(req, res) => {
+    const data = await fetchNewsData();
+    if (data) {
+        res.json(data)
+    } else {
+       res.status(500).json({ error: 'Failed to fetch government contracts data' });
+    }
+});
+
+// Watchlist endpoints
+// app.get('/api/watchlist', async (req, res) => {
+//     try {
+//         const watchlist = await getWatchlist();
+//         res.json(watchlist);
+//     } catch (error) {
+//         res.status(500).json({ error: 'Failed to get watchlist' });
+//     }
+// });
+
+// app.post('/api/watchlist', async (req, res) => {
+//     try {
+//         const { ticker } = req.body;
+//         const watchlist = await addToWatchlist(ticker);
+//         res.json(watchlist);
+//     } catch (error) {
+//         res.status(500).json({ error: 'Failed to add to watchlist' });
+//     }
+// });
+
+// app.delete('/api/watchlist/:ticker', async (req, res) => {
+//     try {
+//         const { ticker } = req.params;
+//         const watchlist = await removeFromWatchlist(ticker);
+//         res.json(watchlist);
+//     } catch (error) {
+//         res.status(500).json({ error: 'Failed to remove from watchlist' });
+//     }
+// });
 
 // App Startup
 app.listen(PORT, () => {

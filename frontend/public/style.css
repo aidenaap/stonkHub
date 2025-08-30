@@ -1,4 +1,16 @@
 /* frontend/src/input.css */
+/* CUSTOM YA DIG */
+.newsArticleBtn {
+  background: rgb(59 130 246 / 0.5);
+  border-radius: 1rem;
+  border: 3px solid black;
+  padding: 3px 5px;
+  white-space: nowrap;
+  box-shadow: 0 5px 10px rgba(0,0,0,.5)
+}
+.newsArticleBtn:hover {
+  background: rgba(17, 69, 151, 0.5);
+}
 
 *, ::before, ::after {
   --tw-border-spacing-x: 0;
