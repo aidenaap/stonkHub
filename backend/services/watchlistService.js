@@ -7,6 +7,8 @@ const WATCHLIST_FILE = path.join(__dirname, '../storage/stonkData.json');
 async function getWatchlist() {
     try {
         const data = await fs.readFile(WATCHLIST_FILE, 'utf8');
+        console.log("watchlist data in getWatchlist()")
+        console.log(data);
         return JSON.parse(data);
     } catch (error) {
         // File doesn't exist, return empty array

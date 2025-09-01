@@ -12,19 +12,27 @@ let congressData;
 let contractData;
 let newsData;
 let watchlistData;
+let stockData = {};
 
 // headers from api calls to be displayed in title headers. Values formatted baesd on these in 
 const lobbyingHeaders = ['Ticker', 'Client', 'Date', 'Amount', 'Issue', 'Specific_Issue', 'Registrant'];
 const congressHeaders = ['Representative', 'Ticker', 'Transaction', 'Amount', 'Range', 'TransactionDate', 'ReportDate', 'Party', 'House'];
 const contractHeaders = ['Ticker', 'Agency', 'Date', 'Amount', 'Description'];
-const newsHeaders = ['Title', 'Description', 'Type', 'URL'];
+const newsHeaders = ['Title', 'Description', 'Type', 'URL', 'AI Review'];
 const watchlistHeaders = ['Ticker', 'Name', 'Valuation', '30d', '6mo'];
 
 // navbar search iteration 
 let placeholderIndex = 0;
 const placeholders = ["Search tickers...", "Search politicians...", "Search greatness..."];
 
-// Handle the animated placeholder value in the search bar
+// Prep filter
+function setupFilterListener() {
+    const filterInput = document.getElementById('filter-input');
+    filterInput.addEventListener('input', function(e) {
+    filterData(e.target.value);
+    });
+}
+// Handle the animated placeholder in the search bar
 function animatePlaceholder() {
     const searchInput = document.querySelector('nav input[type="text"]');
 
@@ -59,46 +67,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
-function setupFilterListener() {
-    const filterInput = document.getElementById('filter-input');
-    filterInput.addEventListener('input', function(e) {
-    filterData(e.target.value);
-    });
-}
-
-function setActiveTab(activeButton) {
-    // Remove active class from all buttons
-    document.querySelectorAll('nav button').forEach(btn => {
-    btn.classList.remove('active-tab', 'bg-[#76ABAE]', 'text-[#222831]');
-    btn.classList.add('bg-transparent', 'text-[#EEEEEE]', 'border', 'border-[#76ABAE]/30');
-    });
-
-    // Add active class to clicked button
-    activeButton.classList.add('active-tab', 'bg-[#76ABAE]', 'text-[#222831]');
-    activeButton.classList.remove('bg-transparent', 'text-[#EEEEEE]', 'border', 'border-[#76ABAE]/30');
-}
-
-// Helper function to determine if a row should be highlighted
-function shouldHighlightRow(item, dataType) {
-
-    if (dataType != 'news') {
-        const amount = parseFloat(item.Amount) || 0;
-
-        switch(dataType) {
-            case 'lobbying':
-                return amount >= 100000;
-            case 'congress':
-                return amount >= 50001;
-            case 'contracts':
-                return amount >= 1000000;
-            default:
-                return false;
-        }
-    } else {
-        return false;
-    }
-}
-
 // Load data on initial load
 async function loadInitialData() {
 
@@ -118,16 +86,42 @@ async function loadInitialData() {
     // news
     const newsResponse = await fetch(`${API_BASE}/news`);
     newsData = await newsResponse.json();
+
     // watchlist
     const watchlistResponse = await fetch(`${API_BASE}/watchlist`);
     watchlistData = await watchlistResponse.json();
+    console.log("watchlistData");
+    console.log(watchlistData);
+
+    const tickers = Object.keys(watchlistData);
+
+
+    // stockData based on watchlist
+    const stockResponse = await fetch(`${API_BASE}/stocklist`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ stocklist: tickers })
+    });
+    stockData = await stockResponse.json();
+    console.log("Stock Data:");
+    console.log(stockData);
 
     // Display lobbying upon startup
     currentData=lobbyingData;
     displayTableData(lobbyingData, lobbyingHeaders, true)
-    
 }
+// Change button styling upon click of nav-bar buttons
+function setActiveTab(activeButton) {
+    // Remove active class from all buttons
+    document.querySelectorAll('nav button').forEach(btn => {
+    btn.classList.remove('active-tab', 'bg-[#76ABAE]', 'text-[#222831]');
+    btn.classList.add('bg-transparent', 'text-[#EEEEEE]', 'border', 'border-[#76ABAE]/30');
+    });
 
+    // Add active class to clicked button
+    activeButton.classList.add('active-tab', 'bg-[#76ABAE]', 'text-[#222831]');
+    activeButton.classList.remove('bg-transparent', 'text-[#EEEEEE]', 'border', 'border-[#76ABAE]/30');
+}
 
 // For each nav-bar button, set active tab, title above table, currentData, and currentDataType
 // Meanwhile call displayTableData 
@@ -135,14 +129,11 @@ async function loadLobbyingPage() {
     try {
         setActiveTab(document.getElementById('lobbying-btn'));
         document.getElementById('table-title').textContent = 'Lobbying Data';
-        toggleWatchlistControls();
-        // showLoading();
 
-        // const response = await fetch(`${API_BASE}/lobbying`);
-        // const data = await response.json();
-        // currentData = lobbyingData;
         currentDataType = 'lobbying';
-        // displayTableData(data, lobbyingHeaders);
+        toggleWatchlistControls();
+
+        currentData = lobbyingData;
         displayTableData(lobbyingData, lobbyingHeaders);
     } catch (error) {
         console.error('Error loading lobbying data:', error);
@@ -153,13 +144,11 @@ async function loadCongressPage() {
     try {
         setActiveTab(document.getElementById('congress-btn'));
         document.getElementById('table-title').textContent = 'Congress Trading Data';
-        toggleWatchlistControls();
-        // showLoading();
-
-        // const response = await fetch(`${API_BASE}/congress`);
-        // const data = await response.json();
-        // currentData = data;
+        
         currentDataType = 'congress';
+        toggleWatchlistControls();
+
+        currentData = congressData;
         displayTableData(congressData, congressHeaders);
     } catch (error) {
         console.error('Error loading congress data:', error);
@@ -170,13 +159,11 @@ async function loadContractsPage() {
     try {
         setActiveTab(document.getElementById('contracts-btn'));
         document.getElementById('table-title').textContent = 'Government Contracts Data';
-        toggleWatchlistControls();
-        // showLoading();
-
-        // const response = await fetch(`${API_BASE}/contracts`);
-        // const data = await response.json();
-        // currentData = data;
+        
         currentDataType = 'contracts';
+        toggleWatchlistControls();
+
+        currentData = contractData;
         displayTableData(contractData, contractHeaders);
     } catch (error) {
         console.error('Error loading contracts data:', error);
@@ -187,15 +174,11 @@ async function loadNewsPage() {
     try {
         setActiveTab(document.getElementById('news-btn'));
         document.getElementById('table-title').textContent = 'Top Headlines & Tech News';
-        toggleWatchlistControls();
-        // showLoading();
-
-        // const response = await fetch(`${API_BASE}/news`);
-        // const data = await response.json();
-        // currentData = data;
+        
         currentDataType = 'news';
-        // console.log("data right before calling displayTableData:")
-        // console.log(data);
+        toggleWatchlistControls();
+
+        currentData = newsData;
         displayTableData(newsData, newsHeaders);
     } catch (error) {
         console.error('Error loading news', error);
@@ -206,23 +189,35 @@ async function loadWatchlistPage() {
     try {
         setActiveTab(document.getElementById('watchlist-btn')); // if you add the button
         document.getElementById('table-title').textContent = 'My Watchlist';
-        toggleWatchlistControls();
         
-        // Convert simple ticker array to table-friendly format
-        const tableData = watchlist.map(ticker => ({
-            Ticker: ticker,
-            DateAdded: new Date().toLocaleDateString(), // You'd want to store this
-            Notes: 'N/A'
+        currentDataType = 'watchlist';
+        toggleWatchlistControls();
+
+        // going to have to load in watchlist, then stock data, then convert to table-friendly format
+        const tableData = Object.entries(watchlistData).map(([ticker, values]) => ({
+            "Ticker": ticker,
+            "Current": values[0],
+            "Change": values[1],
+            "% Change": values[2],
+            "Open": values[3],
+            "Prev Close": values[4]
         }));
+    
+        // // Convert simple ticker array to table-friendly format
+        //  const tableData = watchlistData.map(ticker => ({
+        //     Ticker: ticker,
+        //     DateAdded: new Date().toLocaleDateString(), // You'd want to store this
+        //     Notes: 'N/A'
+        // }));
         
         currentData = tableData;
-        currentDataType = 'watchlist';
-        displayTableData(tableData, ['Ticker', 'Date Added', 'Notes']);
+        displayTableData(tableData, ['Ticker', 'Current', 'Change', '% Change', 'Open', 'Prev Close']);
     } catch (error) {
         console.error('Error loading watchlist:', error);
         showError('Failed to load watchlist');
     }
 }
+
 
 // Watchlist Functionality
 // Custom display of add feature
@@ -252,7 +247,7 @@ async function addToWatchlist(ticker) {
             console.log('Added to watchlist:', updatedWatchlist);
             // Optionally reload watchlist view if currently displayed
             if (currentDataType === 'watchlist') {
-                loadWatchListPage();
+                await loadWatchlistPage();
             }
         } else {
             console.error('Failed to add to watchlist');
@@ -281,8 +276,28 @@ async function removeFromWatchlist(ticker) {
 }
 
 
+// Helper function to determine if a row should be highlighted
+function shouldHighlightRow(item, dataType) {
+
+    if (dataType != 'news') {
+        const amount = parseFloat(item.Amount) || 0;
+
+        switch(dataType) {
+            case 'lobbying':
+                return amount >= 100000;
+            case 'congress':
+                return amount >= 50001;
+            case 'contracts':
+                return amount >= 1000000;
+            default:
+                return false;
+        }
+    } else {
+        return false;
+    }
+}
 // Display base information with highlighting - custom buttons on news, delete button on watchlist
-function displayTableData(data, headers, firstTime=false) {
+function displayTableData(data, headers, firstTime=false, stockRefresh=false) {
 
     const table = document.getElementById('data-table');
     const tableHeaders = document.getElementById('table-headers');
@@ -325,7 +340,7 @@ function displayTableData(data, headers, firstTime=false) {
             }
 
             // Tranform text if amount, date, or URL
-            if (header === 'Amount' && value) {
+            if ((header === 'Amount' || header === 'Current' || header === 'Open' || header === 'Prev Close') && value) {
                 value = '$' + Number(value).toLocaleString();
                 // Make the amount bold if highlighted
                 if (isHighlighted) {
@@ -343,9 +358,12 @@ function displayTableData(data, headers, firstTime=false) {
                 alpha.rel = "noopener noreferrer";
                 alpha.classList.add('newsArticleBtn');
 
-                console.log(alpha);
-
                 td.appendChild(alpha);
+            } else if (header === 'AI Review') {
+                const alpha = document.createElement('a');
+                alpha.textContent = "AI Summary";
+                alpha.classList.add('aiReviewBtn');
+                // add code to send to openai API and then open a large pop-up on the screen. 
             } else {
                 td.textContent = value || 'N/A';
             }
@@ -357,7 +375,7 @@ function displayTableData(data, headers, firstTime=false) {
     });
 
     // Show table, hide loading on first time load
-    if(firstTime = true) {
+    if(firstTime == true || stockRefresh == true) {
         loading.classList.add('hidden');
         table.classList.remove('hidden');
     }  
@@ -368,6 +386,7 @@ function displayTableData(data, headers, firstTime=false) {
 
 // Filtering functionality
 function filterData(searchTerm) {
+
     if (!searchTerm.trim()) {
         filteredData = currentData;
     } else {
@@ -430,6 +449,7 @@ function displayFilteredData(data, headers) {
         tableBody.appendChild(tr);
     });
 }
+
 
 // Loading/error screens
 function showLoading() {

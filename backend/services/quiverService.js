@@ -32,7 +32,7 @@ const fetchLobbying = async (options = {
     //        console.log(`   Specific Issue: ${lobbying.Specific_Issue}`);
     //        console.log(`   Registrant: ${lobbying.Registrant}`);
     //    });
-       
+       console.log("Lobbying data retrieved");
        return response.data;
    } catch (error) {
        if (error.response) {
@@ -91,20 +91,20 @@ const fetchCongressTrading = async (options = {
            }
        });
        
-       console.log('Recent Congress Trading Data:');
-       console.log('============================');
-       response.data.forEach((trade, index) => {
-           console.log(`\n${index + 1}. ${trade.Representative} (${trade.Party})`);
-           console.log(`   Ticker: ${trade.Ticker}`);
-           console.log(`   Transaction: ${trade.Transaction}`);
-           console.log(`   Amount: $${trade.Amount?.toLocaleString()}`);
-           console.log(`   Range: ${trade.Range}`);
-           console.log(`   Transaction Date: ${trade.TransactionDate}`);
-           console.log(`   Report Date: ${trade.ReportDate}`);
-           console.log(`   House: ${trade.House}`);
-           console.log(`   District: ${trade.District}`);
-       });
-       
+    //    console.log('Recent Congress Trading Data:');
+    //    console.log('============================');
+    //    response.data.forEach((trade, index) => {
+    //        console.log(`\n${index + 1}. ${trade.Representative} (${trade.Party})`);
+    //        console.log(`   Ticker: ${trade.Ticker}`);
+    //        console.log(`   Transaction: ${trade.Transaction}`);
+    //        console.log(`   Amount: $${trade.Amount?.toLocaleString()}`);
+    //        console.log(`   Range: ${trade.Range}`);
+    //        console.log(`   Transaction Date: ${trade.TransactionDate}`);
+    //        console.log(`   Report Date: ${trade.ReportDate}`);
+    //        console.log(`   House: ${trade.House}`);
+    //        console.log(`   District: ${trade.District}`);
+    //    });
+        console.log("Congress trading data retrieved.");
        return response.data;
    } catch (error) {
        if (error.response) {
@@ -161,15 +161,15 @@ const fetchGovContracts = async (options = {
            }
        });
        
-       console.log('Recent Government Contracts:');
-       console.log('===========================');
-       response.data.forEach((contract, index) => {
-           console.log(`\n${index + 1}. ${contract.Ticker} - ${contract.Agency}`);
-           console.log(`   Date: ${contract.Date}`);
-           console.log(`   Amount: $${contract.Amount?.toLocaleString()}`);
-           console.log(`   Description: ${contract.Description}`);
-       });
-       
+    //    console.log('Recent Government Contracts:');
+    //    console.log('===========================');
+    //    response.data.forEach((contract, index) => {
+    //        console.log(`\n${index + 1}. ${contract.Ticker} - ${contract.Agency}`);
+    //        console.log(`   Date: ${contract.Date}`);
+    //        console.log(`   Amount: $${contract.Amount?.toLocaleString()}`);
+    //        console.log(`   Description: ${contract.Description}`);
+    //    });
+       console.log('Government contract data retrieved.');
        return response.data;
    } catch (error) {
        if (error.response) {

@@ -12,17 +12,19 @@ const {
 } = require('./services/quiverService');
 const { fetchNewsData } = require('./services/newsService');
 const { getWatchlist, addToWatchlist, removeFromWatchlist } = require('./services/watchlistService');
+const { fetchRealTimeStockData, getStockData } = require('./services/stockService');
 
 // App setup
 const app = express();
 const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.static('frontend/public'));
+app.use('../storage', express.static(path.join(__dirname)));
 
 // Fetch live data on startup
-fetchLobbying();
-fetchCongressTrading();
-fetchGovContracts();
+// fetchLobbying();
+// fetchCongressTrading();
+// fetchGovContracts();
 
 // Endpoints
 app.get('/', (req, res) => {
@@ -148,6 +150,45 @@ app.delete('/api/watchlist/:ticker', async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: 'Failed to remove from watchlist' });
     }
+});
+
+// Stock endpoints
+// app.post('/api/stocklist', async(req, res) => {
+//     try {
+//         const { stocklist } = req.body;
+//         console.log(`our stocklist from the req.body: ${stocklist}`)
+//         // const stocklist = req.query.symbols.split(","); // turn query string into array
+//         const stockData = await fetchRealTimeStockData(stocklist);
+//         res.json(stockData);
+//     } catch (error) {
+//         res.status(500).json({ error: 'Failed to get watchlist' });
+//     }
+// });
+
+app.get('/api/stocklist', async(req, res) => {
+    try {
+        const jsonStockData = await getStockData();
+        res.json(jsonStockData);
+    } catch {
+        res.status(500).json({error: 'Failed to get stocklist'});
+    }
+});
+
+app.post('/api/stocklist', async (req, res) => {
+  try {
+    console.log("req.body:", req.body); // 👀 add this
+    const { stocklist } = req.body;
+
+    if (!stocklist || !Array.isArray(stocklist)) {
+      return res.status(400).json({ error: 'Invalid stocklist' });
+    }
+
+    const stockData = await fetchRealTimeStockData(stocklist);
+    res.json(stockData);
+  } catch (error) {
+    console.error('Error in /stocklist route:', error.message);
+    res.status(500).json({ error: 'Failed to get stocklist' });
+  }
 });
 
 // App Startup

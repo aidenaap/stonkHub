@@ -44,8 +44,8 @@ const fetchNewsData = async() => {
             newsData.push(article);
         }
 
-        console.log('News data:');
-        console.log(newsData);
+        // console.log('News data:');
+        // console.log(newsData);
 
         return newsData;
 
