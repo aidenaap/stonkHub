@@ -25,11 +25,23 @@ async function addToWatchlist(ticker) {
     return watchlist;
 }
 
+// async function removeFromWatchlist(ticker) {
+//     const watchlist = await getWatchlist();
+//     const filtered = watchlist.filter(t => t !== ticker.toUpperCase());
+//     await saveWatchlist(filtered);
+//     return filtered;
+// }
+
 async function removeFromWatchlist(ticker) {
-    const watchlist = await getWatchlist();
-    const filtered = watchlist.filter(t => t !== ticker.toUpperCase());
-    await saveWatchlist(filtered);
-    return filtered;
+  const watchlist = await getWatchlist(); // returns the object from your JSON file
+  const upper = ticker.toUpperCase();
+
+  if (watchlist.hasOwnProperty(upper)) {
+    delete watchlist[upper]; // remove the key/value pair
+  }
+
+  await saveWatchlist(watchlist); // save the updated object back to file
+  return watchlist;
 }
 
 async function saveWatchlist(watchlist) {

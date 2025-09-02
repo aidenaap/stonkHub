@@ -11,6 +11,17 @@
 .newsArticleBtn:hover {
   background: rgba(17, 69, 151, 0.5);
 }
+.deleteWatchlistBtn {
+  background: rgba(218, 34, 34, 0.5);
+  border-radius: 1rem;
+  border: 3px solid black;
+  padding: 5px 7px;
+  white-space: nowrap;
+  box-shadow: 0 5px 10px rgba(0,0,0,.5)
+}
+.deleteWatchlistBtn:hover {
+  background: rgba(145, 24, 24, 0.5);
+}
 
 *, ::before, ::after {
   --tw-border-spacing-x: 0;

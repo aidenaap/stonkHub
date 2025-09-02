@@ -19,7 +19,7 @@ const lobbyingHeaders = ['Ticker', 'Client', 'Date', 'Amount', 'Issue', 'Specifi
 const congressHeaders = ['Representative', 'Ticker', 'Transaction', 'Amount', 'Range', 'TransactionDate', 'ReportDate', 'Party', 'House'];
 const contractHeaders = ['Ticker', 'Agency', 'Date', 'Amount', 'Description'];
 const newsHeaders = ['Title', 'Description', 'Type', 'URL', 'AI Review'];
-const watchlistHeaders = ['Ticker', 'Name', 'Valuation', '30d', '6mo'];
+const watchlistHeaders = ['Ticker', 'Current', 'Change', '% Change', 'Open', 'Prev Close', 'Remove'];
 
 // navbar search iteration 
 let placeholderIndex = 0;
@@ -202,16 +202,9 @@ async function loadWatchlistPage() {
             "Open": values[3],
             "Prev Close": values[4]
         }));
-    
-        // // Convert simple ticker array to table-friendly format
-        //  const tableData = watchlistData.map(ticker => ({
-        //     Ticker: ticker,
-        //     DateAdded: new Date().toLocaleDateString(), // You'd want to store this
-        //     Notes: 'N/A'
-        // }));
         
         currentData = tableData;
-        displayTableData(tableData, ['Ticker', 'Current', 'Change', '% Change', 'Open', 'Prev Close']);
+        displayTableData(tableData, watchlistHeaders);
     } catch (error) {
         console.error('Error loading watchlist:', error);
         showError('Failed to load watchlist');
@@ -364,6 +357,37 @@ function displayTableData(data, headers, firstTime=false, stockRefresh=false) {
                 alpha.textContent = "AI Summary";
                 alpha.classList.add('aiReviewBtn');
                 // add code to send to openai API and then open a large pop-up on the screen. 
+            } else if (header==='Remove') {
+                 const alpha = document.createElement('a');
+                alpha.href = "#";
+                alpha.textContent = "Delete";
+                alpha.rel = "noopener noreferrer";
+                alpha.classList.add('deleteWatchlistBtn');
+                // upon click, delete from the watchlist
+                alpha.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    const ticker = item.Ticker; // ticker comes from your row data
+                    try {
+                        const response = await fetch(`${API_BASE}/watchlist/${ticker}`, {
+                            method: "DELETE"
+                        });
+                        if (response.ok) {
+                            console.log(`${ticker} deleted successfully`);
+
+                            // Option A: remove row directly
+                            tr.remove();
+
+                            // Option B: reload watchlist & table fresh
+                            // await loadWatchlistPage();
+                        } else {
+                            console.error("Failed to delete ticker:", ticker);
+                        }
+                    } catch (err) {
+                        console.error("Error deleting ticker:", err);
+                    }
+                });
+
+                td.appendChild(alpha)
             } else {
                 td.textContent = value || 'N/A';
             }
@@ -403,6 +427,8 @@ function filterData(searchTerm) {
         case 'congress': headers = congressHeaders; break;
         case 'contracts': headers = contractHeaders; break;
         case 'news': headers = newsHeaders; break;
+        case 'watchlist': headers = watchlistHeaders; break;
+
     }
 
     displayFilteredData(filteredData, headers);
@@ -432,7 +458,7 @@ function displayFilteredData(data, headers) {
                 value = item[header.toLowerCase()];
             }
 
-            if (header === 'Amount' && value) {
+            if ((header === 'Amount' || header === 'Current' || header === 'Open' || header === 'Prev Close') && value) {
                 value = '$' + Number(value).toLocaleString();
                 // Make the amount bold if highlighted
                 if (isHighlighted) {

@@ -21,11 +21,6 @@ app.use(express.json());
 app.use(express.static('frontend/public'));
 app.use('../storage', express.static(path.join(__dirname)));
 
-// Fetch live data on startup
-// fetchLobbying();
-// fetchCongressTrading();
-// fetchGovContracts();
-
 // Endpoints
 app.get('/', (req, res) => {
    res.sendFile(path.join(__dirname, '../frontend/public/index.html'));
@@ -153,18 +148,7 @@ app.delete('/api/watchlist/:ticker', async (req, res) => {
 });
 
 // Stock endpoints
-// app.post('/api/stocklist', async(req, res) => {
-//     try {
-//         const { stocklist } = req.body;
-//         console.log(`our stocklist from the req.body: ${stocklist}`)
-//         // const stocklist = req.query.symbols.split(","); // turn query string into array
-//         const stockData = await fetchRealTimeStockData(stocklist);
-//         res.json(stockData);
-//     } catch (error) {
-//         res.status(500).json({ error: 'Failed to get watchlist' });
-//     }
-// });
-
+// get from file storage
 app.get('/api/stocklist', async(req, res) => {
     try {
         const jsonStockData = await getStockData();
@@ -173,7 +157,7 @@ app.get('/api/stocklist', async(req, res) => {
         res.status(500).json({error: 'Failed to get stocklist'});
     }
 });
-
+// get from finnhub and save to file storage
 app.post('/api/stocklist', async (req, res) => {
   try {
     console.log("req.body:", req.body); // 👀 add this
@@ -190,6 +174,7 @@ app.post('/api/stocklist', async (req, res) => {
     res.status(500).json({ error: 'Failed to get stocklist' });
   }
 });
+
 
 // App Startup
 app.listen(PORT, () => {
