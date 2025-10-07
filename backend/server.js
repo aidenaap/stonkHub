@@ -21,7 +21,7 @@ app.use(express.json());
 app.use(express.static('frontend/public'));
 app.use('../storage', express.static(path.join(__dirname)));
 
-// Endpoints
+// Base Routing
 app.get('/', (req, res) => {
    res.sendFile(path.join(__dirname, '../frontend/public/index.html'));
 });
@@ -130,6 +130,7 @@ app.get('/api/watchlist', async (req, res) => {
 app.post('/api/watchlist', async (req, res) => {
     try {
         const { ticker } = req.body;
+        console.log("Ticker in the watchlist endpoint serverjs: ", ticker);
         const watchlist = await addToWatchlist(ticker);
         res.json(watchlist);
     } catch (error) {

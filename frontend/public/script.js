@@ -59,7 +59,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const tickerInput = document.getElementById('ticker-input');
         const ticker = tickerInput.value.trim();
         if (ticker) {
-            await addToWatchlist(ticker);
+            const watchlistPushResponse = await fetch(`${API_BASE}/watchlist`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ ticker: ticker })
+            });
+
+            console.log(watchlistPushResponse);
+            // await addToWatchlist(ticker);
             tickerInput.value = '';
         }
     });
@@ -102,6 +109,8 @@ async function loadInitialData() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ stocklist: tickers })
     });
+
+
     stockData = await stockResponse.json();
     console.log("Stock Data:");
     console.log(stockData);
@@ -225,48 +234,48 @@ function toggleWatchlistControls() {
     }
 }
 // Add and deletion from JSON in backend/storage
-async function addToWatchlist(ticker) {
-    try {
-        const response = await fetch(`${API_BASE}/watchlist`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ ticker: ticker })
-        });
+// async function addToWatchlist(ticker) {
+//     try {
+//         const response = await fetch(`${API_BASE}/watchlist`, {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json'
+//             },
+//             body: JSON.stringify({ ticker: ticker })
+//         });
         
-        if (response.ok) {
-            const updatedWatchlist = await response.json();
-            console.log('Added to watchlist:', updatedWatchlist);
-            // Optionally reload watchlist view if currently displayed
-            if (currentDataType === 'watchlist') {
-                await loadWatchlistPage();
-            }
-        } else {
-            console.error('Failed to add to watchlist');
-        }
-    } catch (error) {
-        console.error('Error adding to watchlist:', error);
-    }
-}
-async function removeFromWatchlist(ticker) {
-    try {
-        const response = await fetch(`${API_BASE}/watchlist/${ticker}`, {
-            method: 'DELETE'
-        });
+//         if (response.ok) {
+//             const updatedWatchlist = await response.json();
+//             console.log('Added to watchlist:', updatedWatchlist);
+//             // Optionally reload watchlist view if currently displayed
+//             if (currentDataType === 'watchlist') {
+//                 await loadWatchlistPage();
+//             }
+//         } else {
+//             console.error('Failed to add to watchlist');
+//         }
+//     } catch (error) {
+//         console.error('Error adding to watchlist:', error);
+//     }
+// }
+// async function removeFromWatchlist(ticker) {
+//     try {
+//         const response = await fetch(`${API_BASE}/watchlist/${ticker}`, {
+//             method: 'DELETE'
+//         });
         
-        if (response.ok) {
-            const updatedWatchlist = await response.json();
-            console.log('Removed from watchlist:', updatedWatchlist);
-            // Optionally reload watchlist view
-            if (currentDataType === 'watchlist') {
-                loadWatchListPage();
-            }
-        }
-    } catch (error) {
-        console.error('Error removing from watchlist:', error);
-    }
-}
+//         if (response.ok) {
+//             const updatedWatchlist = await response.json();
+//             console.log('Removed from watchlist:', updatedWatchlist);
+//             // Optionally reload watchlist view
+//             if (currentDataType === 'watchlist') {
+//                 loadWatchListPage();
+//             }
+//         }
+//     } catch (error) {
+//         console.error('Error removing from watchlist:', error);
+//     }
+// }
 
 
 // Helper function to determine if a row should be highlighted
@@ -479,10 +488,10 @@ function displayFilteredData(data, headers) {
 
 // Loading/error screens
 function showLoading() {
-document.getElementById('loading').classList.remove('hidden');
-document.getElementById('data-table').classList.add('hidden');
+    document.getElementById('loading').classList.remove('hidden');
+    document.getElementById('data-table').classList.add('hidden');
 }
 function showError(message) {
-const loading = document.getElementById('loading');
-loading.innerHTML = `<div class="text-red-400 text-xl">${message}</div>`;
+    const loading = document.getElementById('loading');
+    loading.innerHTML = `<div class="text-red-400 text-xl">${message}</div>`;
 }

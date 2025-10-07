@@ -17,12 +17,22 @@ async function getWatchlist() {
 }
 
 async function addToWatchlist(ticker) {
+  try {
     const watchlist = await getWatchlist();
-    if (!watchlist.includes(ticker.toUpperCase())) {
-        watchlist.push(ticker.toUpperCase());
-        await saveWatchlist(watchlist);
+    console.log("Current watchlist when addingto watchlist:", watchlist);
+
+    const upperTicker = ticker.toUpperCase();
+    if (!watchlist[upperTicker]) {
+      watchlist[upperTicker] = [];
+      console.log("New watchlist after adding:", watchlist);
+      await saveWatchlist(watchlist);
     }
+
     return watchlist;
+  } catch (err) {
+    console.error("Error in addToWatchlist:", err);
+    throw err;
+  }
 }
 
 // async function removeFromWatchlist(ticker) {
@@ -46,8 +56,10 @@ async function removeFromWatchlist(ticker) {
 
 async function saveWatchlist(watchlist) {
     // Ensure data directory exists
+    console.log("Savewatchlist watchlist received: ", watchlist);
     await fs.mkdir(path.dirname(WATCHLIST_FILE), { recursive: true });
     await fs.writeFile(WATCHLIST_FILE, JSON.stringify(watchlist, null, 2));
+    console.log("Should've saved the watchlist now.");
 }
 
 module.exports = { getWatchlist, addToWatchlist, removeFromWatchlist };
