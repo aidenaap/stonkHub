@@ -1,6 +1,7 @@
 // Imports
 require('dotenv').config();
 const express = require('express');
+const fs = require('fs').promises;
 const path = require('path');
 const { 
    fetchLobbying, 
@@ -13,13 +14,14 @@ const {
 const { fetchNewsData } = require('./services/newsService');
 const { getWatchlist, addToWatchlist, removeFromWatchlist } = require('./services/watchlistService');
 const { fetchRealTimeStockData, getStockData } = require('./services/stockService');
+const { getStockList, getLegislatorList } =require('./services/staticServices');
 
 // App setup
 const app = express();
 const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.static('frontend/public'));
-app.use('../storage', express.static(path.join(__dirname)));
+app.use('/storage', express.static(path.join(__dirname, 'storage')));
 
 // Base Routing
 app.get('/', (req, res) => {
@@ -148,7 +150,7 @@ app.delete('/api/watchlist/:ticker', async (req, res) => {
     }
 });
 
-// Stock endpoints
+// Stock data endpoints
 // get from file storage
 app.get('/api/stocklist', async(req, res) => {
     try {
@@ -176,6 +178,25 @@ app.post('/api/stocklist', async (req, res) => {
   }
 });
 
+
+// Static stock/legislator information from JSON
+app.get('/api/search/stocks', async (req, res) => {
+    try {
+        const stockList = await getStockList();
+        res.json(stockList);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to get stock list for search' });
+    }
+});
+
+app.get('/api/search/legislators', async (req, res) => {
+    try {
+        const legislators = await getLegislatorList();
+        res.json(legislators);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to get legislator list' });
+    }
+});
 
 // App Startup
 app.listen(PORT, () => {

@@ -6,6 +6,10 @@ let currentData = [];
 let filteredData = [];
 let currentDataType = 'lobbying';
 
+// storage to get info from static json
+let stockList = {};
+let legislatorList = [];
+
 // storage for api calls upon startup
 let lobbyingData;
 let congressData;
@@ -33,28 +37,40 @@ function setupFilterListener() {
     });
 }
 // Handle the animated placeholder in the search bar
-function animatePlaceholder() {
-    const searchInput = document.querySelector('nav input[type="text"]');
+// function animatePlaceholder() {
+//     const searchInput = document.querySelector('nav input[type="text"]');
 
-    // Fade out
-    searchInput.style.transition = 'opacity 0.5s ease-in-out';
-    searchInput.style.opacity = '0.3';
+//     // Fade out
+//     searchInput.style.transition = 'opacity 0.5s ease-in-out';
+//     searchInput.style.opacity = '0.3';
+
+//     setTimeout(() => {
+//     // Change placeholder
+//     placeholderIndex = (placeholderIndex + 1) % placeholders.length;
+//     searchInput.placeholder = placeholders[placeholderIndex];
+
+//     // Fade back in
+//     searchInput.style.opacity = '1';
+//     }, 500);
+// }
+function animatePlaceholder() {
+    const searchBtn = document.getElementById('search-icon-btn');
+    
+    searchBtn.style.transition = 'opacity 0.5s ease-in-out';
+    searchBtn.style.opacity = '0.3';
 
     setTimeout(() => {
-    // Change placeholder
-    placeholderIndex = (placeholderIndex + 1) % placeholders.length;
-    searchInput.placeholder = placeholders[placeholderIndex];
-
-    // Fade back in
-    searchInput.style.opacity = '1';
+        searchBtn.style.opacity = '1';
     }, 500);
 }
+
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
     setupFilterListener();
     setInterval(animatePlaceholder, 3000); // Change every 3 seconds
 
+    // watch for adding tickers
     document.getElementById('add-ticker-btn').addEventListener('click', async function() {
         const tickerInput = document.getElementById('ticker-input');
         const ticker = tickerInput.value.trim();
@@ -71,7 +87,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-
+    // watch for search
+    document.getElementById('modal-search-input').addEventListener('input', function(e) {
+        fuzzySearch(e.target.value);
+    });
 });
 
 // Load data on initial load
@@ -117,7 +136,14 @@ async function loadInitialData() {
 
     // Display lobbying upon startup
     currentData=lobbyingData;
-    displayTableData(lobbyingData, lobbyingHeaders, true)
+    displayTableData(lobbyingData, lobbyingHeaders, true);
+
+    // // Obtain static data from JSON after info is obtained
+    // const stockListResponse = await fetch(`${API_BASE}/search/stocks`);
+    // stockList = await stockListResponse.json();
+
+    // const legislatorListResponse = await fetch(`${API_BASE}/search/legislators`);
+    // legislatorList = await legislatorListResponse.json();
 }
 // Change button styling upon click of nav-bar buttons
 function setActiveTab(activeButton) {
@@ -483,6 +509,134 @@ function displayFilteredData(data, headers) {
 
         tableBody.appendChild(tr);
     });
+}
+
+// Modal Pop-up
+async function openSearchModal() {
+    const modal = document.getElementById('search-modal');
+    modal.style.display = 'flex';
+    document.getElementById('modal-search-input').focus();
+    
+    // Lazy load search data only when modal opens
+    if (Object.keys(stockList).length === 0) {
+        const stockListResponse = await fetch(`${API_BASE}/search/stocks`);
+        stockList = await stockListResponse.json();
+    }
+    
+    if (legislatorList.length === 0) {
+        const legislatorListResponse = await fetch(`${API_BASE}/search/legislators`);
+        legislatorList = await legislatorListResponse.json();
+    }
+    
+    // Close on overlay click
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeSearchModal();
+        }
+    });
+}
+
+function closeSearchModal() {
+    document.getElementById('search-modal').style.display = 'none';
+    document.getElementById('search-dropdown').classList.add('hidden');
+    document.getElementById('modal-search-input').value = '';
+    document.getElementById('search-results').innerHTML = '<div class="text-[#76ABAE]/50 text-center">Search for a stock or politician to view details</div>';
+}
+
+// Fuzzy search implementation
+function fuzzySearch(searchTerm) {
+    if (!searchTerm || searchTerm.length < 2) {
+        document.getElementById('search-dropdown').classList.add('hidden');
+        return;
+    }
+    
+    const term = searchTerm.toLowerCase();
+    const results = [];
+    
+    // Search stocks
+    Object.values(stockList).forEach(stock => {
+        if (stock.Symbol.toLowerCase().includes(term) || 
+            stock.Name.toLowerCase().includes(term)) {
+            results.push({ type: 'stock', data: stock });
+        }
+    });
+    
+    // Search legislators
+    legislatorList.forEach(legislator => {
+        const fullName = legislator.name.fullname.toLowerCase();
+        if (fullName.includes(term)) {
+            results.push({ type: 'legislator', data: legislator });
+        }
+    });
+    
+    displaySearchDropdown(results.slice(0, 10));
+}
+
+function displaySearchDropdown(results) {
+    const dropdown = document.getElementById('search-dropdown');
+    
+    if (results.length === 0) {
+        dropdown.classList.add('hidden');
+        return;
+    }
+    
+    dropdown.innerHTML = results.map(result => {
+        if (result.type === 'stock') {
+            return `<div onclick="selectSearchResult('stock', '${result.data.Symbol}')" 
+                class="p-3 hover:bg-[#76ABAE]/20 cursor-pointer border-b border-[#76ABAE]/10">
+                <div class="font-semibold text-[#76ABAE]">${result.data.Symbol}</div>
+                <div class="text-sm text-[#EEEEEE]/70">${result.data.Name}</div>
+            </div>`;
+        } else {
+            return `<div onclick="selectSearchResult('legislator', '${result.data.id.bioguide}')" 
+                class="p-3 hover:bg-[#76ABAE]/20 cursor-pointer border-b border-[#76ABAE]/10">
+                <div class="font-semibold text-[#76ABAE]">${result.data.name.fullname}</div>
+                <div class="text-sm text-[#EEEEEE]/70">${result.data.terms[result.data.terms.length-1].state} - ${result.data.terms[result.data.terms.length-1].party}</div>
+            </div>`;
+        }
+    }).join('');
+    
+    dropdown.classList.remove('hidden');
+}
+
+function selectSearchResult(type, id) {
+    document.getElementById('search-dropdown').classList.add('hidden');
+    
+    if (type === 'stock') {
+        displayStockDetails(id);
+    } else {
+        displayLegislatorDetails(id);
+    }
+}
+
+function displayStockDetails(symbol) {
+    const stock = stockList[symbol];
+    document.getElementById('search-results').innerHTML = `
+        <div class="space-y-4">
+            <h3 class="text-2xl font-bold text-[#76ABAE]">${stock.Symbol} - ${stock.Name}</h3>
+            <div class="grid grid-cols-2 gap-4">
+                <div><span class="text-[#76ABAE]">Market Cap:</span> $${Number(stock['Market Cap']).toLocaleString()}</div>
+                <div><span class="text-[#76ABAE]">Sector:</span> ${stock.Sector}</div>
+                <div><span class="text-[#76ABAE]">Industry:</span> ${stock.Industry}</div>
+                <div><span class="text-[#76ABAE]">Country:</span> ${stock.Country}</div>
+            </div>
+        </div>`;
+}
+
+function displayLegislatorDetails(bioguideId) {
+    const legislator = legislatorList.find(l => l.id.bioguide === bioguideId);
+    const latestTerm = legislator.terms[legislator.terms.length - 1];
+    
+    document.getElementById('search-results').innerHTML = `
+        <div class="space-y-4">
+            <h3 class="text-2xl font-bold text-[#76ABAE]">${legislator.name.fullname}</h3>
+            <div class="grid grid-cols-2 gap-4">
+                <div><span class="text-[#76ABAE]">Position:</span> ${latestTerm.type === 'sen' ? 'Senator' : 'Representative'}</div>
+                <div><span class="text-[#76ABAE]">State:</span> ${latestTerm.state}</div>
+                <div><span class="text-[#76ABAE]">Party:</span> ${latestTerm.party}</div>
+                <div><span class="text-[#76ABAE]">Current Term:</span> ${latestTerm.start} to ${latestTerm.end}</div>
+            </div>
+        </div>`;
 }
 
 
