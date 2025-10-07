@@ -8,6 +8,12 @@
 </head>
 <body onload="loadInitialData()" class="bg-[#222831] font-sans text-[#EEEEEE] h-screen overflow-hidden">
    <div id="app" class="h-full flex flex-col">
+        <!-- Ticker Bar -->
+        <div class="bg-[#1a1d24] border-b border-[#76ABAE]/20 overflow-hidden" style="height: 50px;">
+            <div id="ticker-track">
+                <!-- Ticker items will be populated by JS -->
+            </div>
+        </div>
        <!-- Navbar -->
        <nav class="bg-[#31363F] px-6 py-4 flex justify-between items-center shadow-lg">
            <div class="flex space-x-4">
@@ -27,14 +33,12 @@
                    My Watchlist
                </button>
            </div>
-           <!-- <div class="flex items-center">
-               <input type="text" placeholder="Search tickers..." class="bg-[#222831] text-[#EEEEEE] px-4 py-2 rounded-lg border border-[#76ABAE]/30 focus:border-[#76ABAE] focus:outline-none w-64">
-           </div> -->
            <div class="flex items-center">
-                <button onclick="openSearchModal()" id="search-icon-btn" class="bg-transparent hover:bg-[#76ABAE]/20 text-[#76ABAE] p-3 rounded-lg transition-colors">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <button onclick="openSearchModal()" id="search-icon-btn" class="bg-[#76ABAE] hover:bg-[#76ABAE]/80 text-[#222831] px-6 py-3 rounded-lg transition-colors flex items-center justify-center gap-2 font-semibold">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg> Search
+                    </svg>
+                    <span>Search</span>
                 </button>
             </div>
        </nav>

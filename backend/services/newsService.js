@@ -1,5 +1,4 @@
 const axios = require('axios');
-const NEWSORGKEY = process.env.NEWSORGKEY;
 const legacyBaseURL = "https://newsapi.org/v2";
 
 const businessNews = `${legacyBaseURL}/top-headlines?country=us&language=en&category=business&apiKey=${process.env.NEWSORGKEY}`;
@@ -22,7 +21,7 @@ const fetchNewsData = async() => {
             description: topHeadlineResponse.data.articles[i].description,
             url: topHeadlineResponse.data.articles[i].url,
             source: topHeadlineResponse.data.articles[i].source.name,
-            type: 'Top Story'
+            type: 'Business'
             };
             newsData.push(article);
 

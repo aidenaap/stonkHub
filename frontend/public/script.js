@@ -18,42 +18,22 @@ let newsData;
 let watchlistData;
 let stockData = {};
 
-// headers from api calls to be displayed in title headers. Values formatted baesd on these in 
+// Static Table Headers
 const lobbyingHeaders = ['Ticker', 'Client', 'Date', 'Amount', 'Issue', 'Specific_Issue', 'Registrant'];
 const congressHeaders = ['Representative', 'Ticker', 'Transaction', 'Amount', 'Range', 'TransactionDate', 'ReportDate', 'Party', 'House'];
 const contractHeaders = ['Ticker', 'Agency', 'Date', 'Amount', 'Description'];
 const newsHeaders = ['Title', 'Description', 'Type', 'URL', 'AI Review'];
 const watchlistHeaders = ['Ticker', 'Current', 'Change', '% Change', 'Open', 'Prev Close', 'Remove'];
 
-// navbar search iteration 
-let placeholderIndex = 0;
-const placeholders = ["Search tickers...", "Search politicians...", "Search greatness..."];
 
-// Prep filter
+// ===== Initial Setup ===== //
 function setupFilterListener() {
     const filterInput = document.getElementById('filter-input');
     filterInput.addEventListener('input', function(e) {
-    filterData(e.target.value);
+        filterData(e.target.value);
     });
 }
-// Handle the animated placeholder in the search bar
-// function animatePlaceholder() {
-//     const searchInput = document.querySelector('nav input[type="text"]');
-
-//     // Fade out
-//     searchInput.style.transition = 'opacity 0.5s ease-in-out';
-//     searchInput.style.opacity = '0.3';
-
-//     setTimeout(() => {
-//     // Change placeholder
-//     placeholderIndex = (placeholderIndex + 1) % placeholders.length;
-//     searchInput.placeholder = placeholders[placeholderIndex];
-
-//     // Fade back in
-//     searchInput.style.opacity = '1';
-//     }, 500);
-// }
-function animatePlaceholder() {
+function animatePlaceholder() { // animation in the search bar
     const searchBtn = document.getElementById('search-icon-btn');
     
     searchBtn.style.transition = 'opacity 0.5s ease-in-out';
@@ -63,10 +43,7 @@ function animatePlaceholder() {
         searchBtn.style.opacity = '1';
     }, 500);
 }
-
-
-// Initialize on page load
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() { // Initialize filters/animation on page load, listeners for watchlist updates & searches
     setupFilterListener();
     setInterval(animatePlaceholder, 3000); // Change every 3 seconds
 
@@ -87,66 +64,91 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // watch for search
+    // watch for search in modal pop-up
     document.getElementById('modal-search-input').addEventListener('input', function(e) {
         fuzzySearch(e.target.value);
     });
 });
 
-// Load data on initial load
-async function loadInitialData() {
+async function loadInitialData() { // get all API data on initial load
 
     // show loading until we displayTableData
     showLoading();
 
-    // lobbying
+    // get all Quiver data
     const lobbyingResponse = await fetch(`${API_BASE}/lobbying`);
     lobbyingData = await lobbyingResponse.json();
-    // congress
     const congressResponse = await fetch(`${API_BASE}/congress`);
     congressData = await congressResponse.json();
-    // contracts
     const contractResponse = await fetch(`${API_BASE}/contracts`);
     contractData = await contractResponse.json();
 
-    // news
+    // news data
     const newsResponse = await fetch(`${API_BASE}/news`);
     newsData = await newsResponse.json();
 
-    // watchlist
+    // watchlist data
     const watchlistResponse = await fetch(`${API_BASE}/watchlist`);
     watchlistData = await watchlistResponse.json();
-    console.log("watchlistData");
-    console.log(watchlistData);
-
     const tickers = Object.keys(watchlistData);
 
-
-    // stockData based on watchlist
+    // live stockData based on watchlist
     const stockResponse = await fetch(`${API_BASE}/stocklist`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ stocklist: tickers })
     });
-
-
     stockData = await stockResponse.json();
-    console.log("Stock Data:");
-    console.log(stockData);
+
+    // Populate the top ticker bar
+    populateTickerBar();
 
     // Display lobbying upon startup
     currentData=lobbyingData;
     displayTableData(lobbyingData, lobbyingHeaders, true);
-
-    // // Obtain static data from JSON after info is obtained
-    // const stockListResponse = await fetch(`${API_BASE}/search/stocks`);
-    // stockList = await stockListResponse.json();
-
-    // const legislatorListResponse = await fetch(`${API_BASE}/search/legislators`);
-    // legislatorList = await legislatorListResponse.json();
 }
-// Change button styling upon click of nav-bar buttons
-function setActiveTab(activeButton) {
+
+// ===== Ticker Bar ===== //
+function populateTickerBar() {
+    const tickerTrack = document.getElementById('ticker-track');
+    
+    if (!watchlistData || Object.keys(watchlistData).length === 0) {
+        tickerTrack.innerHTML = '<div class="ticker-item" style="margin: 0 auto;"><p style="color: #EEEEEE80;">No stocks in watchlist</p></div>';
+        return;
+    }
+    
+    let tickerHTML = '';
+    
+    // Create ticker items from watchlist data
+    for (let ticker in watchlistData) {
+        const data = watchlistData[ticker];
+        const price = data[0];
+        if (!price) {
+            continue;
+        }
+        const change = data[1];
+        const percentChange = data[2];
+        
+        const changeClass = change >= 0 ? 'pos-change' : 'neg-change';
+        const arrow = change >= 0 ? '▲' : '▼';
+        
+        tickerHTML += `
+            <div class="ticker-item">
+                <div class="ticker-left">
+                    <p class="ticker-name">${ticker}</p>
+                    <p class="ticker-percent-change ${changeClass}">${arrow} ${Math.abs(percentChange).toFixed(2)}%</p>
+                </div>
+                <p class="ticker-price">$${price.toFixed(2)}</p>
+            </div>
+        `;
+    }
+    
+    // Duplicate content multiple times for seamless continuous loop
+    tickerTrack.innerHTML = tickerHTML + tickerHTML + tickerHTML;
+}
+
+// ===== Dynamic Page Changes ===== //
+function setActiveTab(activeButton) { // button styling
     // Remove active class from all buttons
     document.querySelectorAll('nav button').forEach(btn => {
     btn.classList.remove('active-tab', 'bg-[#76ABAE]', 'text-[#222831]');
@@ -157,8 +159,17 @@ function setActiveTab(activeButton) {
     activeButton.classList.add('active-tab', 'bg-[#76ABAE]', 'text-[#222831]');
     activeButton.classList.remove('bg-transparent', 'text-[#EEEEEE]', 'border', 'border-[#76ABAE]/30');
 }
-
-// For each nav-bar button, set active tab, title above table, currentData, and currentDataType
+function toggleWatchlistControls() { // Watchlist add button
+    const watchlistControls = document.getElementById('watchlist-controls');
+    if (currentDataType === 'watchlist') {
+        watchlistControls.classList.remove('hidden');
+        watchlistControls.classList.add('flex');
+    } else {
+        watchlistControls.classList.add('hidden');
+        watchlistControls.classList.remove('flex');
+    }
+}
+// For each, set active tab, title above table, currentData, and currentDataType
 // Meanwhile call displayTableData 
 async function loadLobbyingPage() {
     try {
@@ -247,65 +258,8 @@ async function loadWatchlistPage() {
 }
 
 
-// Watchlist Functionality
-// Custom display of add feature
-function toggleWatchlistControls() {
-    const watchlistControls = document.getElementById('watchlist-controls');
-    if (currentDataType === 'watchlist') {
-        watchlistControls.classList.remove('hidden');
-        watchlistControls.classList.add('flex');
-    } else {
-        watchlistControls.classList.add('hidden');
-        watchlistControls.classList.remove('flex');
-    }
-}
-// Add and deletion from JSON in backend/storage
-// async function addToWatchlist(ticker) {
-//     try {
-//         const response = await fetch(`${API_BASE}/watchlist`, {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json'
-//             },
-//             body: JSON.stringify({ ticker: ticker })
-//         });
-        
-//         if (response.ok) {
-//             const updatedWatchlist = await response.json();
-//             console.log('Added to watchlist:', updatedWatchlist);
-//             // Optionally reload watchlist view if currently displayed
-//             if (currentDataType === 'watchlist') {
-//                 await loadWatchlistPage();
-//             }
-//         } else {
-//             console.error('Failed to add to watchlist');
-//         }
-//     } catch (error) {
-//         console.error('Error adding to watchlist:', error);
-//     }
-// }
-// async function removeFromWatchlist(ticker) {
-//     try {
-//         const response = await fetch(`${API_BASE}/watchlist/${ticker}`, {
-//             method: 'DELETE'
-//         });
-        
-//         if (response.ok) {
-//             const updatedWatchlist = await response.json();
-//             console.log('Removed from watchlist:', updatedWatchlist);
-//             // Optionally reload watchlist view
-//             if (currentDataType === 'watchlist') {
-//                 loadWatchListPage();
-//             }
-//         }
-//     } catch (error) {
-//         console.error('Error removing from watchlist:', error);
-//     }
-// }
-
-
-// Helper function to determine if a row should be highlighted
-function shouldHighlightRow(item, dataType) {
+// ===== Page Display ===== //
+function shouldHighlightRow(item, dataType) { // determine if a row should be highlighted
 
     if (dataType != 'news') {
         const amount = parseFloat(item.Amount) || 0;
@@ -324,8 +278,7 @@ function shouldHighlightRow(item, dataType) {
         return false;
     }
 }
-// Display base information with highlighting - custom buttons on news, delete button on watchlist
-function displayTableData(data, headers, firstTime=false, stockRefresh=false) {
+function displayTableData(data, headers, firstTime=false, stockRefresh=false) { // primary display
 
     const table = document.getElementById('data-table');
     const tableHeaders = document.getElementById('table-headers');
@@ -442,7 +395,6 @@ function displayTableData(data, headers, firstTime=false, stockRefresh=false) {
     filteredData = data;
     document.getElementById('filter-input').value = '';
 }
-
 // Filtering functionality
 function filterData(searchTerm) {
 
@@ -511,7 +463,8 @@ function displayFilteredData(data, headers) {
     });
 }
 
-// Modal Pop-up
+
+// ===== Modal Pop-up ===== //
 async function openSearchModal() {
     const modal = document.getElementById('search-modal');
     modal.style.display = 'flex';
@@ -535,16 +488,14 @@ async function openSearchModal() {
         }
     });
 }
-
 function closeSearchModal() {
     document.getElementById('search-modal').style.display = 'none';
     document.getElementById('search-dropdown').classList.add('hidden');
     document.getElementById('modal-search-input').value = '';
     document.getElementById('search-results').innerHTML = '<div class="text-[#76ABAE]/50 text-center">Search for a stock or politician to view details</div>';
 }
-
 // Fuzzy search implementation
-function fuzzySearch(searchTerm) {
+function fuzzySearch(searchTerm) { 
     if (!searchTerm || searchTerm.length < 2) {
         document.getElementById('search-dropdown').classList.add('hidden');
         return;
@@ -571,7 +522,6 @@ function fuzzySearch(searchTerm) {
     
     displaySearchDropdown(results.slice(0, 10));
 }
-
 function displaySearchDropdown(results) {
     const dropdown = document.getElementById('search-dropdown');
     
@@ -598,8 +548,7 @@ function displaySearchDropdown(results) {
     
     dropdown.classList.remove('hidden');
 }
-
-function selectSearchResult(type, id) {
+function selectSearchResult(type, id) { //open details based on result type/id
     document.getElementById('search-dropdown').classList.add('hidden');
     
     if (type === 'stock') {
@@ -608,8 +557,8 @@ function selectSearchResult(type, id) {
         displayLegislatorDetails(id);
     }
 }
-
-function displayStockDetails(symbol) {
+// Pop-up types
+function displayStockDetails(symbol) { // stocks pop-up
     const stock = stockList[symbol];
     document.getElementById('search-results').innerHTML = `
         <div class="space-y-4">
@@ -622,8 +571,7 @@ function displayStockDetails(symbol) {
             </div>
         </div>`;
 }
-
-function displayLegislatorDetails(bioguideId) {
+function displayLegislatorDetails(bioguideId) { // legislator pop-up
     const legislator = legislatorList.find(l => l.id.bioguide === bioguideId);
     const latestTerm = legislator.terms[legislator.terms.length - 1];
     
@@ -640,7 +588,7 @@ function displayLegislatorDetails(bioguideId) {
 }
 
 
-// Loading/error screens
+// ===== Loading / Error ===== //
 function showLoading() {
     document.getElementById('loading').classList.remove('hidden');
     document.getElementById('data-table').classList.add('hidden');
