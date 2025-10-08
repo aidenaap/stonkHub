@@ -14,7 +14,8 @@ const {
 const { fetchNewsData } = require('./services/newsService');
 const { getWatchlist, addToWatchlist, removeFromWatchlist } = require('./services/watchlistService');
 const { fetchRealTimeStockData, getStockData } = require('./services/stockService');
-const { getStockList, getLegislatorList } =require('./services/staticServices');
+const { getStockList, getLegislatorList } = require('./services/staticServices');
+const { summarizeArticle } = require('./services/openaiService');
 
 // App setup
 const app = express();
@@ -109,13 +110,28 @@ app.get('/api/contracts/:ticker', async (req, res) => {
    }
 });
 
-// News endpoint 
+// News endpoints
 app.get('/api/news', async(req, res) => {
     const data = await fetchNewsData();
     if (data) {
         res.json(data)
     } else {
        res.status(500).json({ error: 'Failed to fetch government contracts data' });
+    }
+});
+app.post('/api/news/summarize', async (req, res) => { // AI Summary endpoint
+    try {
+        const { url, title, description } = req.body;
+        
+        if (!url || !title) {
+            return res.status(400).json({ error: 'URL and title are required' });
+        }
+
+        const summary = await summarizeArticle(url, title, description);
+        res.json(summary);
+    } catch (error) {
+        console.error('Error generating summary:', error);
+        res.status(500).json({ error: 'Failed to generate AI summary' });
     }
 });
 

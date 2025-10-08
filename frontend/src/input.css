@@ -60,7 +60,10 @@
 }
 
 .newsArticleBtn {
-  background: blue;
+  color: rgb(0,89,255);
+}
+.aiReviewBtn {
+  background: rgb(0, 89, 255);
   border-radius: 1rem;
   border: 3px solid black;
   padding: 3px 5px;

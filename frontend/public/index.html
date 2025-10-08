@@ -82,8 +82,7 @@
        </div>
    </div>
 
-   <!-- Search Modal Pop-up -->
-    <!-- Search Modal -->
+    <!-- Search Modal Pop-up -->
     <div id="search-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center; padding: 20px;">
         <div style="background: #31363F; border-radius: 12px; width: 90vw; height: 85vh; display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); max-width: 1200px;">
             <div class="p-6 border-b border-[#76ABAE]/20">
@@ -102,6 +101,37 @@
             <!-- Results Area -->
             <div id="search-results" class="flex-1 p-6 overflow-y-auto">
                 <div class="text-[#76ABAE]/50 text-center">Search for a stock or politician to view details</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Summary Modal -->
+    <div id="ai-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center; padding: 20px;">
+        <div style="background: #31363F; border-radius: 12px; width: 90vw; height: 85vh; display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); max-width: 1200px;">
+            <!-- Header -->
+            <div class="p-6 border-b border-[#76ABAE]/20">
+                <div class="flex justify-between items-start">
+                    <div class="flex-1">
+                        <h2 id="ai-modal-title" class="text-2xl font-bold text-[#76ABAE] mb-2"></h2>
+                        <p id="ai-modal-description" class="text-[#EEEEEE]/70 text-sm mb-3"></p>
+                        <a id="ai-modal-link" href="#" target="_blank" class="text-[#76ABAE] hover:text-[#76ABAE]/80 text-sm">
+                            View Original Article →
+                        </a>
+                    </div>
+                    <button onclick="closeAIModal()" class="text-[#EEEEEE] hover:text-[#76ABAE] transition-colors ml-4">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <!-- Summary Content -->
+            <div class="flex-1 p-6 overflow-y-auto">
+                <div id="ai-summary-content" class="text-[#EEEEEE]">
+                    <div class="flex items-center justify-center h-full">
+                        <div class="text-[#76ABAE] text-xl">Generating AI summary...</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

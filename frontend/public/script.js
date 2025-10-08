@@ -331,42 +331,82 @@ function displayTableData(data, headers, firstTime=false, stockRefresh=false) { 
             } else if (header.includes('Date') && value) {
                 value = new Date(value).toLocaleDateString();
                 td.textContent = value || 'N/A';
-            } else if (header === 'URL') {
+            } else if (header === 'URL') {  // Article URL Button
+                // const alpha = document.createElement('a');
+                // alpha.href = value;
+                // alpha.textContent = "View";
+                // alpha.target = "_blank";
+                // alpha.rel = "noopener noreferrer";
+                // alpha.classList.add('newsArticleBtn');
+
+                // td.appendChild(alpha);
                 const alpha = document.createElement('a');
                 alpha.href = value;
-                alpha.textContent = "View Article";
                 alpha.target = "_blank";
                 alpha.rel = "noopener noreferrer";
                 alpha.classList.add('newsArticleBtn');
-
+                alpha.style.display = 'inline-block';
+                
+                const icon = document.createElement('img');
+                icon.src = '/images/eye_svg.svg';
+                icon.alt = 'View Article';
+                icon.style.width = '24px';
+                icon.style.height = '24px';
+                icon.style.filter = 'brightness(0) saturate(100%) invert(64%) sepia(23%) saturate(612%) hue-rotate(138deg) brightness(91%) contrast(86%)';
+                icon.style.transition = 'filter 0.2s';
+                
+                alpha.addEventListener('mouseenter', () => {
+                    icon.style.filter = 'brightness(0) saturate(100%) invert(64%) sepia(23%) saturate(612%) hue-rotate(138deg) brightness(91%) contrast(86%) opacity(80%)';
+                });
+                alpha.addEventListener('mouseleave', () => {
+                    icon.style.filter = 'brightness(0) saturate(100%) invert(64%) sepia(23%) saturate(612%) hue-rotate(138deg) brightness(91%) contrast(86%)';
+                });
+                
+                alpha.appendChild(icon);
                 td.appendChild(alpha);
-            } else if (header === 'AI Review') {
+            } else if (header === 'AI Review') {    // AI Summary Button
                 const alpha = document.createElement('a');
-                alpha.textContent = "AI Summary";
-                alpha.classList.add('aiReviewBtn');
-                // add code to send to openai API and then open a large pop-up on the screen. 
-            } else if (header==='Remove') {
-                 const alpha = document.createElement('a');
                 alpha.href = "#";
-                alpha.textContent = "Delete";
+                alpha.textContent = "Summarize";
+                alpha.classList.add('aiReviewBtn');
+                alpha.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    await openAIModal(item.url, item.title, item.description);
+                });
+                td.appendChild(alpha); 
+            } else if (header==='Remove') {
+                const alpha = document.createElement('a');
+                alpha.href = "#";
                 alpha.rel = "noopener noreferrer";
                 alpha.classList.add('deleteWatchlistBtn');
+                alpha.style.display = 'inline-block';
+                alpha.style.cursor = 'pointer';
+                
+                const icon = document.createElement('img');
+                icon.src = '/images/delete_svg.svg';
+                icon.alt = 'Delete';
+                icon.style.width = '24px';
+                icon.style.height = '24px';
+                icon.style.transition = 'opacity 0.2s';
+                
+                alpha.addEventListener('mouseenter', () => {
+                    icon.style.opacity = '0.7';
+                });
+                alpha.addEventListener('mouseleave', () => {
+                    icon.style.opacity = '1';
+                });
+                
                 // upon click, delete from the watchlist
                 alpha.addEventListener('click', async (e) => {
                     e.preventDefault();
-                    const ticker = item.Ticker; // ticker comes from your row data
+                    const ticker = item.Ticker;
                     try {
                         const response = await fetch(`${API_BASE}/watchlist/${ticker}`, {
                             method: "DELETE"
                         });
                         if (response.ok) {
                             console.log(`${ticker} deleted successfully`);
-
-                            // Option A: remove row directly
                             tr.remove();
-
-                            // Option B: reload watchlist & table fresh
-                            // await loadWatchlistPage();
                         } else {
                             console.error("Failed to delete ticker:", ticker);
                         }
@@ -374,8 +414,9 @@ function displayTableData(data, headers, firstTime=false, stockRefresh=false) { 
                         console.error("Error deleting ticker:", err);
                     }
                 });
-
-                td.appendChild(alpha)
+                
+                alpha.appendChild(icon);
+                td.appendChild(alpha);
             } else {
                 td.textContent = value || 'N/A';
             }
@@ -464,7 +505,7 @@ function displayFilteredData(data, headers) {
 }
 
 
-// ===== Modal Pop-up ===== //
+// ===== Search Modal Pop-up ===== //
 async function openSearchModal() {
     const modal = document.getElementById('search-modal');
     modal.style.display = 'flex';
@@ -585,6 +626,65 @@ function displayLegislatorDetails(bioguideId) { // legislator pop-up
                 <div><span class="text-[#76ABAE]">Current Term:</span> ${latestTerm.start} to ${latestTerm.end}</div>
             </div>
         </div>`;
+}
+
+// ===== AI Summary Modal ===== //
+async function openAIModal(url, title, description) {
+    const modal = document.getElementById('ai-modal');
+    modal.style.display = 'flex';
+    
+    // Set article info
+    document.getElementById('ai-modal-title').textContent = title;
+    document.getElementById('ai-modal-description').textContent = description;
+    document.getElementById('ai-modal-link').href = url;
+    
+    // Show loading state
+    document.getElementById('ai-summary-content').innerHTML = `
+        <div class="flex items-center justify-center h-full">
+            <div class="text-[#76ABAE] text-xl">Generating AI summary...</div>
+        </div>
+    `;
+    
+    try {
+        // Fetch AI summary
+        const response = await fetch(`${API_BASE}/news/summarize`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url, title, description })
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to generate summary');
+        }
+        
+        const data = await response.json();
+        
+        // Display summary
+        document.getElementById('ai-summary-content').innerHTML = `
+            <div class="prose prose-invert max-w-none">
+                <div class="text-lg leading-relaxed whitespace-pre-line">${data.summary}</div>
+            </div>
+        `;
+        
+    } catch (error) {
+        console.error('Error fetching AI summary:', error);
+        document.getElementById('ai-summary-content').innerHTML = `
+            <div class="text-red-400 text-center">
+                <p class="text-xl mb-2">Failed to generate AI summary</p>
+                <p class="text-sm">Please try again later</p>
+            </div>
+        `;
+    }
+    
+    // Close on overlay click
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeAIModal();
+        }
+    });
+}
+function closeAIModal() {
+    document.getElementById('ai-modal').style.display = 'none';
 }
 
 
