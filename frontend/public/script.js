@@ -47,23 +47,6 @@ document.addEventListener('DOMContentLoaded', function() { // Initialize filters
     setupFilterListener();
     setInterval(animatePlaceholder, 3000); // Change every 3 seconds
 
-    // watch for adding tickers
-    document.getElementById('add-ticker-btn').addEventListener('click', async function() {
-        const tickerInput = document.getElementById('ticker-input');
-        const ticker = tickerInput.value.trim();
-        if (ticker) {
-            const watchlistPushResponse = await fetch(`${API_BASE}/watchlist`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ ticker: ticker })
-            });
-
-            console.log(watchlistPushResponse);
-            // await addToWatchlist(ticker);
-            tickerInput.value = '';
-        }
-    });
-
     // watch for search in modal pop-up
     document.getElementById('modal-search-input').addEventListener('input', function(e) {
         fuzzySearch(e.target.value);
@@ -159,16 +142,6 @@ function setActiveTab(activeButton) { // button styling
     activeButton.classList.add('active-tab', 'bg-[#76ABAE]', 'text-[#222831]');
     activeButton.classList.remove('bg-transparent', 'text-[#EEEEEE]', 'border', 'border-[#76ABAE]/30');
 }
-function toggleWatchlistControls() { // Watchlist add button
-    const watchlistControls = document.getElementById('watchlist-controls');
-    if (currentDataType === 'watchlist') {
-        watchlistControls.classList.remove('hidden');
-        watchlistControls.classList.add('flex');
-    } else {
-        watchlistControls.classList.add('hidden');
-        watchlistControls.classList.remove('flex');
-    }
-}
 // For each, set active tab, title above table, currentData, and currentDataType
 // Meanwhile call displayTableData 
 async function loadLobbyingPage() {
@@ -177,7 +150,6 @@ async function loadLobbyingPage() {
         document.getElementById('table-title').textContent = 'Lobbying Data';
 
         currentDataType = 'lobbying';
-        toggleWatchlistControls();
 
         currentData = lobbyingData;
         displayTableData(lobbyingData, lobbyingHeaders);
@@ -192,7 +164,6 @@ async function loadCongressPage() {
         document.getElementById('table-title').textContent = 'Congress Trading Data';
         
         currentDataType = 'congress';
-        toggleWatchlistControls();
 
         currentData = congressData;
         displayTableData(congressData, congressHeaders);
@@ -207,7 +178,6 @@ async function loadContractsPage() {
         document.getElementById('table-title').textContent = 'Government Contracts Data';
         
         currentDataType = 'contracts';
-        toggleWatchlistControls();
 
         currentData = contractData;
         displayTableData(contractData, contractHeaders);
@@ -222,7 +192,6 @@ async function loadNewsPage() {
         document.getElementById('table-title').textContent = 'Top Headlines & Tech News';
         
         currentDataType = 'news';
-        toggleWatchlistControls();
 
         currentData = newsData;
         displayTableData(newsData, newsHeaders);
@@ -237,7 +206,6 @@ async function loadWatchlistPage() {
         document.getElementById('table-title').textContent = 'My Watchlist';
         
         currentDataType = 'watchlist';
-        toggleWatchlistControls();
 
         // going to have to load in watchlist, then stock data, then convert to table-friendly format
         const tableData = Object.entries(watchlistData).map(([ticker, values]) => ({
@@ -601,6 +569,8 @@ function selectSearchResult(type, id) { //open details based on result type/id
 // Pop-up types
 function displayStockDetails(symbol) { // stocks pop-up
     const stock = stockList[symbol];
+    const isInWatchlist = watchlistData && watchlistData.hasOwnProperty(symbol);
+    
     document.getElementById('search-results').innerHTML = `
         <div class="space-y-4">
             <h3 class="text-2xl font-bold text-[#76ABAE]">${stock.Symbol} - ${stock.Name}</h3>
@@ -610,11 +580,52 @@ function displayStockDetails(symbol) { // stocks pop-up
                 <div><span class="text-[#76ABAE]">Industry:</span> ${stock.Industry}</div>
                 <div><span class="text-[#76ABAE]">Country:</span> ${stock.Country}</div>
             </div>
+            <div class="mt-6 pt-4 border-t border-[#76ABAE]/20">
+                <button id="watchlist-toggle-btn" class="w-full ${isInWatchlist ? 'bg-red-500 hover:bg-red-600' : 'bg-[#76ABAE] hover:bg-[#76ABAE]/80'} text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                    ${isInWatchlist ? 'Remove from Watchlist' : 'Add to Watchlist'}
+                </button>
+            </div>
         </div>`;
+    
+    // Add event listener to the button
+    document.getElementById('watchlist-toggle-btn').addEventListener('click', async () => {
+        await toggleWatchlist(symbol);
+    });
 }
 function displayLegislatorDetails(bioguideId) { // legislator pop-up
     const legislator = legislatorList.find(l => l.id.bioguide === bioguideId);
+    console.log('Legislator data:', legislator);
+    console.log('Has committees?', legislator.committees);
+    console.log('Committees length:', legislator.committees?.length);
+    
     const latestTerm = legislator.terms[legislator.terms.length - 1];
+    
+    // Build committees section if available
+    let committeesHTML = '';
+    if (legislator.committees && legislator.committees.length > 0) {
+        committeesHTML = `
+            <div class="mt-6">
+                <h4 class="text-xl font-semibold text-[#76ABAE] mb-3">Committee Assignments</h4>
+                <div class="space-y-3">
+                    ${legislator.committees.map(committee => `
+                        <div class="bg-[#222831] p-4 rounded-lg">
+                            <div class="font-semibold text-[#EEEEEE] mb-2">${committee.name}</div>
+                            ${committee.subcommittees && committee.subcommittees.length > 0 ? `
+                                <div class="ml-4 mt-2">
+                                    <div class="text-sm text-[#76ABAE] mb-1">Subcommittees:</div>
+                                    <ul class="text-sm text-[#EEEEEE]/70 space-y-1">
+                                        ${committee.subcommittees.map(sub => `
+                                            <li>• ${sub.name}</li>
+                                        `).join('')}
+                                    </ul>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
     
     document.getElementById('search-results').innerHTML = `
         <div class="space-y-4">
@@ -625,7 +636,63 @@ function displayLegislatorDetails(bioguideId) { // legislator pop-up
                 <div><span class="text-[#76ABAE]">Party:</span> ${latestTerm.party}</div>
                 <div><span class="text-[#76ABAE]">Current Term:</span> ${latestTerm.start} to ${latestTerm.end}</div>
             </div>
+            ${committeesHTML}
         </div>`;
+}
+
+// ===== Watchlist Functionality ===== //
+async function toggleWatchlist(ticker) {
+    const isInWatchlist = watchlistData && watchlistData.hasOwnProperty(ticker);
+    
+    try {
+        if (isInWatchlist) {
+            // Remove from watchlist
+            const response = await fetch(`${API_BASE}/watchlist/${ticker}`, {
+                method: 'DELETE'
+            });
+            
+            if (response.ok) {
+                delete watchlistData[ticker];
+                console.log(`${ticker} removed from watchlist`);
+                
+                // Update ticker bar
+                populateTickerBar();
+                
+                // Refresh the display
+                displayStockDetails(ticker);
+                
+                // If on watchlist page, reload it
+                if (currentDataType === 'watchlist') {
+                    await loadWatchlistPage();
+                }
+            } else {
+                console.error('Failed to remove from watchlist');
+            }
+        } else {
+            // Add to watchlist
+            const response = await fetch(`${API_BASE}/watchlist`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ticker: ticker })
+            });
+            
+            if (response.ok) {
+                const updatedWatchlist = await response.json();
+                watchlistData = updatedWatchlist;
+                console.log(`${ticker} added to watchlist`);
+                
+                // Update ticker bar
+                populateTickerBar();
+                
+                // Refresh the display
+                displayStockDetails(ticker);
+            } else {
+                console.error('Failed to add to watchlist');
+            }
+        }
+    } catch (error) {
+        console.error('Error toggling watchlist:', error);
+    }
 }
 
 // ===== AI Summary Modal ===== //

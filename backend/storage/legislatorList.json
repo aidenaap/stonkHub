@@ -68,6 +68,93 @@
         "party": "Democrat",
         "url": "https://www.cantwell.senate.gov"
       }
+    ],
+    "committees": [
+      {
+        "type": "senate",
+        "name": "Senate Committee on Commerce, Science, and Transportation",
+        "url": "http://www.commerce.senate.gov/",
+        "thomas_id": "SSCM",
+        "senate_committee_id": "SSCM",
+        "subcommittees": [
+          {
+            "thomas_id": "33",
+            "name": "Aviation, Space, and Innovation"
+          },
+          {
+            "thomas_id": "34",
+            "name": "Telecommunications and Media"
+          },
+          {
+            "thomas_id": "35",
+            "name": "Consumer Protection, Technology, and Data Privacy"
+          },
+          {
+            "thomas_id": "36",
+            "name": "Coast Guard, Maritime, and Fisheries"
+          },
+          {
+            "thomas_id": "37",
+            "name": "Science, Manufacturing, and Competitiveness"
+          },
+          {
+            "thomas_id": "38",
+            "name": "Surface Transportation, Freight, Pipelines, and Safety"
+          },
+          {
+            "thomas_id": "39",
+            "name": "Tourism, Trade, and Export Promotion"
+          }
+        ],
+        "wikipedia": "United States Senate Committee on Commerce, Science and Transportation",
+        "jurisdiction": "The Senate Committee on Commerce, Science, and Transportation has legislative jurisdiction on matters related to science and technology, oceans policy, transportation, communications, and consumer affairs.",
+        "jurisdiction_source": "https://www.commerce.senate.gov/public/index.cfm/jurisdiction"
+      },
+      {
+        "type": "senate",
+        "name": "Senate Committee on Finance",
+        "url": "http://www.finance.senate.gov/",
+        "thomas_id": "SSFI",
+        "senate_committee_id": "SSFI",
+        "subcommittees": [
+          {
+            "name": "Energy, Natural Resources, and Infrastructure",
+            "thomas_id": "12",
+            "wikipedia": "United States Senate Finance Subcommittee on Energy, Natural Resources, and Infrastructure"
+          },
+          {
+            "name": "Health Care",
+            "thomas_id": "10",
+            "wikipedia": "United States Senate Finance Subcommittee on Health Care"
+          },
+          {
+            "name": "International Trade, Customs, and Global Competitiveness",
+            "thomas_id": "13",
+            "wikipedia": "United States Senate Finance Subcommittee on International Trade, Customs, and Global Competitiveness"
+          },
+          {
+            "name": "Fiscal Responsibility and Economic Growth",
+            "thomas_id": "14",
+            "wikipedia": "United States Senate Finance Subcommittee on Fiscal Responsibility and Economic Growth"
+          },
+          {
+            "name": "Taxation and IRS Oversight",
+            "thomas_id": "11",
+            "wikipedia": "United States Senate Finance Subcommittee on Taxation and IRS Oversight"
+          },
+          {
+            "name": "Social Security, Pensions, and Family Policy",
+            "thomas_id": "02",
+            "wikipedia": "United States Senate Finance Subcommittee on Social Security, Pensions, and Family Policy"
+          }
+        ],
+        "rss_url": "http://www.finance.senate.gov/rss/feed/chair/",
+        "minority_rss_url": "http://www.finance.senate.gov/rss/feed/ranking/",
+        "wikipedia": "United States Senate Committee on Finance",
+        "jurisdiction": "The Senate Committee on Finance has legislative jurisdiction on matters relating to taxation, debt, customs, foreign trade, and health programs under the Social Security Act such as Medicare, Medicaid, the Children's Health Insurance Program (CHIP), Temporary Assistance to Needy Families (TANF) and other health and human services programs financed by a specific tax or trust fund.",
+        "jurisdiction_source": "https://www.ethics.senate.gov/public/index.cfm/jurisdiction",
+        "youtube_id": "UCqy51oGHjollKBBWV4_iRgQ"
+      }
     ]
   },
   {
@@ -121,6 +208,51 @@
         "state": "MN",
         "party": "Democrat",
         "url": "https://www.klobuchar.senate.gov"
+      }
+    ],
+    "committees": [
+      {
+        "name": "Senate Committee on Judiciary",
+        "details_missing": true
+      },
+      {
+        "type": "senate",
+        "name": "Senate Committee on Agriculture, Nutrition, and Forestry",
+        "url": "http://www.agriculture.senate.gov/",
+        "thomas_id": "SSAF",
+        "senate_committee_id": "SSAF",
+        "subcommittees": [
+          {
+            "name": "Commodities, Derivatives, Risk Management, and Trade",
+            "thomas_id": "13",
+            "wikipedia": "United States Senate Agriculture Subcommittee on Commodities, Markets, Trade and Risk Management"
+          },
+          {
+            "name": "Conservation, Forestry, Natural Resources, and Biotechnology",
+            "thomas_id": "14",
+            "wikipedia": "United States Senate Agriculture Subcommittee on Conservation, Forestry and Natural Resources"
+          },
+          {
+            "name": "Rural Development, Energy, and Credit",
+            "thomas_id": "15",
+            "wikipedia": "United States Senate Agriculture Subcommittee on Jobs, Rural Economic Growth and Energy Innovation"
+          },
+          {
+            "name": "Food and Nutrition, Specialty Crops, Organics, and Research",
+            "thomas_id": "16",
+            "wikipedia": "United States Senate Agriculture Subcommittee on Nutrition, Specialty Crops, Food and Agricultural Research"
+          },
+          {
+            "name": "Livestock, Dairy, Poultry, and Food Safety",
+            "thomas_id": "17",
+            "wikipedia": "United States Senate Agriculture Subcommittee on Livestock, Dairy, Poultry, Marketing and Agriculture Security"
+          }
+        ],
+        "rss_url": "http://www.ag.senate.gov/rss/feeds/?type=press&amp;groups=democrat",
+        "minority_rss_url": "http://www.ag.senate.gov/rss/feeds/?type=press&amp;groups=republican",
+        "wikipedia": "United States Senate Committee on Agriculture, Nutrition and Forestry",
+        "jurisdiction": "The Senate Committee on Agriculture has legislative jurisdiction over agriculture, food, and nutrition.",
+        "jurisdiction_source": "https://www.agriculture.senate.gov/about/jurisdiction"
       }
     ]
   },
@@ -241,7 +373,8 @@
         "party": "Independent",
         "url": "https://www.sanders.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -295,7 +428,8 @@
         "party": "Democrat",
         "url": "https://www.whitehouse.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -349,7 +483,8 @@
         "party": "Republican",
         "url": "https://www.barrasso.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -460,7 +595,8 @@
         "party": "Republican",
         "url": "https://www.wicker.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -522,7 +658,8 @@
         "party": "Republican",
         "url": "https://www.collins.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -584,7 +721,8 @@
         "party": "Republican",
         "url": "https://www.cornyn.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -703,7 +841,8 @@
         "party": "Democrat",
         "url": "https://www.durbin.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -790,7 +929,8 @@
         "party": "Republican",
         "url": "https://www.lgraham.senate.gov/public"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -868,7 +1008,8 @@
         "party": "Republican",
         "url": "https://www.mcconnell.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -914,7 +1055,8 @@
         "party": "Democrat",
         "url": "https://www.merkley.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -1001,7 +1143,8 @@
         "party": "Democrat",
         "url": "https://www.reed.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -1047,7 +1190,8 @@
         "party": "Republican",
         "url": "https://www.risch.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -1093,7 +1237,8 @@
         "party": "Democrat",
         "url": "https://www.shaheen.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -1140,7 +1285,8 @@
         "party": "Democrat",
         "url": "https://www.warner.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -1211,7 +1357,8 @@
         "party": "Democrat",
         "url": "https://www.gillibrand.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -1257,7 +1404,8 @@
         "party": "Democrat",
         "url": "https://www.coons.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -1398,7 +1546,8 @@
         "party": "Republican",
         "url": "https://aderholt.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -1501,7 +1650,8 @@
         "party": "Democrat",
         "url": "https://www.baldwin.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -1555,7 +1705,8 @@
         "party": "Democrat",
         "url": "https://www.bennet.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -1656,7 +1807,8 @@
         "party": "Republican",
         "url": "https://bilirakis.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -1813,7 +1965,8 @@
         "party": "Democrat",
         "url": "https://bishop.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -1916,7 +2069,8 @@
         "party": "Republican",
         "url": "https://www.blackburn.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -1962,7 +2116,8 @@
         "party": "Democrat",
         "url": "https://www.blumenthal.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -2049,7 +2204,8 @@
         "party": "Republican",
         "url": "https://www.boozman.senate.gov/public"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -2150,7 +2306,8 @@
         "party": "Republican",
         "url": "https://buchanan.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -2307,7 +2464,8 @@
         "party": "Republican",
         "url": "https://calvert.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -2402,7 +2560,8 @@
         "party": "Republican",
         "url": "https://www.capito.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -2503,7 +2662,8 @@
         "party": "Democrat",
         "url": "https://carson.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -2620,7 +2780,8 @@
         "party": "Republican",
         "url": "https://carter.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -2683,7 +2844,8 @@
         "party": "Republican",
         "url": "https://www.cassidy.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -2785,7 +2947,8 @@
         "party": "Democrat",
         "url": "https://castor.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -2878,7 +3041,8 @@
         "party": "Democrat",
         "url": "https://chu.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -2979,7 +3143,8 @@
         "party": "Democrat",
         "url": "https://clarke.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -3088,7 +3253,8 @@
         "party": "Democrat",
         "url": "https://cleaver.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -3245,7 +3411,8 @@
         "party": "Democrat",
         "url": "https://clyburn.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -3346,7 +3513,8 @@
         "party": "Democrat",
         "url": "https://cohen.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -3463,7 +3631,8 @@
         "party": "Republican",
         "url": "https://cole.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -3572,7 +3741,8 @@
         "party": "Democrat",
         "url": "https://costa.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -3673,7 +3843,8 @@
         "party": "Democrat",
         "url": "https://courtney.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -3760,7 +3931,8 @@
         "party": "Republican",
         "url": "https://www.crapo.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -3845,7 +4017,8 @@
         "party": "Republican",
         "url": "https://crawford.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -3954,7 +4127,8 @@
         "party": "Democrat",
         "url": "https://cuellar.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -4095,7 +4269,8 @@
         "party": "Democrat",
         "url": "https://davis.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -4236,7 +4411,8 @@
         "party": "Democrat",
         "url": "https://degette.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -4401,7 +4577,8 @@
         "party": "Democrat",
         "url": "https://delauro.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -4486,7 +4663,8 @@
         "party": "Republican",
         "url": "https://desjarlais.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -4603,7 +4781,8 @@
         "party": "Republican",
         "url": "https://mariodiazbalart.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -4752,7 +4931,8 @@
         "party": "Democrat",
         "url": "https://doggett.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -4837,7 +5017,8 @@
         "party": "Republican",
         "url": "https://fleischmann.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -4946,7 +5127,8 @@
         "party": "Republican",
         "url": "https://foxx.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -5039,7 +5221,8 @@
         "party": "Democrat",
         "url": "https://garamendi.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -5124,7 +5307,8 @@
         "party": "Republican",
         "url": "https://gosar.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -5234,7 +5418,8 @@
         "party": "Republican",
         "url": "https://www.grassley.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -5359,7 +5544,8 @@
         "party": "Republican",
         "url": "https://graves.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -5468,7 +5654,8 @@
         "party": "Democrat",
         "url": "https://algreen.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -5553,7 +5740,8 @@
         "party": "Republican",
         "url": "https://morgangriffith.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -5646,7 +5834,8 @@
         "party": "Republican",
         "url": "https://guthrie.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -5731,7 +5920,8 @@
         "party": "Republican",
         "url": "https://harris.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -5794,7 +5984,8 @@
         "party": "Democrat",
         "url": "https://www.heinrich.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -5887,7 +6078,8 @@
         "party": "Democrat",
         "url": "https://himes.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -5958,7 +6150,8 @@
         "party": "Democrat",
         "url": "https://www.hirono.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -6004,7 +6197,8 @@
         "party": "Republican",
         "url": "https://www.hoeven.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -6209,7 +6403,8 @@
         "party": "Democrat",
         "url": "https://hoyer.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -6294,7 +6489,8 @@
         "party": "Republican",
         "url": "https://huizenga.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -6395,7 +6591,8 @@
         "party": "Democrat",
         "url": "https://hankjohnson.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -6441,7 +6638,8 @@
         "party": "Republican",
         "url": "https://www.ronjohnson.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -6542,7 +6740,8 @@
         "party": "Republican",
         "url": "https://jordan.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -6739,7 +6938,8 @@
         "party": "Democrat",
         "url": "https://kaptur.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -6824,7 +7024,8 @@
         "party": "Democrat",
         "url": "https://keating.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -6909,7 +7110,8 @@
         "party": "Republican",
         "url": "https://kelly.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -6972,7 +7174,8 @@
         "party": "Republican",
         "url": "https://www.lankford.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -7097,7 +7300,8 @@
         "party": "Democrat",
         "url": "https://larsen.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -7230,7 +7434,8 @@
         "party": "Democrat",
         "url": "https://larson.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -7331,7 +7536,8 @@
         "party": "Republican",
         "url": "https://latta.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -7377,7 +7583,8 @@
         "party": "Republican",
         "url": "https://www.lee.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -7526,7 +7733,8 @@
         "party": "Democrat",
         "url": "https://lofgren.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -7683,7 +7891,8 @@
         "party": "Republican",
         "url": "https://lucas.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -7762,7 +7971,8 @@
         "party": "Democrat",
         "url": "https://www.lujan.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -7888,7 +8098,8 @@
         "party": "Democrat",
         "url": "https://lynch.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -8095,7 +8306,8 @@
         "party": "Democrat",
         "url": "https://www.markey.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -8204,7 +8416,8 @@
         "party": "Democrat",
         "url": "https://matsui.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -8313,7 +8526,8 @@
         "party": "Republican",
         "url": "https://mccaul.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -8407,7 +8621,8 @@
         "party": "Republican",
         "url": "https://mcclintock.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -8532,7 +8747,8 @@
         "party": "Democrat",
         "url": "https://mccollum.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -8673,7 +8889,8 @@
         "party": "Democrat",
         "url": "https://mcgovern.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -8814,7 +9031,8 @@
         "party": "Democrat",
         "url": "https://meeks.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -8923,7 +9141,8 @@
         "party": "Democrat",
         "url": "https://gwenmoore.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -9026,7 +9245,8 @@
         "party": "Republican",
         "url": "https://www.moran.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -9088,7 +9308,8 @@
         "party": "Republican",
         "url": "https://www.murkowski.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -9159,7 +9380,8 @@
         "party": "Democrat",
         "url": "https://www.murphy.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -9229,7 +9451,8 @@
         "party": "Democrat",
         "url": "https://www.murray.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -9394,7 +9617,8 @@
         "party": "Democrat",
         "url": "https://nadler.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -9567,7 +9791,8 @@
         "party": "Democrat",
         "url": "https://neal.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -9732,7 +9957,8 @@
         "party": "Democrat",
         "url": "https://norton.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -9914,7 +10140,8 @@
         "party": "Democrat",
         "url": "https://pallone.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -9960,7 +10187,8 @@
         "party": "Republican",
         "url": "https://www.paul.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -10141,7 +10369,8 @@
         "party": "Democrat",
         "url": "https://pelosi.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -10204,7 +10433,8 @@
         "party": "Democrat",
         "url": "https://www.peters.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -10298,7 +10528,8 @@
         "party": "Democrat",
         "url": "https://pingree.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -10391,7 +10622,8 @@
         "party": "Democrat",
         "url": "https://quigley.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -10596,7 +10828,8 @@
         "party": "Republican",
         "url": "https://halrogers.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -10713,7 +10946,8 @@
         "party": "Republican",
         "url": "https://mikerogers.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -10814,7 +11048,8 @@
         "party": "Republican",
         "url": "https://scalise.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -10947,7 +11182,8 @@
         "party": "Democrat",
         "url": "https://schakowsky.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -11082,7 +11318,8 @@
         "party": "Democrat",
         "url": "https://www.schiff.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -11217,7 +11454,8 @@
         "party": "Democrat",
         "url": "https://www.schumer.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -11303,7 +11541,8 @@
         "party": "Republican",
         "url": "https://schweikert.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -11388,7 +11627,8 @@
         "party": "Republican",
         "url": "https://austinscott.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -11505,7 +11745,8 @@
         "party": "Democrat",
         "url": "https://davidscott.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -11662,7 +11903,8 @@
         "party": "Democrat",
         "url": "https://bobbyscott.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -11725,7 +11967,8 @@
         "party": "Republican",
         "url": "https://www.scott.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -11810,7 +12053,8 @@
         "party": "Democrat",
         "url": "https://sewell.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -11951,7 +12195,8 @@
         "party": "Democrat",
         "url": "https://sherman.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -12084,7 +12329,8 @@
         "party": "Republican",
         "url": "https://simpson.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -12225,7 +12471,8 @@
         "party": "Democrat",
         "url": "https://adamsmith.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -12326,7 +12573,8 @@
         "party": "Republican",
         "url": "https://adriansmith.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -12531,7 +12779,8 @@
         "party": "Republican",
         "url": "https://chrissmith.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -12648,7 +12897,8 @@
         "party": "Democrat",
         "url": "https://lindasanchez.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -12805,7 +13055,8 @@
         "party": "Democrat",
         "url": "https://benniethompson.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -12938,7 +13189,8 @@
         "party": "Democrat",
         "url": "https://mikethompson.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -13031,7 +13283,8 @@
         "party": "Republican",
         "url": "https://thompson.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -13110,7 +13363,8 @@
         "party": "Republican",
         "url": "https://www.thune.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -13203,7 +13457,8 @@
         "party": "Democrat",
         "url": "https://tonko.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -13321,7 +13576,8 @@
         "party": "Republican",
         "url": "https://turner.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -13416,7 +13672,8 @@
         "party": "Democrat",
         "url": "https://www.vanhollen.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -13573,7 +13830,8 @@
         "party": "Democrat",
         "url": "https://velazquez.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -13666,7 +13924,8 @@
         "party": "Republican",
         "url": "https://walberg.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -13775,7 +14034,8 @@
         "party": "Democrat",
         "url": "https://wassermanschultz.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -13940,7 +14200,8 @@
         "party": "Democrat",
         "url": "https://waters.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -14026,7 +14287,8 @@
         "party": "Republican",
         "url": "https://webster.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -14122,7 +14384,8 @@
         "party": "Democrat",
         "url": "https://www.welch.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -14247,7 +14510,8 @@
         "party": "Republican",
         "url": "https://joewilson.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -14332,7 +14596,8 @@
         "party": "Democrat",
         "url": "https://wilson.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -14433,7 +14698,8 @@
         "party": "Republican",
         "url": "https://wittman.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -14518,7 +14784,8 @@
         "party": "Republican",
         "url": "https://womack.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -14653,7 +14920,8 @@
         "party": "Democrat",
         "url": "https://www.wyden.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -14716,7 +14984,8 @@
         "party": "Republican",
         "url": "https://www.young.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -14803,7 +15072,8 @@
         "party": "Republican",
         "url": "https://amodei.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -14888,7 +15158,8 @@
         "party": "Democrat",
         "url": "https://bonamici.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -14973,7 +15244,8 @@
         "party": "Democrat",
         "url": "https://delbene.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -15058,7 +15330,8 @@
         "party": "Republican",
         "url": "https://massie.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -15113,7 +15386,8 @@
         "party": "Democrat",
         "url": "https://www.schatz.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -15207,7 +15481,8 @@
         "party": "Democrat",
         "url": "https://foster.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -15292,7 +15567,8 @@
         "party": "Democrat",
         "url": "https://titus.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -15339,7 +15615,8 @@
         "party": "Republican",
         "url": "https://www.cotton.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -15417,7 +15694,8 @@
         "party": "Republican",
         "url": "https://lamalfa.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -15494,7 +15772,8 @@
         "party": "Democrat",
         "url": "https://huffman.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -15571,7 +15850,8 @@
         "party": "Democrat",
         "url": "https://bera.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -15648,7 +15928,8 @@
         "party": "Democrat",
         "url": "https://swalwell.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -15725,7 +16006,8 @@
         "party": "Democrat",
         "url": "https://juliabrownley.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -15802,7 +16084,8 @@
         "party": "Democrat",
         "url": "https://ruiz.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -15879,7 +16162,8 @@
         "party": "Democrat",
         "url": "https://takano.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -15956,7 +16240,8 @@
         "party": "Democrat",
         "url": "https://vargas.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -16033,7 +16318,8 @@
         "party": "Democrat",
         "url": "https://scottpeters.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -16111,7 +16397,8 @@
         "party": "Democrat",
         "url": "https://frankel.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -16166,7 +16453,8 @@
         "party": "Democrat",
         "url": "https://www.duckworth.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -16243,7 +16531,8 @@
         "party": "Republican",
         "url": "https://barr.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -16289,7 +16578,8 @@
         "party": "Democrat",
         "url": "https://www.warren.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -16335,7 +16625,8 @@
         "party": "Independent",
         "url": "https://www.king.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -16412,7 +16703,8 @@
         "party": "Republican",
         "url": "https://wagner.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -16459,7 +16751,8 @@
         "party": "Republican",
         "url": "https://www.daines.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -16536,7 +16829,8 @@
         "party": "Republican",
         "url": "https://hudson.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -16600,7 +16894,8 @@
         "party": "Republican",
         "url": "https://www.cramer.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -16646,7 +16941,8 @@
         "party": "Republican",
         "url": "https://www.fischer.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -16723,7 +17019,8 @@
         "party": "Democrat",
         "url": "https://meng.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -16800,7 +17097,8 @@
         "party": "Democrat",
         "url": "https://jeffries.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -16877,7 +17175,8 @@
         "party": "Democrat",
         "url": "https://beatty.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -16954,7 +17253,8 @@
         "party": "Republican",
         "url": "https://joyce.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -17025,7 +17325,8 @@
         "party": "Republican",
         "url": "https://www.mullin.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -17102,7 +17403,8 @@
         "party": "Republican",
         "url": "https://perry.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -17148,7 +17450,8 @@
         "party": "Republican",
         "url": "https://www.cruz.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -17225,7 +17528,8 @@
         "party": "Republican",
         "url": "https://weber.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -17302,7 +17606,8 @@
         "party": "Democrat",
         "url": "https://castro.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -17380,7 +17685,8 @@
         "party": "Republican",
         "url": "https://williams.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -17457,7 +17763,8 @@
         "party": "Democrat",
         "url": "https://veasey.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -17503,7 +17810,8 @@
         "party": "Democrat",
         "url": "https://www.kaine.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -17580,7 +17888,8 @@
         "party": "Democrat",
         "url": "https://pocan.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -17657,7 +17966,8 @@
         "party": "Democrat",
         "url": "https://robinkelly.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -17734,7 +18044,8 @@
         "party": "Republican",
         "url": "https://jasonsmith.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -17780,7 +18091,8 @@
         "party": "Democrat",
         "url": "https://www.booker.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -17857,7 +18169,8 @@
         "party": "Democrat",
         "url": "https://katherineclark.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -17934,7 +18247,8 @@
         "party": "Democrat",
         "url": "https://norcross.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -18011,7 +18325,8 @@
         "party": "Democrat",
         "url": "https://adams.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -18080,7 +18395,8 @@
         "party": "Republican",
         "url": "https://palmer.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -18149,7 +18465,8 @@
         "party": "Republican",
         "url": "https://hill.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -18218,7 +18535,8 @@
         "party": "Republican",
         "url": "https://westerman.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -18289,7 +18607,8 @@
         "party": "Democrat",
         "url": "https://www.gallego.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -18358,7 +18677,8 @@
         "party": "Democrat",
         "url": "https://desaulnier.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -18427,7 +18747,8 @@
         "party": "Democrat",
         "url": "https://aguilar.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -18496,7 +18817,8 @@
         "party": "Democrat",
         "url": "https://lieu.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -18565,7 +18887,8 @@
         "party": "Democrat",
         "url": "https://torres.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -18634,7 +18957,8 @@
         "party": "Republican",
         "url": "https://buddycarter.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -18703,7 +19027,8 @@
         "party": "Republican",
         "url": "https://loudermilk.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -18772,7 +19097,8 @@
         "party": "Republican",
         "url": "https://allen.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -18841,7 +19167,8 @@
         "party": "Republican",
         "url": "https://bost.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -18910,7 +19237,8 @@
         "party": "Democrat",
         "url": "https://moulton.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -18979,7 +19307,8 @@
         "party": "Republican",
         "url": "https://moolenaar.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -19048,7 +19377,8 @@
         "party": "Democrat",
         "url": "https://debbiedingell.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -19117,7 +19447,8 @@
         "party": "Republican",
         "url": "https://emmer.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -19186,7 +19517,8 @@
         "party": "Republican",
         "url": "https://rouzer.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -19255,7 +19587,8 @@
         "party": "Democrat",
         "url": "https://watsoncoleman.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -19324,7 +19657,8 @@
         "party": "Republican",
         "url": "https://stefanik.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -19393,7 +19727,8 @@
         "party": "Democrat",
         "url": "https://boyle.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -19462,7 +19797,8 @@
         "party": "Republican",
         "url": "https://babin.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -19531,7 +19867,8 @@
         "party": "Democrat",
         "url": "https://beyer.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -19600,7 +19937,8 @@
         "party": "Democrat",
         "url": "https://plaskett.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -19669,7 +20007,8 @@
         "party": "Republican",
         "url": "https://newhouse.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -19738,7 +20077,8 @@
         "party": "Republican",
         "url": "https://grothman.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -19807,7 +20147,8 @@
         "party": "Republican",
         "url": "https://radewagen.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -19845,7 +20186,8 @@
         "party": "Republican",
         "url": "https://www.sullivan.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -19883,7 +20225,8 @@
         "party": "Republican",
         "url": "https://www.ernst.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -19921,7 +20264,8 @@
         "party": "Republican",
         "url": "https://www.tillis.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -19959,7 +20303,8 @@
         "party": "Republican",
         "url": "https://www.rounds.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -20028,7 +20373,8 @@
         "party": "Republican",
         "url": "https://trentkelly.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -20097,7 +20443,8 @@
         "party": "Republican",
         "url": "https://lahood.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -20166,7 +20513,8 @@
         "party": "Republican",
         "url": "https://davidson.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -20234,7 +20582,8 @@
         "party": "Republican",
         "url": "https://comer.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -20302,7 +20651,8 @@
         "party": "Democrat",
         "url": "https://evans.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -20339,7 +20689,8 @@
         "party": "Republican",
         "url": "https://www.kennedy.senate.gov/public"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -20376,7 +20727,8 @@
         "party": "Democrat",
         "url": "https://www.hassan.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -20413,7 +20765,8 @@
         "party": "Democrat",
         "url": "https://www.cortezmasto.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -20482,7 +20835,8 @@
         "party": "Democrat",
         "url": "https://schneider.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -20542,7 +20896,8 @@
         "party": "Republican",
         "url": "https://biggs.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -20602,7 +20957,8 @@
         "party": "Democrat",
         "url": "https://khanna.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -20662,7 +21018,8 @@
         "party": "Democrat",
         "url": "https://panetta.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -20722,7 +21079,8 @@
         "party": "Democrat",
         "url": "https://carbajal.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -20782,7 +21140,8 @@
         "party": "Democrat",
         "url": "https://barragan.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -20842,7 +21201,8 @@
         "party": "Democrat",
         "url": "https://correa.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -20904,7 +21264,8 @@
         "party": "Democrat",
         "url": "https://www.bluntrochester.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -20964,7 +21325,8 @@
         "party": "Republican",
         "url": "https://dunn.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -21024,7 +21386,8 @@
         "party": "Republican",
         "url": "https://rutherford.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -21084,7 +21447,8 @@
         "party": "Democrat",
         "url": "https://soto.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -21144,7 +21508,8 @@
         "party": "Republican",
         "url": "https://mast.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -21204,7 +21569,8 @@
         "party": "Democrat",
         "url": "https://krishnamoorthi.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -21266,7 +21632,8 @@
         "party": "Republican",
         "url": "https://www.banks.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -21312,7 +21679,8 @@
         "party": "Republican",
         "url": "https://www.marshall.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -21372,7 +21740,8 @@
         "party": "Republican",
         "url": "https://clayhiggins.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -21432,7 +21801,8 @@
         "party": "Republican",
         "url": "https://mikejohnson.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -21492,7 +21862,8 @@
         "party": "Democrat",
         "url": "https://raskin.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -21552,7 +21923,8 @@
         "party": "Republican",
         "url": "https://bergman.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -21606,7 +21978,8 @@
         "party": "Republican",
         "url": "https://www.budd.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -21666,7 +22039,8 @@
         "party": "Republican",
         "url": "https://bacon.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -21726,7 +22100,8 @@
         "party": "Democrat",
         "url": "https://gottheimer.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -21772,7 +22147,8 @@
         "party": "Democrat",
         "url": "https://www.rosen.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -21832,7 +22208,8 @@
         "party": "Democrat",
         "url": "https://espaillat.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -21892,7 +22269,8 @@
         "party": "Republican",
         "url": "https://fitzpatrick.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -21952,7 +22330,8 @@
         "party": "Republican",
         "url": "https://smucker.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -22012,7 +22391,8 @@
         "party": "Republican",
         "url": "https://kustoff.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -22072,7 +22452,8 @@
         "party": "Democrat",
         "url": "https://gonzalez.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -22132,7 +22513,8 @@
         "party": "Republican",
         "url": "https://arrington.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -22192,7 +22574,8 @@
         "party": "Democrat",
         "url": "https://jayapal.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -22252,7 +22635,8 @@
         "party": "Republican",
         "url": "https://estes.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -22312,7 +22696,8 @@
         "party": "Republican",
         "url": "https://norman.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -22372,7 +22757,8 @@
         "party": "Democrat",
         "url": "https://gomez.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -22433,7 +22819,8 @@
         "party": "Republican",
         "url": "https://www.curtis.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -22478,7 +22865,8 @@
         "party": "Democrat",
         "url": "https://www.smith.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -22523,7 +22911,8 @@
         "party": "Republican",
         "url": "https://www.hydesmith.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -22583,7 +22972,8 @@
         "party": "Republican",
         "url": "https://cloud.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -22642,7 +23032,8 @@
         "party": "Republican",
         "url": "https://balderson.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -22701,7 +23092,8 @@
         "party": "Republican",
         "url": "https://hern.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -22760,7 +23152,8 @@
         "party": "Democrat",
         "url": "https://morelle.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -22819,7 +23212,8 @@
         "party": "Democrat",
         "url": "https://scanlon.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -22887,7 +23281,8 @@
         "party": "Democrat",
         "url": "https://case.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -22948,7 +23343,8 @@
         "party": "Democrat",
         "url": "https://horsford.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -22999,7 +23395,8 @@
         "party": "Democrat",
         "url": "https://stanton.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -23050,7 +23447,8 @@
         "party": "Democrat",
         "url": "https://harder.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -23101,7 +23499,8 @@
         "party": "Democrat",
         "url": "https://levin.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -23152,7 +23551,8 @@
         "party": "Democrat",
         "url": "https://neguse.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -23203,7 +23603,8 @@
         "party": "Democrat",
         "url": "https://crow.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -23254,7 +23655,8 @@
         "party": "Democrat",
         "url": "https://hayes.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -23305,7 +23707,8 @@
         "party": "Republican",
         "url": "https://steube.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -23356,7 +23759,8 @@
         "party": "Democrat",
         "url": "https://mcbath.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -23407,7 +23811,8 @@
         "party": "Republican",
         "url": "https://fulcher.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -23458,7 +23863,8 @@
         "party": "Democrat",
         "url": "https://chuygarcia.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -23509,7 +23915,8 @@
         "party": "Democrat",
         "url": "https://casten.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -23560,7 +23967,8 @@
         "party": "Democrat",
         "url": "https://underwood.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -23611,7 +24019,8 @@
         "party": "Republican",
         "url": "https://baird.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -23662,7 +24071,8 @@
         "party": "Democrat",
         "url": "https://davids.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -23713,7 +24123,8 @@
         "party": "Democrat",
         "url": "https://trahan.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -23764,7 +24175,8 @@
         "party": "Democrat",
         "url": "https://pressley.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -23817,7 +24229,8 @@
         "party": "Democrat",
         "url": "https://www.slotkin.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -23868,7 +24281,8 @@
         "party": "Democrat",
         "url": "https://stevens.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -23919,7 +24333,8 @@
         "party": "Democrat",
         "url": "https://tlaib.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -23970,7 +24385,8 @@
         "party": "Democrat",
         "url": "https://craig.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -24021,7 +24437,8 @@
         "party": "Democrat",
         "url": "https://omar.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -24072,7 +24489,8 @@
         "party": "Republican",
         "url": "https://stauber.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -24122,7 +24540,8 @@
         "party": "Republican",
         "url": "https://guest.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -24173,7 +24592,8 @@
         "party": "Democrat",
         "url": "https://pappas.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -24224,7 +24644,8 @@
         "party": "Republican",
         "url": "https://vandrew.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -24285,7 +24706,8 @@
         "party": "Democrat",
         "url": "https://www.kim.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -24336,7 +24758,8 @@
         "party": "Democrat",
         "url": "https://sherrill.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -24387,7 +24810,8 @@
         "party": "Democrat",
         "url": "https://susielee.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -24438,7 +24862,8 @@
         "party": "Democrat",
         "url": "https://ocasio-cortez.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -24489,7 +24914,8 @@
         "party": "Democrat",
         "url": "https://dean.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -24540,7 +24966,8 @@
         "party": "Democrat",
         "url": "https://houlahan.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -24591,7 +25018,8 @@
         "party": "Republican",
         "url": "https://meuser.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -24642,7 +25070,8 @@
         "party": "Republican",
         "url": "https://johnjoyce.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -24693,7 +25122,8 @@
         "party": "Republican",
         "url": "https://reschenthaler.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -24744,7 +25174,8 @@
         "party": "Republican",
         "url": "https://timmons.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -24795,7 +25226,8 @@
         "party": "Republican",
         "url": "https://dustyjohnson.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -24846,7 +25278,8 @@
         "party": "Republican",
         "url": "https://burchett.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -24897,7 +25330,8 @@
         "party": "Republican",
         "url": "https://johnrose.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -24948,7 +25382,8 @@
         "party": "Republican",
         "url": "https://crenshaw.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -24999,7 +25434,8 @@
         "party": "Republican",
         "url": "https://gooden.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -25050,7 +25486,8 @@
         "party": "Democrat",
         "url": "https://fletcher.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -25101,7 +25538,8 @@
         "party": "Democrat",
         "url": "https://escobar.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -25152,7 +25590,8 @@
         "party": "Republican",
         "url": "https://roy.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -25203,7 +25642,8 @@
         "party": "Democrat",
         "url": "https://sylviagarcia.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -25254,7 +25694,8 @@
         "party": "Republican",
         "url": "https://cline.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -25305,7 +25746,8 @@
         "party": "Democrat",
         "url": "https://schrier.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -25356,7 +25798,8 @@
         "party": "Republican",
         "url": "https://steil.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -25407,7 +25850,8 @@
         "party": "Republican",
         "url": "https://miller.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -25443,7 +25887,8 @@
         "party": "Republican",
         "url": "https://www.rickscott.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -25479,7 +25924,8 @@
         "party": "Republican",
         "url": "https://www.hawley.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -25530,7 +25976,8 @@
         "party": "Democrat",
         "url": "https://golden.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -25581,7 +26028,8 @@
         "party": "Republican",
         "url": "https://murphy.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -25675,7 +26123,8 @@
         "party": "Democrat",
         "url": "https://mfume.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -25725,7 +26174,8 @@
         "party": "Republican",
         "url": "https://tiffany.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -25761,7 +26211,8 @@
         "party": "Democrat",
         "url": "https://www.kelly.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -25824,7 +26275,8 @@
         "party": "Republican",
         "url": "https://www.lummis.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -25942,7 +26394,8 @@
         "party": "Republican",
         "url": "https://issa.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -26075,7 +26528,8 @@
         "party": "Republican",
         "url": "https://sessions.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -26144,7 +26598,8 @@
         "party": "Republican",
         "url": "https://valadao.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -26172,7 +26627,8 @@
         "party": "Republican",
         "url": "https://www.tuberville.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -26199,7 +26655,8 @@
         "party": "Democrat",
         "url": "https://www.hickenlooper.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -26227,7 +26684,8 @@
         "party": "Republican",
         "url": "https://www.hagerty.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -26270,7 +26728,8 @@
         "party": "Republican",
         "url": "https://barrymoore.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -26313,7 +26772,8 @@
         "party": "Republican",
         "url": "https://obernolte.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -26356,7 +26816,8 @@
         "party": "Republican",
         "url": "https://youngkim.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -26399,7 +26860,8 @@
         "party": "Democrat",
         "url": "https://sarajacobs.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -26442,7 +26904,8 @@
         "party": "Republican",
         "url": "https://boebert.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -26484,7 +26947,8 @@
         "party": "Republican",
         "url": "https://cammack.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -26527,7 +26991,8 @@
         "party": "Republican",
         "url": "https://franklin.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -26570,7 +27035,8 @@
         "party": "Republican",
         "url": "https://donalds.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -26613,7 +27079,8 @@
         "party": "Republican",
         "url": "https://gimenez.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -26656,7 +27123,8 @@
         "party": "Republican",
         "url": "https://salazar.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -26698,7 +27166,8 @@
         "party": "Democrat",
         "url": "https://nikemawilliams.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -26740,7 +27209,8 @@
         "party": "Republican",
         "url": "https://clyde.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -26783,7 +27253,8 @@
         "party": "Republican",
         "url": "https://greene.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -26826,7 +27297,8 @@
         "party": "Republican",
         "url": "https://hinson.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -26869,7 +27341,8 @@
         "party": "Republican",
         "url": "https://millermeeks.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -26912,7 +27385,8 @@
         "party": "Republican",
         "url": "https://feenstra.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -26955,7 +27429,8 @@
         "party": "Republican",
         "url": "https://marymiller.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -26997,7 +27472,8 @@
         "party": "Democrat",
         "url": "https://mrvan.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -27040,7 +27516,8 @@
         "party": "Republican",
         "url": "https://spartz.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -27082,7 +27559,8 @@
         "party": "Republican",
         "url": "https://mann.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -27124,7 +27602,8 @@
         "party": "Democrat",
         "url": "https://auchincloss.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -27167,7 +27646,8 @@
         "party": "Republican",
         "url": "https://mcclain.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -27210,7 +27690,8 @@
         "party": "Republican",
         "url": "https://fischbach.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -27252,7 +27733,8 @@
         "party": "Democrat",
         "url": "https://ross.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -27294,7 +27776,8 @@
         "party": "Democrat",
         "url": "https://fernandez.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -27336,7 +27819,8 @@
         "party": "Republican",
         "url": "https://garbarino.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -27378,7 +27862,8 @@
         "party": "Republican",
         "url": "https://malliotakis.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -27421,7 +27906,8 @@
         "party": "Democrat",
         "url": "https://ritchietorres.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -27463,7 +27949,8 @@
         "party": "Republican",
         "url": "https://bice.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -27505,7 +27992,8 @@
         "party": "Republican",
         "url": "https://bentz.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -27548,7 +28036,8 @@
         "party": "Republican",
         "url": "https://mace.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -27591,7 +28080,8 @@
         "party": "Republican",
         "url": "https://harshbarger.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -27633,7 +28123,8 @@
         "party": "Republican",
         "url": "https://fallon.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -27675,7 +28166,8 @@
         "party": "Republican",
         "url": "https://pfluger.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -27718,7 +28210,8 @@
         "party": "Republican",
         "url": "https://jackson.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -27761,7 +28254,8 @@
         "party": "Republican",
         "url": "https://nehls.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -27803,7 +28297,8 @@
         "party": "Republican",
         "url": "https://gonzales.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -27846,7 +28341,8 @@
         "party": "Republican",
         "url": "https://vanduyne.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -27888,7 +28384,8 @@
         "party": "Republican",
         "url": "https://blakemoore.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -27931,7 +28428,8 @@
         "party": "Republican",
         "url": "https://owens.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -27973,7 +28471,8 @@
         "party": "Democrat",
         "url": "https://strickland.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -28016,7 +28515,8 @@
         "party": "Republican",
         "url": "https://fitzgerald.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -28060,7 +28560,8 @@
         "party": "Democrat",
         "url": "https://www.padilla.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -28089,7 +28590,8 @@
         "party": "Democrat",
         "url": "https://www.ossoff.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -28125,7 +28627,8 @@
         "party": "Democrat",
         "url": "https://www.warnock.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -28177,7 +28680,8 @@
         "party": "Republican",
         "url": "https://tenney.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -28220,7 +28724,8 @@
         "party": "Republican",
         "url": "https://letlow.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -28263,7 +28768,8 @@
         "party": "Democrat",
         "url": "https://troycarter.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -28306,7 +28812,8 @@
         "party": "Democrat",
         "url": "https://stansbury.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -28348,7 +28855,8 @@
         "party": "Republican",
         "url": "https://ellzey.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -28390,7 +28898,8 @@
         "party": "Democrat",
         "url": "https://shontelbrown.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -28432,7 +28941,8 @@
         "party": "Republican",
         "url": "https://carey.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -28474,7 +28984,8 @@
         "party": "Democrat",
         "url": "https://cherfilus-mccormick.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -28517,7 +29028,8 @@
         "party": "Republican",
         "url": "https://flood.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -28560,7 +29072,8 @@
         "party": "Republican",
         "url": "https://finstad.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -28603,7 +29116,8 @@
         "party": "Democrat",
         "url": "https://patryan.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -28646,7 +29160,8 @@
         "party": "Republican",
         "url": "https://yakym.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -28698,7 +29213,8 @@
         "party": "Republican",
         "url": "https://zinke.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -28726,7 +29242,8 @@
         "party": "Republican",
         "url": "https://www.britt.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -28754,7 +29271,8 @@
         "party": "Republican",
         "url": "https://www.schmitt.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -28782,7 +29300,8 @@
         "party": "Democrat",
         "url": "https://www.fetterman.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -28817,7 +29336,8 @@
         "party": "Republican",
         "url": "https://strong.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -28852,7 +29372,8 @@
         "party": "Republican",
         "url": "https://crane.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -28887,7 +29408,8 @@
         "party": "Republican",
         "url": "https://ciscomani.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -28922,7 +29444,8 @@
         "party": "Republican",
         "url": "https://kiley.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -28957,7 +29480,8 @@
         "party": "Democrat",
         "url": "https://kevinmullin.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -28992,7 +29516,8 @@
         "party": "Democrat",
         "url": "https://kamlager-dove.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -29027,7 +29552,8 @@
         "party": "Democrat",
         "url": "https://robertgarcia.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -29062,7 +29588,8 @@
         "party": "Democrat",
         "url": "https://pettersen.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -29097,7 +29624,8 @@
         "party": "Republican",
         "url": "https://bean.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -29132,7 +29660,8 @@
         "party": "Republican",
         "url": "https://mills.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -29167,7 +29696,8 @@
         "party": "Democrat",
         "url": "https://frost.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -29202,7 +29732,8 @@
         "party": "Republican",
         "url": "https://luna.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -29237,7 +29768,8 @@
         "party": "Republican",
         "url": "https://laurellee.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -29272,7 +29804,8 @@
         "party": "Democrat",
         "url": "https://moskowitz.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -29307,7 +29840,8 @@
         "party": "Republican",
         "url": "https://mccormick.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -29342,7 +29876,8 @@
         "party": "Republican",
         "url": "https://collins.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -29376,7 +29911,8 @@
         "party": "Republican",
         "url": "https://moylan.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -29411,7 +29947,8 @@
         "party": "Democrat",
         "url": "https://tokuda.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -29446,7 +29983,8 @@
         "party": "Republican",
         "url": "https://nunn.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -29481,7 +30019,8 @@
         "party": "Democrat",
         "url": "https://jonathanjackson.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -29516,7 +30055,8 @@
         "party": "Democrat",
         "url": "https://ramirez.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -29551,7 +30091,8 @@
         "party": "Democrat",
         "url": "https://budzinski.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -29586,7 +30127,8 @@
         "party": "Democrat",
         "url": "https://sorensen.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -29621,7 +30163,8 @@
         "party": "Republican",
         "url": "https://houchin.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -29656,7 +30199,8 @@
         "party": "Democrat",
         "url": "https://mcgarvey.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -29691,7 +30235,8 @@
         "party": "Democrat",
         "url": "https://ivey.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -29726,7 +30271,8 @@
         "party": "Democrat",
         "url": "https://scholten.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -29761,7 +30307,8 @@
         "party": "Republican",
         "url": "https://james.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -29796,7 +30343,8 @@
         "party": "Democrat",
         "url": "https://thanedar.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -29831,7 +30379,8 @@
         "party": "Republican",
         "url": "https://alford.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -29866,7 +30415,8 @@
         "party": "Republican",
         "url": "https://burlison.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -29901,7 +30451,8 @@
         "party": "Republican",
         "url": "https://ezell.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -29936,7 +30487,8 @@
         "party": "Democrat",
         "url": "https://dondavis.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -29971,7 +30523,8 @@
         "party": "Democrat",
         "url": "https://foushee.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -30006,7 +30559,8 @@
         "party": "Republican",
         "url": "https://edwards.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -30041,7 +30595,8 @@
         "party": "Republican",
         "url": "https://kean.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -30076,7 +30631,8 @@
         "party": "Democrat",
         "url": "https://menendez.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -30111,7 +30667,8 @@
         "party": "Democrat",
         "url": "https://vasquez.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -30146,7 +30703,8 @@
         "party": "Republican",
         "url": "https://lalota.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -30181,7 +30739,8 @@
         "party": "Democrat",
         "url": "https://goldman.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -30216,7 +30775,8 @@
         "party": "Republican",
         "url": "https://lawler.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -30251,7 +30811,8 @@
         "party": "Republican",
         "url": "https://langworthy.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -30286,7 +30847,8 @@
         "party": "Democrat",
         "url": "https://landsman.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -30321,7 +30883,8 @@
         "party": "Republican",
         "url": "https://maxmiller.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -30356,7 +30919,8 @@
         "party": "Democrat",
         "url": "https://sykes.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -30391,7 +30955,8 @@
         "party": "Republican",
         "url": "https://brecheen.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -30426,7 +30991,8 @@
         "party": "Democrat",
         "url": "https://hoyle.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -30461,7 +31027,8 @@
         "party": "Democrat",
         "url": "https://salinas.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -30496,7 +31063,8 @@
         "party": "Democrat",
         "url": "https://summerlee.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -30531,7 +31099,8 @@
         "party": "Democrat",
         "url": "https://deluzio.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -30566,7 +31135,8 @@
         "party": "Democrat",
         "url": "https://magaziner.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -30601,7 +31171,8 @@
         "party": "Republican",
         "url": "https://fry.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -30636,7 +31207,8 @@
         "party": "Republican",
         "url": "https://ogles.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -30671,7 +31243,8 @@
         "party": "Republican",
         "url": "https://moran.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -30706,7 +31279,8 @@
         "party": "Republican",
         "url": "https://keithself.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -30741,7 +31315,8 @@
         "party": "Republican",
         "url": "https://luttrell.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -30776,7 +31351,8 @@
         "party": "Republican",
         "url": "https://delacruz.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -30811,7 +31387,8 @@
         "party": "Democrat",
         "url": "https://crockett.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -30846,7 +31423,8 @@
         "party": "Democrat",
         "url": "https://casar.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -30881,7 +31459,8 @@
         "party": "Republican",
         "url": "https://hunt.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -30916,7 +31495,8 @@
         "party": "Republican",
         "url": "https://kiggans.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -30951,7 +31531,8 @@
         "party": "Democrat",
         "url": "https://balint.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -30986,7 +31567,8 @@
         "party": "Democrat",
         "url": "https://gluesenkampperez.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31021,7 +31603,8 @@
         "party": "Republican",
         "url": "https://vanorden.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31056,7 +31639,8 @@
         "party": "Republican",
         "url": "https://hageman.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31093,7 +31677,8 @@
         "party": "Republican",
         "url": "https://www.ricketts.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31128,7 +31713,8 @@
         "party": "Democrat",
         "url": "https://mcclellan.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31162,7 +31748,8 @@
         "party": "Democrat",
         "url": "https://amo.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31197,7 +31784,8 @@
         "party": "Republican",
         "url": "https://maloy.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31257,7 +31845,8 @@
         "party": "Democrat",
         "url": "https://suozzi.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31293,7 +31882,8 @@
         "party": "Democrat",
         "url": "https://kennedy.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31328,7 +31918,8 @@
         "party": "Republican",
         "url": "https://fong.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31363,7 +31954,8 @@
         "party": "Republican",
         "url": "https://rulli.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31398,7 +31990,8 @@
         "party": "Democrat",
         "url": "https://mciver.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31433,7 +32026,8 @@
         "party": "Republican",
         "url": "https://wied.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31476,7 +32070,8 @@
         "party": "Democrat",
         "url": "https://fields.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31538,7 +32133,8 @@
         "party": "Republican",
         "url": "https://stutzman.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31574,7 +32170,8 @@
         "party": "Democrat",
         "url": "https://cisneros.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31601,7 +32198,8 @@
         "party": "Democrat",
         "url": "https://www.alsobrooks.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31628,7 +32226,8 @@
         "party": "Republican",
         "url": "https://www.sheehy.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31655,7 +32254,8 @@
         "party": "Republican",
         "url": "https://www.moreno.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31682,7 +32282,8 @@
         "party": "Republican",
         "url": "https://www.mccormick.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31708,7 +32309,8 @@
         "party": "Republican",
         "url": "https://begich.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31734,7 +32336,8 @@
         "party": "Democrat",
         "url": "https://figures.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31760,7 +32363,8 @@
         "party": "Democrat",
         "url": "https://ansari.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31786,7 +32390,8 @@
         "party": "Republican",
         "url": "https://hamadeh.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31812,7 +32417,8 @@
         "party": "Democrat",
         "url": "https://simon.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31838,7 +32444,8 @@
         "party": "Democrat",
         "url": "https://gray.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31864,7 +32471,8 @@
         "party": "Democrat",
         "url": "https://liccardo.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31890,7 +32498,8 @@
         "party": "Democrat",
         "url": "https://whitesides.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31916,7 +32525,8 @@
         "party": "Democrat",
         "url": "https://rivas.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31942,7 +32552,8 @@
         "party": "Democrat",
         "url": "https://friedman.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31968,7 +32579,8 @@
         "party": "Democrat",
         "url": "https://tran.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -31994,7 +32606,8 @@
         "party": "Democrat",
         "url": "https://min.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32020,7 +32633,8 @@
         "party": "Republican",
         "url": "https://hurd.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32046,7 +32660,8 @@
         "party": "Republican",
         "url": "https://crank.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32072,7 +32687,8 @@
         "party": "Republican",
         "url": "https://gabeevans.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32098,7 +32714,8 @@
         "party": "Democrat",
         "url": "https://mcbride.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32124,7 +32741,8 @@
         "party": "Republican",
         "url": "https://haridopolos.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32150,7 +32768,8 @@
         "party": "Republican",
         "url": "https://jack.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32176,7 +32795,8 @@
         "party": "Republican",
         "url": "https://shreve.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32202,7 +32822,8 @@
         "party": "Republican",
         "url": "https://messmer.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32228,7 +32849,8 @@
         "party": "Republican",
         "url": "https://schmidt.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32254,7 +32876,8 @@
         "party": "Democrat",
         "url": "https://olszewski.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32280,7 +32903,8 @@
         "party": "Democrat",
         "url": "https://elfreth.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32306,7 +32930,8 @@
         "party": "Democrat",
         "url": "https://mcclaindelaney.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32332,7 +32957,8 @@
         "party": "Republican",
         "url": "https://barrett.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32358,7 +32984,8 @@
         "party": "Democrat",
         "url": "https://mcdonaldrivet.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32384,7 +33011,8 @@
         "party": "Democrat",
         "url": "https://morrison.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32410,7 +33038,8 @@
         "party": "Democrat",
         "url": "https://bell.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32437,7 +33066,8 @@
         "party": "Republican",
         "url": "https://onder.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32462,7 +33092,8 @@
         "party": "Republican",
         "url": "https://king-hinds.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32488,7 +33119,8 @@
         "party": "Republican",
         "url": "https://downing.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32514,7 +33146,8 @@
         "party": "Republican",
         "url": "https://mcdowell.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32541,7 +33174,8 @@
         "party": "Republican",
         "url": "https://markharris.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32567,7 +33201,8 @@
         "party": "Republican",
         "url": "https://harrigan.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32593,7 +33228,8 @@
         "party": "Republican",
         "url": "https://knott.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32619,7 +33255,8 @@
         "party": "Republican",
         "url": "https://timmoore.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32645,7 +33282,8 @@
         "party": "Republican",
         "url": "https://fedorchak.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32671,7 +33309,8 @@
         "party": "Democrat",
         "url": "https://goodlander.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32697,7 +33336,8 @@
         "party": "Democrat",
         "url": "https://conaway.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32723,7 +33363,8 @@
         "party": "Democrat",
         "url": "https://pou.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32749,7 +33390,8 @@
         "party": "Democrat",
         "url": "https://gillen.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32775,7 +33417,8 @@
         "party": "Democrat",
         "url": "https://latimer.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32801,7 +33444,8 @@
         "party": "Democrat",
         "url": "https://riley.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32827,7 +33471,8 @@
         "party": "Democrat",
         "url": "https://mannion.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32853,7 +33498,8 @@
         "party": "Republican",
         "url": "https://taylor.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32879,7 +33525,8 @@
         "party": "Democrat",
         "url": "https://dexter.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32905,7 +33552,8 @@
         "party": "Democrat",
         "url": "https://bynum.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32931,7 +33579,8 @@
         "party": "Republican",
         "url": "https://mackenzie.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32957,7 +33606,8 @@
         "party": "Republican",
         "url": "https://bresnahan.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -32983,7 +33633,8 @@
         "party": "Democrat",
         "url": "https://hernandez.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -33009,7 +33660,8 @@
         "party": "Republican",
         "url": "https://sheribiggs.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -33035,7 +33687,8 @@
         "party": "Republican",
         "url": "https://craiggoldman.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -33061,7 +33714,8 @@
         "party": "Republican",
         "url": "https://gill.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -33087,7 +33741,8 @@
         "party": "Democrat",
         "url": "https://juliejohnson.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -33113,7 +33768,8 @@
         "party": "Republican",
         "url": "https://mikekennedy.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -33140,7 +33796,8 @@
         "party": "Republican",
         "url": "https://mcguire.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -33166,7 +33823,8 @@
         "party": "Democrat",
         "url": "https://vindman.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -33192,7 +33850,8 @@
         "party": "Democrat",
         "url": "https://subramanyam.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -33218,7 +33877,8 @@
         "party": "Republican",
         "url": "https://baumgartner.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -33244,7 +33904,8 @@
         "party": "Democrat",
         "url": "https://randall.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -33270,7 +33931,8 @@
         "party": "Republican",
         "url": "https://rileymoore.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -33297,7 +33959,8 @@
         "party": "Republican",
         "url": "https://www.justice.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -33323,7 +33986,8 @@
         "party": "Republican",
         "url": "https://www.husted.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -33349,7 +34013,8 @@
         "party": "Republican",
         "url": "https://www.moody.senate.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -33376,7 +34041,8 @@
         "party": "Republican",
         "url": "https://patronis.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -33402,7 +34068,8 @@
         "party": "Republican",
         "url": "https://fine.house.gov"
       }
-    ]
+    ],
+    "committees": []
   },
   {
     "id": {
@@ -33427,6 +34094,7 @@
         "party": "Democrat",
         "url": null
       }
-    ]
+    ],
+    "committees": []
   }
 ]
