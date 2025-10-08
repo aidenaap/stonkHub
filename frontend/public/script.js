@@ -288,7 +288,7 @@ function displayTableData(data, headers, firstTime=false, stockRefresh=false) { 
                 value = item[header.toLowerCase()];
             }
 
-            // Tranform text if amount, date, or URL
+            // Tranform text if amount, date, review, URL, tickers, or representatives
             if ((header === 'Amount' || header === 'Current' || header === 'Open' || header === 'Prev Close') && value) {
                 value = '$' + Number(value).toLocaleString();
                 // Make the amount bold if highlighted
@@ -300,14 +300,6 @@ function displayTableData(data, headers, firstTime=false, stockRefresh=false) { 
                 value = new Date(value).toLocaleDateString();
                 td.textContent = value || 'N/A';
             } else if (header === 'URL') {  // Article URL Button
-                // const alpha = document.createElement('a');
-                // alpha.href = value;
-                // alpha.textContent = "View";
-                // alpha.target = "_blank";
-                // alpha.rel = "noopener noreferrer";
-                // alpha.classList.add('newsArticleBtn');
-
-                // td.appendChild(alpha);
                 const alpha = document.createElement('a');
                 alpha.href = value;
                 alpha.target = "_blank";
@@ -385,6 +377,39 @@ function displayTableData(data, headers, firstTime=false, stockRefresh=false) { 
                 
                 alpha.appendChild(icon);
                 td.appendChild(alpha);
+            } else if (header === 'Ticker' && value) {
+                td.style.cursor = 'pointer';
+                td.style.color = '#76ABAE';
+                td.style.textDecoration = 'underline';
+                td.textContent = value;
+                td.addEventListener('click', () => {
+                    openSearchModal();
+                    // Small delay to ensure modal is open and data is loaded
+                    setTimeout(() => {
+                        displayStockDetails(value);
+                    }, 100);
+                });
+            } else if (header === 'Representative' && value) {
+                td.style.cursor = 'pointer';
+                td.style.color = '#76ABAE';
+                td.style.textDecoration = 'underline';
+                td.textContent = value;
+                td.addEventListener('click', async () => {
+                    openSearchModal();
+                    // Small delay to ensure modal is open and data is loaded
+                    setTimeout(() => {
+                        // Find legislator by name
+                        const legislator = legislatorList.find(l => 
+                            l.name.fullname.toLowerCase() === value.toLowerCase()
+                        );
+                        if (legislator) {
+                            displayLegislatorDetails(legislator.id.bioguide);
+                        } else {
+                            document.getElementById('search-results').innerHTML = 
+                                '<div class="text-[#76ABAE]/50 text-center">Legislator not found</div>';
+                        }
+                    }, 100);
+                });
             } else {
                 td.textContent = value || 'N/A';
             }
@@ -464,7 +489,38 @@ function displayFilteredData(data, headers) {
                 value = new Date(value).toLocaleDateString();
             }
 
-            td.textContent = value || 'N/A';
+            if (header === 'Ticker' && value) {
+                td.style.cursor = 'pointer';
+                td.style.textDecoration = 'underline';
+                td.textContent = value;
+                td.addEventListener('click', () => {
+                    openSearchModal();
+                    setTimeout(() => {
+                        displayStockDetails(value);
+                    }, 100);
+                });
+            } else if (header === 'Representative' && value) {
+                td.style.cursor = 'pointer';
+                td.style.textDecoration = 'underline';
+                td.textContent = value;
+                td.addEventListener('click', () => {
+                    openSearchModal();
+                    setTimeout(() => {
+                        const legislator = legislatorList.find(l => 
+                            l.name.fullname.toLowerCase() === value.toLowerCase()
+                        );
+                        if (legislator) {
+                            displayLegislatorDetails(legislator.id.bioguide);
+                        } else {
+                            document.getElementById('search-results').innerHTML = 
+                                '<div class="text-[#76ABAE]/50 text-center">Legislator not found</div>';
+                        }
+                    }, 100);
+                });
+            } else {
+                td.textContent = value || 'N/A';
+            }
+
             tr.appendChild(td);
         });
 
