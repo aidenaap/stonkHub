@@ -485,27 +485,110 @@ function displayFilteredData(data, headers) {
                 if (isHighlighted) {
                     td.classList.add('font-bold');
                 }
+                td.textContent = value || 'N/A';
             } else if (header.includes('Date') && value) {
                 value = new Date(value).toLocaleDateString();
-            }
-
-            if (header === 'Ticker' && value) {
+                td.textContent = value || 'N/A';
+            } else if (header === 'URL') {  // Article URL Button
+                const alpha = document.createElement('a');
+                alpha.href = value;
+                alpha.target = "_blank";
+                alpha.rel = "noopener noreferrer";
+                alpha.classList.add('newsArticleBtn');
+                alpha.style.display = 'inline-block';
+                
+                const icon = document.createElement('img');
+                icon.src = '/images/eye_svg.svg';
+                icon.alt = 'View Article';
+                icon.style.width = '24px';
+                icon.style.height = '24px';
+                icon.style.filter = 'brightness(0) saturate(100%) invert(64%) sepia(23%) saturate(612%) hue-rotate(138deg) brightness(91%) contrast(86%)';
+                icon.style.transition = 'filter 0.2s';
+                
+                alpha.addEventListener('mouseenter', () => {
+                    icon.style.filter = 'brightness(0) saturate(100%) invert(64%) sepia(23%) saturate(612%) hue-rotate(138deg) brightness(91%) contrast(86%) opacity(80%)';
+                });
+                alpha.addEventListener('mouseleave', () => {
+                    icon.style.filter = 'brightness(0) saturate(100%) invert(64%) sepia(23%) saturate(612%) hue-rotate(138deg) brightness(91%) contrast(86%)';
+                });
+                
+                alpha.appendChild(icon);
+                td.appendChild(alpha);
+            } else if (header === 'AI Review') {    // AI Summary Button
+                const alpha = document.createElement('a');
+                alpha.href = "#";
+                alpha.textContent = "Summarize";
+                alpha.classList.add('aiReviewBtn');
+                alpha.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    await openAIModal(item.url, item.title, item.description);
+                });
+                td.appendChild(alpha); 
+            } else if (header==='Remove') {
+                const alpha = document.createElement('a');
+                alpha.href = "#";
+                alpha.rel = "noopener noreferrer";
+                alpha.classList.add('deleteWatchlistBtn');
+                alpha.style.display = 'inline-block';
+                alpha.style.cursor = 'pointer';
+                
+                const icon = document.createElement('img');
+                icon.src = '/images/delete_svg.svg';
+                icon.alt = 'Delete';
+                icon.style.width = '24px';
+                icon.style.height = '24px';
+                icon.style.transition = 'opacity 0.2s';
+                
+                alpha.addEventListener('mouseenter', () => {
+                    icon.style.opacity = '0.7';
+                });
+                alpha.addEventListener('mouseleave', () => {
+                    icon.style.opacity = '1';
+                });
+                
+                // upon click, delete from the watchlist
+                alpha.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    const ticker = item.Ticker;
+                    try {
+                        const response = await fetch(`${API_BASE}/watchlist/${ticker}`, {
+                            method: "DELETE"
+                        });
+                        if (response.ok) {
+                            console.log(`${ticker} deleted successfully`);
+                            tr.remove();
+                        } else {
+                            console.error("Failed to delete ticker:", ticker);
+                        }
+                    } catch (err) {
+                        console.error("Error deleting ticker:", err);
+                    }
+                });
+                
+                alpha.appendChild(icon);
+                td.appendChild(alpha);
+            } else if (header === 'Ticker' && value) {
                 td.style.cursor = 'pointer';
+                td.style.color = '#76ABAE';
                 td.style.textDecoration = 'underline';
                 td.textContent = value;
                 td.addEventListener('click', () => {
                     openSearchModal();
+                    // Small delay to ensure modal is open and data is loaded
                     setTimeout(() => {
                         displayStockDetails(value);
                     }, 100);
                 });
             } else if (header === 'Representative' && value) {
                 td.style.cursor = 'pointer';
+                td.style.color = '#76ABAE';
                 td.style.textDecoration = 'underline';
                 td.textContent = value;
-                td.addEventListener('click', () => {
+                td.addEventListener('click', async () => {
                     openSearchModal();
+                    // Small delay to ensure modal is open and data is loaded
                     setTimeout(() => {
+                        // Find legislator by name
                         const legislator = legislatorList.find(l => 
                             l.name.fullname.toLowerCase() === value.toLowerCase()
                         );
@@ -520,6 +603,48 @@ function displayFilteredData(data, headers) {
             } else {
                 td.textContent = value || 'N/A';
             }
+
+            // if ((header === 'Amount' || header === 'Current' || header === 'Open' || header === 'Prev Close') && value) {
+            //     value = '$' + Number(value).toLocaleString();
+            //     // Make the amount bold if highlighted
+            //     if (isHighlighted) {
+            //         td.classList.add('font-bold');
+            //     }
+            // } else if (header.includes('Date') && value) {
+            //     value = new Date(value).toLocaleDateString();
+            // }
+
+            // if (header === 'Ticker' && value) {
+            //     td.style.cursor = 'pointer';
+            //     td.style.textDecoration = 'underline';
+            //     td.textContent = value;
+            //     td.addEventListener('click', () => {
+            //         openSearchModal();
+            //         setTimeout(() => {
+            //             displayStockDetails(value);
+            //         }, 100);
+            //     });
+            // } else if (header === 'Representative' && value) {
+            //     td.style.cursor = 'pointer';
+            //     td.style.textDecoration = 'underline';
+            //     td.textContent = value;
+            //     td.addEventListener('click', () => {
+            //         openSearchModal();
+            //         setTimeout(() => {
+            //             const legislator = legislatorList.find(l => 
+            //                 l.name.fullname.toLowerCase() === value.toLowerCase()
+            //             );
+            //             if (legislator) {
+            //                 displayLegislatorDetails(legislator.id.bioguide);
+            //             } else {
+            //                 document.getElementById('search-results').innerHTML = 
+            //                     '<div class="text-[#76ABAE]/50 text-center">Legislator not found</div>';
+            //             }
+            //         }, 100);
+            //     });
+            // } else {
+            //     td.textContent = value || 'N/A';
+            // }
 
             tr.appendChild(td);
         });
@@ -623,77 +748,243 @@ function selectSearchResult(type, id) { //open details based on result type/id
     }
 }
 // Pop-up types
-function displayStockDetails(symbol) { // stocks pop-up
+async function displayStockDetails(symbol) {
     const stock = stockList[symbol];
     const isInWatchlist = watchlistData && watchlistData.hasOwnProperty(symbol);
     
+    // Show loading state
     document.getElementById('search-results').innerHTML = `
-        <div class="space-y-4">
-            <h3 class="text-2xl font-bold text-[#76ABAE]">${stock.Symbol} - ${stock.Name}</h3>
-            <div class="grid grid-cols-2 gap-4">
-                <div><span class="text-[#76ABAE]">Market Cap:</span> $${Number(stock['Market Cap']).toLocaleString()}</div>
-                <div><span class="text-[#76ABAE]">Sector:</span> ${stock.Sector}</div>
-                <div><span class="text-[#76ABAE]">Industry:</span> ${stock.Industry}</div>
-                <div><span class="text-[#76ABAE]">Country:</span> ${stock.Country}</div>
-            </div>
-            <div class="mt-6 pt-4 border-t border-[#76ABAE]/20">
-                <button id="watchlist-toggle-btn" class="w-full ${isInWatchlist ? 'bg-red-500 hover:bg-red-600' : 'bg-[#76ABAE] hover:bg-[#76ABAE]/80'} text-white px-6 py-3 rounded-lg font-semibold transition-colors">
-                    ${isInWatchlist ? 'Remove from Watchlist' : 'Add to Watchlist'}
-                </button>
-            </div>
-        </div>`;
+        <div class="flex items-center justify-center h-full">
+            <div class="text-[#76ABAE] text-xl">Loading stock details...</div>
+        </div>
+    `;
     
-    // Add event listener to the button
-    document.getElementById('watchlist-toggle-btn').addEventListener('click', async () => {
-        await toggleWatchlist(symbol);
-    });
-}
-function displayLegislatorDetails(bioguideId) { // legislator pop-up
-    const legislator = legislatorList.find(l => l.id.bioguide === bioguideId);
-    console.log('Legislator data:', legislator);
-    console.log('Has committees?', legislator.committees);
-    console.log('Committees length:', legislator.committees?.length);
-    
-    const latestTerm = legislator.terms[legislator.terms.length - 1];
-    
-    // Build committees section if available
-    let committeesHTML = '';
-    if (legislator.committees && legislator.committees.length > 0) {
-        committeesHTML = `
-            <div class="mt-6">
-                <h4 class="text-xl font-semibold text-[#76ABAE] mb-3">Committee Assignments</h4>
-                <div class="space-y-3">
-                    ${legislator.committees.map(committee => `
-                        <div class="bg-[#222831] p-4 rounded-lg">
-                            <div class="font-semibold text-[#EEEEEE] mb-2">${committee.name}</div>
-                            ${committee.subcommittees && committee.subcommittees.length > 0 ? `
-                                <div class="ml-4 mt-2">
-                                    <div class="text-sm text-[#76ABAE] mb-1">Subcommittees:</div>
-                                    <ul class="text-sm text-[#EEEEEE]/70 space-y-1">
-                                        ${committee.subcommittees.map(sub => `
-                                            <li>• ${sub.name}</li>
-                                        `).join('')}
-                                    </ul>
-                                </div>
-                            ` : ''}
-                        </div>
-                    `).join('')}
+    // Fetch historical data in parallel
+    try {
+        const [lobbyingData, congressData, contractsData] = await Promise.all([
+            fetch(`${API_BASE}/lobbying/${symbol}`).then(r => r.ok ? r.json() : []),
+            fetch(`${API_BASE}/congress/${symbol}`).then(r => r.ok ? r.json() : []),
+            fetch(`${API_BASE}/contracts/${symbol}`).then(r => r.ok ? r.json() : [])
+        ]);
+        
+        // Build count summary
+        const countsHTML = `
+            <div class="mt-4 p-4 bg-[#222831] rounded-lg">
+                <div class="grid grid-cols-3 gap-4 text-center">
+                    <div>
+                        <div class="text-2xl font-bold text-[#76ABAE]">${lobbyingData.length}</div>
+                        <div class="text-sm text-[#EEEEEE]/70">Lobbying Instances</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold text-[#76ABAE]">${congressData.length}</div>
+                        <div class="text-sm text-[#EEEEEE]/70">Congress Trades</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold text-[#76ABAE]">${contractsData.length}</div>
+                        <div class="text-sm text-[#EEEEEE]/70">Contracts Awarded</div>
+                    </div>
                 </div>
             </div>
         `;
-    }
-    
-    document.getElementById('search-results').innerHTML = `
-        <div class="space-y-4">
-            <h3 class="text-2xl font-bold text-[#76ABAE]">${legislator.name.fullname}</h3>
-            <div class="grid grid-cols-2 gap-4">
-                <div><span class="text-[#76ABAE]">Position:</span> ${latestTerm.type === 'sen' ? 'Senator' : 'Representative'}</div>
-                <div><span class="text-[#76ABAE]">State:</span> ${latestTerm.state}</div>
-                <div><span class="text-[#76ABAE]">Party:</span> ${latestTerm.party}</div>
-                <div><span class="text-[#76ABAE]">Current Term:</span> ${latestTerm.start} to ${latestTerm.end}</div>
+        
+        // Build historical sections
+        let historicalHTML = '';
+        
+        // Lobbying section
+        historicalHTML += `
+            <div class="mt-6">
+                <h4 class="text-xl font-semibold text-[#76ABAE] mb-3">Recent Lobbying Activity</h4>
+                <div class="bg-[#222831] rounded-lg p-4 max-h-60 overflow-y-auto">
+                    ${lobbyingData.length === 0 
+                        ? '<div class="text-[#EEEEEE]/50 text-center py-4">No Lobbying Data</div>'
+                        : lobbyingData.slice(0, 5).map(item => `
+                            <div class="border-b border-[#76ABAE]/10 py-3 last:border-0">
+                                <div class="font-semibold text-[#EEEEEE]">${item.Client}</div>
+                                <div class="text-sm text-[#EEEEEE]/70 mt-1">
+                                    <div>Amount: $${Number(item.Amount).toLocaleString()} • ${new Date(item.Date).toLocaleDateString()}</div>
+                                    <div class="mt-1">Issue: ${item.Issue}</div>
+                                </div>
+                            </div>
+                        `).join('')
+                    }
+                </div>
             </div>
-            ${committeesHTML}
-        </div>`;
+        `;
+        
+        // Congress trading section
+        historicalHTML += `
+            <div class="mt-6">
+                <h4 class="text-xl font-semibold text-[#76ABAE] mb-3">Recent Congressional Trading</h4>
+                <div class="bg-[#222831] rounded-lg p-4 max-h-60 overflow-y-auto">
+                    ${congressData.length === 0
+                        ? '<div class="text-[#EEEEEE]/50 text-center py-4">No Congressional Trading Data</div>'
+                        : congressData.slice(0, 5).map(item => `
+                            <div class="border-b border-[#76ABAE]/10 py-3 last:border-0">
+                                <div class="font-semibold text-[#EEEEEE]">${item.Representative}</div>
+                                <div class="text-sm text-[#EEEEEE]/70 mt-1">
+                                    <div>${item.Transaction} • ${item.Range}</div>
+                                    <div>Transaction: ${new Date(item.TransactionDate).toLocaleDateString()} • Reported: ${new Date(item.ReportDate).toLocaleDateString()}</div>
+                                </div>
+                            </div>
+                        `).join('')
+                    }
+                </div>
+            </div>
+        `;
+        
+        // Government contracts section
+        historicalHTML += `
+            <div class="mt-6">
+                <h4 class="text-xl font-semibold text-[#76ABAE] mb-3">Recent Government Contracts</h4>
+                <div class="bg-[#222831] rounded-lg p-4 max-h-60 overflow-y-auto">
+                    ${contractsData.length === 0
+                        ? '<div class="text-[#EEEEEE]/50 text-center py-4">No Government Contracts Data</div>'
+                        : contractsData.slice(0, 5).map(item => `
+                            <div class="border-b border-[#76ABAE]/10 py-3 last:border-0">
+                                <div class="font-semibold text-[#EEEEEE]">${item.Agency}</div>
+                                <div class="text-sm text-[#EEEEEE]/70 mt-1">
+                                    <div>Amount: $${Number(item.Amount).toLocaleString()} • ${new Date(item.Date).toLocaleDateString()}</div>
+                                    <div class="mt-1">${item.Description}</div>
+                                </div>
+                            </div>
+                        `).join('')
+                    }
+                </div>
+            </div>
+        `;
+        
+        // Display complete stock details
+        document.getElementById('search-results').innerHTML = `
+            <div class="space-y-4">
+                <h3 class="text-2xl font-bold text-[#76ABAE]">${stock.Symbol} - ${stock.Name}</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><span class="text-[#76ABAE]">Market Cap:</span> $${Number(stock['Market Cap']).toLocaleString()}</div>
+                    <div><span class="text-[#76ABAE]">Sector:</span> ${stock.Sector}</div>
+                    <div><span class="text-[#76ABAE]">Industry:</span> ${stock.Industry}</div>
+                    <div><span class="text-[#76ABAE]">Country:</span> ${stock.Country}</div>
+                </div>
+                ${countsHTML}
+                ${historicalHTML}
+                <div class="mt-6 pt-4 border-t border-[#76ABAE]/20">
+                    <button id="watchlist-toggle-btn" class="w-full ${isInWatchlist ? 'bg-red-500 hover:bg-red-600' : 'bg-[#76ABAE] hover:bg-[#76ABAE]/80'} text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                        ${isInWatchlist ? 'Remove from Watchlist' : 'Add to Watchlist'}
+                    </button>
+                </div>
+            </div>`;
+        
+        // Add event listener to the button
+        document.getElementById('watchlist-toggle-btn').addEventListener('click', async () => {
+            await toggleWatchlist(symbol);
+        });
+        
+    } catch (error) {
+        console.error('Error fetching stock details:', error);
+        document.getElementById('search-results').innerHTML = `
+            <div class="text-red-400 text-center">
+                <p class="text-xl mb-2">Failed to load stock details</p>
+                <p class="text-sm">Please try again later</p>
+            </div>
+        `;
+    }
+}
+async function displayLegislatorDetails(bioguideId) {
+    const legislator = legislatorList.find(l => l.id.bioguide === bioguideId);
+    const latestTerm = legislator.terms[legislator.terms.length - 1];
+    
+    // Show loading state
+    document.getElementById('search-results').innerHTML = `
+        <div class="flex items-center justify-center h-full">
+            <div class="text-[#76ABAE] text-xl">Loading legislator details...</div>
+        </div>
+    `;
+    
+    try {
+        // Filter congress trading data for this representative
+        const legislatorTrades = congressData.filter(trade => 
+            trade.Representative.toLowerCase() === legislator.name.fullname.toLowerCase()
+        );
+        
+        // Build count summary
+        const countsHTML = `
+            <div class="mt-4 p-4 bg-[#222831] rounded-lg">
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-[#76ABAE]">${legislatorTrades.length}</div>
+                    <div class="text-sm text-[#EEEEEE]/70">Total Trades</div>
+                </div>
+            </div>
+        `;
+        
+        // Build committees section if available
+        let committeesHTML = '';
+        if (legislator.committees && legislator.committees.length > 0) {
+            committeesHTML = `
+                <div class="mt-6">
+                    <h4 class="text-xl font-semibold text-[#76ABAE] mb-3">Committee Assignments</h4>
+                    <div class="space-y-3">
+                        ${legislator.committees.map(committee => `
+                            <div class="bg-[#222831] p-4 rounded-lg">
+                                <div class="font-semibold text-[#EEEEEE] mb-2">${committee.name}</div>
+                                ${committee.subcommittees && committee.subcommittees.length > 0 ? `
+                                    <div class="ml-4 mt-2">
+                                        <div class="text-sm text-[#76ABAE] mb-1">Subcommittees:</div>
+                                        <ul class="text-sm text-[#EEEEEE]/70 space-y-1">
+                                            ${committee.subcommittees.map(sub => `
+                                                <li>• ${sub.name}</li>
+                                            `).join('')}
+                                        </ul>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Build trading history section
+        let tradingHTML = `
+            <div class="mt-6">
+                <h4 class="text-xl font-semibold text-[#76ABAE] mb-3">Recent Trading Activity</h4>
+                <div class="bg-[#222831] rounded-lg p-4 max-h-60 overflow-y-auto">
+                    ${legislatorTrades.length === 0
+                        ? '<div class="text-[#EEEEEE]/50 text-center py-4">No Trading Data</div>'
+                        : legislatorTrades.slice(0, 10).map(trade => `
+                            <div class="border-b border-[#76ABAE]/10 py-3 last:border-0">
+                                <div class="font-semibold text-[#EEEEEE]">${trade.Ticker} - ${trade.Transaction}</div>
+                                <div class="text-sm text-[#EEEEEE]/70 mt-1">
+                                    <div>Amount: ${trade.Range}</div>
+                                    <div>Transaction: ${new Date(trade.TransactionDate).toLocaleDateString()} • Reported: ${new Date(trade.ReportDate).toLocaleDateString()}</div>
+                                </div>
+                            </div>
+                        `).join('')
+                    }
+                </div>
+            </div>
+        `;
+        
+        document.getElementById('search-results').innerHTML = `
+            <div class="space-y-4">
+                <h3 class="text-2xl font-bold text-[#76ABAE]">${legislator.name.fullname}</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><span class="text-[#76ABAE]">Position:</span> ${latestTerm.type === 'sen' ? 'Senator' : 'Representative'}</div>
+                    <div><span class="text-[#76ABAE]">State:</span> ${latestTerm.state}</div>
+                    <div><span class="text-[#76ABAE]">Party:</span> ${latestTerm.party}</div>
+                    <div><span class="text-[#76ABAE]">Current Term:</span> ${latestTerm.start} to ${latestTerm.end}</div>
+                </div>
+                ${countsHTML}
+                ${tradingHTML}
+                ${committeesHTML}
+            </div>`;
+            
+    } catch (error) {
+        console.error('Error fetching legislator details:', error);
+        document.getElementById('search-results').innerHTML = `
+            <div class="text-red-400 text-center">
+                <p class="text-xl mb-2">Failed to load legislator details</p>
+                <p class="text-sm">Please try again later</p>
+            </div>
+        `;
+    }
 }
 
 // ===== Watchlist Functionality ===== //
