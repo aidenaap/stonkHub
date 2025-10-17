@@ -774,7 +774,7 @@ async function displayStockDetails(symbol) {
         let historicalHTML = '';
         
         // Lobbying section
-        historicalHTML += `
+            historicalHTML += `
             <div class="mt-6">
                 <h4 class="text-xl font-semibold text-[#76ABAE] mb-3">Recent Lobbying Activity</h4>
                 <div class="bg-[#222831] rounded-lg p-4 max-h-60 overflow-y-auto">
@@ -842,7 +842,7 @@ async function displayStockDetails(symbol) {
                 <!-- Two column layout: 1/3 left, 2/3 right -->
                 <div class="flex" style="display: flex; gap: 1.3rem;">
                     <!-- Left side: Company info and counts (1/3) -->
-                    <div class="w-1/3" style="display: flex; flex-direction: column; align-items: center; justify-content: space-evenly;">
+                    <div class="w-1/3" style="display: flex; flex-direction: column; gap: 1rem;">
                         <div class="bg-[#222831] rounded-lg p-4">
                             <h4 class="text-lg font-semibold text-[#76ABAE] mb-3">Company Information</h4>
                             <div class="space-y-2 text-sm">
@@ -870,6 +870,10 @@ async function displayStockDetails(symbol) {
                                 </div>
                             </div>
                         </div>
+                        
+                        <button id="watchlist-toggle-btn" class="w-full ${isInWatchlist ? 'bg-red-500 hover:bg-red-600' : 'bg-[#76ABAE] hover:bg-[#76ABAE]/80'} text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                            ${isInWatchlist ? 'Remove from Watchlist' : 'Add to Watchlist'}
+                        </button>
                     </div>
                     
                     <!-- Right side: TradingView widget (2/3) -->
@@ -882,11 +886,6 @@ async function displayStockDetails(symbol) {
                 
                 ${historicalHTML}
                 
-                <div class="mt-6 pt-4 border-t border-[#76ABAE]/20">
-                    <button id="watchlist-toggle-btn" class="w-full ${isInWatchlist ? 'bg-red-500 hover:bg-red-600' : 'bg-[#76ABAE] hover:bg-[#76ABAE]/80'} text-white px-6 py-3 rounded-lg font-semibold transition-colors">
-                        ${isInWatchlist ? 'Remove from Watchlist' : 'Add to Watchlist'}
-                    </button>
-                </div>
             </div>`;
         
         // Load TradingView widget after DOM is updated
