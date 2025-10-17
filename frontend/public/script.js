@@ -767,25 +767,8 @@ async function displayStockDetails(symbol) {
             fetch(`${API_BASE}/contracts/${symbol}`).then(r => r.ok ? r.json() : [])
         ]);
         
-        // Build count summary
-        const countsHTML = `
-            <div class="mt-4 p-4 bg-[#222831] rounded-lg">
-                <div class="grid grid-cols-3 gap-4 text-center">
-                    <div>
-                        <div class="text-2xl font-bold text-[#76ABAE]">${lobbyingData.length}</div>
-                        <div class="text-sm text-[#EEEEEE]/70">Lobbying Instances</div>
-                    </div>
-                    <div>
-                        <div class="text-2xl font-bold text-[#76ABAE]">${congressData.length}</div>
-                        <div class="text-sm text-[#EEEEEE]/70">Congress Trades</div>
-                    </div>
-                    <div>
-                        <div class="text-2xl font-bold text-[#76ABAE]">${contractsData.length}</div>
-                        <div class="text-sm text-[#EEEEEE]/70">Contracts Awarded</div>
-                    </div>
-                </div>
-            </div>
-        `;
+        // Generate unique ID for TradingView widget
+        const widgetId = `tradingview_${symbol}_${Date.now()}`;
         
         // Build historical sections
         let historicalHTML = '';
@@ -855,22 +838,87 @@ async function displayStockDetails(symbol) {
         
         // Display complete stock details
         document.getElementById('search-results').innerHTML = `
-            <div class="space-y-4">
-                <h3 class="text-2xl font-bold text-[#76ABAE]">${stock.Symbol} - ${stock.Name}</h3>
-                <div class="grid grid-cols-2 gap-4">
-                    <div><span class="text-[#76ABAE]">Market Cap:</span> $${Number(stock['Market Cap']).toLocaleString()}</div>
-                    <div><span class="text-[#76ABAE]">Sector:</span> ${stock.Sector}</div>
-                    <div><span class="text-[#76ABAE]">Industry:</span> ${stock.Industry}</div>
-                    <div><span class="text-[#76ABAE]">Country:</span> ${stock.Country}</div>
+            <div class="space-y-4 overflow-y-auto">
+                <!-- Two column layout: 1/3 left, 2/3 right -->
+                <div class="flex" style="display: flex; gap: 1.3rem;">
+                    <!-- Left side: Company info and counts (1/3) -->
+                    <div class="w-1/3" style="display: flex; flex-direction: column; align-items: center; justify-content: space-evenly;">
+                        <div class="bg-[#222831] rounded-lg p-4">
+                            <h4 class="text-lg font-semibold text-[#76ABAE] mb-3">Company Information</h4>
+                            <div class="space-y-2 text-sm">
+                                <div><span class="text-[#76ABAE]">Market Cap:</span> <span class="text-[#EEEEEE]">$${Number(stock['Market Cap']).toLocaleString()}</span></div>
+                                <div><span class="text-[#76ABAE]">Sector:</span> <span class="text-[#EEEEEE]">${stock.Sector}</span></div>
+                                <div><span class="text-[#76ABAE]">Industry:</span> <span class="text-[#EEEEEE]">${stock.Industry}</span></div>
+                                <div><span class="text-[#76ABAE]">Country:</span> <span class="text-[#EEEEEE]">${stock.Country}</span></div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-[#222831] rounded-lg p-4">
+                            <h4 class="text-lg font-semibold text-[#76ABAE] mb-3">Activity Summary</h4>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-[#EEEEEE]/70">Lobbying Instances:</span>
+                                    <span class="text-xl font-bold text-[#76ABAE]">${lobbyingData.length}</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-[#EEEEEE]/70">Congress Trades:</span>
+                                    <span class="text-xl font-bold text-[#76ABAE]">${congressData.length}</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-[#EEEEEE]/70">Contracts Awarded:</span>
+                                    <span class="text-xl font-bold text-[#76ABAE]">${contractsData.length}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right side: TradingView widget (2/3) -->
+                    <div class="flex-1 bg-[#222831] rounded-lg p-4">
+                        <div class="tradingview-widget-container" style="height: 100%;">
+                            <div id="${widgetId}" style="height: 400px;"></div>
+                        </div>
+                    </div>
                 </div>
-                ${countsHTML}
+                
                 ${historicalHTML}
+                
                 <div class="mt-6 pt-4 border-t border-[#76ABAE]/20">
                     <button id="watchlist-toggle-btn" class="w-full ${isInWatchlist ? 'bg-red-500 hover:bg-red-600' : 'bg-[#76ABAE] hover:bg-[#76ABAE]/80'} text-white px-6 py-3 rounded-lg font-semibold transition-colors">
                         ${isInWatchlist ? 'Remove from Watchlist' : 'Add to Watchlist'}
                     </button>
                 </div>
             </div>`;
+        
+        // Load TradingView widget after DOM is updated
+        const script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js';
+        script.async = true;
+        script.innerHTML = JSON.stringify({
+            "symbols": [[symbol]],
+            "chartOnly": false,
+            "width": "100%",
+            "height": "100%",
+            "locale": "en",
+            "colorTheme": "dark",
+            "autosize": true,
+            "showVolume": true,
+            "hideDateRanges": false,
+            "hideMarketStatus": false,
+            "hideSymbolLogo": false,
+            "scalePosition": "right",
+            "scaleMode": "Normal",
+            "fontFamily": "-apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif",
+            "fontSize": "10",
+            "noTimeScale": false,
+            "valuesTracking": "1",
+            "changeMode": "price-and-percent",
+            "chartType": "area"
+        });
+
+        // Append script to the widget container div, not its parent
+        const widgetContainer = document.getElementById(widgetId);
+        widgetContainer.appendChild(script);
         
         // Add event listener to the button
         document.getElementById('watchlist-toggle-btn').addEventListener('click', async () => {

@@ -179,7 +179,7 @@ app.get('/api/stocklist', async(req, res) => {
 // get from finnhub and save to file storage
 app.post('/api/stocklist', async (req, res) => {
   try {
-    console.log("req.body:", req.body); // 👀 add this
+    console.log("req.body:", req.body);
     const { stocklist } = req.body;
 
     if (!stocklist || !Array.isArray(stocklist)) {
@@ -204,7 +204,6 @@ app.get('/api/search/stocks', async (req, res) => {
         res.status(500).json({ error: 'Failed to get stock list for search' });
     }
 });
-
 app.get('/api/search/legislators', async (req, res) => {
     try {
         const legislators = await getLegislatorList();
