@@ -53,6 +53,11 @@ document.addEventListener('DOMContentLoaded', function() { // Initialize filters
     });
 });
 
+
+// UPDATE HERE
+// Initial data should be obtained as follows:
+// once a day : news, contracts, lobbying, trades
+// upon load: stock prices/watchlist updates
 async function loadInitialData() { // get all API data on initial load
 
     // show loading until we displayTableData
@@ -732,7 +737,7 @@ async function displayStockDetails(symbol) {
         let historicalHTML = '';
         
         // Lobbying section
-            historicalHTML += `
+        historicalHTML += `
             <div class="mt-6">
                 <h4 class="text-xl font-semibold text-[#76ABAE] mb-3">Recent Lobbying Activity</h4>
                 <div class="bg-[#222831] rounded-lg p-4 max-h-60 overflow-y-auto">
@@ -992,7 +997,7 @@ async function displayLegislatorDetails(bioguideId) {
     }
 }
 
-// ===== Watchlist Functionality ===== //
+// ===== Watchlist Functionality (add/remove) ===== //
 async function toggleWatchlist(ticker) {
     const isInWatchlist = watchlistData && watchlistData.hasOwnProperty(ticker);
     

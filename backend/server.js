@@ -17,6 +17,9 @@ const { fetchRealTimeStockData, getStockData } = require('./services/stockServic
 const { getStockList, getLegislatorList } = require('./services/staticServices');
 const { summarizeArticle } = require('./services/openaiService');
 
+// Caching
+const { getCachedData, setCachedData } = require('./services/cacheService');
+
 // App setup
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -31,8 +34,27 @@ app.get('/', (req, res) => {
 
 
 // Lobbying endpoints
+// app.get('/api/lobbying', async (req, res) => {
+//    const data = await fetchLobbying();
+//    if (data) {
+//        res.json(data);
+//    } else {
+//        res.status(500).json({ error: 'Failed to fetch lobbying data' });
+//    }
+// });
+// CACHED VERSION
 app.get('/api/lobbying', async (req, res) => {
-   const data = await fetchLobbying();
+   // Try to get cached data first
+   let data = await getCachedData('lobbying');
+   
+   if (!data) {
+       // Cache miss or stale - fetch fresh data
+       data = await fetchLobbying();
+       if (data) {
+           await setCachedData('lobbying', data);
+       }
+   }
+   
    if (data) {
        res.json(data);
    } else {
@@ -58,9 +80,25 @@ app.get('/api/lobbying/:ticker', async (req, res) => {
 });
 
 // Congress trading endpoints
+// app.get('/api/congress', async (req, res) => {
+//    const { normalized, representative } = req.query;
+//    const data = await fetchCongressTrading({ normalized, representative });
+//    if (data) {
+//        res.json(data);
+//    } else {
+//        res.status(500).json({ error: 'Failed to fetch congress trading data' });
+//    }
+// });
 app.get('/api/congress', async (req, res) => {
-   const { normalized, representative } = req.query;
-   const data = await fetchCongressTrading({ normalized, representative });
+   let data = await getCachedData('congress');
+   
+   if (!data) {
+       data = await fetchCongressTrading({ normalized: req.query.normalized, representative: req.query.representative });
+       if (data) {
+           await setCachedData('congress', data);
+       }
+   }
+   
    if (data) {
        res.json(data);
    } else {
@@ -85,9 +123,25 @@ app.get('/api/congress/:ticker', async (req, res) => {
 });
 
 // Government contracts endpoints
+// app.get('/api/contracts', async (req, res) => {
+//    const { date, page, page_size } = req.query;
+//    const data = await fetchGovContracts({ date, page, page_size });
+//    if (data) {
+//        res.json(data);
+//    } else {
+//        res.status(500).json({ error: 'Failed to fetch government contracts data' });
+//    }
+// });
 app.get('/api/contracts', async (req, res) => {
-   const { date, page, page_size } = req.query;
-   const data = await fetchGovContracts({ date, page, page_size });
+   let data = await getCachedData('contracts');
+   
+   if (!data) {
+       data = await fetchGovContracts({ date: req.query.date, page: req.query.page, page_size: req.query.page_size });
+       if (data) {
+           await setCachedData('contracts', data);
+       }
+   }
+   
    if (data) {
        res.json(data);
    } else {
@@ -111,12 +165,28 @@ app.get('/api/contracts/:ticker', async (req, res) => {
 });
 
 // News endpoints
+// app.get('/api/news', async(req, res) => {
+//     const data = await fetchNewsData();
+//     if (data) {
+//         res.json(data)
+//     } else {
+//        res.status(500).json({ error: 'Failed to fetch government contracts data' });
+//     }
+// });
 app.get('/api/news', async(req, res) => {
-    const data = await fetchNewsData();
+    let data = await getCachedData('news');
+    
+    if (!data) {
+        data = await fetchNewsData();
+        if (data) {
+            await setCachedData('news', data);
+        }
+    }
+    
     if (data) {
-        res.json(data)
+        res.json(data);
     } else {
-       res.status(500).json({ error: 'Failed to fetch government contracts data' });
+        res.status(500).json({ error: 'Failed to fetch news data' });
     }
 });
 app.post('/api/news/summarize', async (req, res) => { // AI Summary endpoint
