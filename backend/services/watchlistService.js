@@ -7,8 +7,8 @@ const WATCHLIST_FILE = path.join(__dirname, '../storage/stonkData.json');
 async function getWatchlist() {
     try {
         const data = await fs.readFile(WATCHLIST_FILE, 'utf8');
-        console.log("watchlist data in getWatchlist()")
-        console.log(data);
+        // console.log("watchlist data in getWatchlist()")
+        // console.log(data);
         return JSON.parse(data);
     } catch (error) {
         // File doesn't exist, return empty array
@@ -34,13 +34,6 @@ async function addToWatchlist(ticker) {
     throw err;
   }
 }
-
-// async function removeFromWatchlist(ticker) {
-//     const watchlist = await getWatchlist();
-//     const filtered = watchlist.filter(t => t !== ticker.toUpperCase());
-//     await saveWatchlist(filtered);
-//     return filtered;
-// }
 
 async function removeFromWatchlist(ticker) {
   const watchlist = await getWatchlist(); // returns the object from your JSON file

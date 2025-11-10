@@ -18,7 +18,7 @@ const { getStockList, getLegislatorList } = require('./services/staticServices')
 const { summarizeArticle } = require('./services/openaiService');
 
 // Caching
-const { getCachedData, setCachedData } = require('./services/cacheService');
+const { getCachedData, setCachedData, getCachedStockData } = require('./services/cacheService');
 
 // App setup
 const app = express();
@@ -34,15 +34,6 @@ app.get('/', (req, res) => {
 
 
 // Lobbying endpoints
-// app.get('/api/lobbying', async (req, res) => {
-//    const data = await fetchLobbying();
-//    if (data) {
-//        res.json(data);
-//    } else {
-//        res.status(500).json({ error: 'Failed to fetch lobbying data' });
-//    }
-// });
-// CACHED VERSION
 app.get('/api/lobbying', async (req, res) => {
    // Try to get cached data first
    let data = await getCachedData('lobbying');
@@ -80,15 +71,6 @@ app.get('/api/lobbying/:ticker', async (req, res) => {
 });
 
 // Congress trading endpoints
-// app.get('/api/congress', async (req, res) => {
-//    const { normalized, representative } = req.query;
-//    const data = await fetchCongressTrading({ normalized, representative });
-//    if (data) {
-//        res.json(data);
-//    } else {
-//        res.status(500).json({ error: 'Failed to fetch congress trading data' });
-//    }
-// });
 app.get('/api/congress', async (req, res) => {
    let data = await getCachedData('congress');
    
@@ -123,15 +105,6 @@ app.get('/api/congress/:ticker', async (req, res) => {
 });
 
 // Government contracts endpoints
-// app.get('/api/contracts', async (req, res) => {
-//    const { date, page, page_size } = req.query;
-//    const data = await fetchGovContracts({ date, page, page_size });
-//    if (data) {
-//        res.json(data);
-//    } else {
-//        res.status(500).json({ error: 'Failed to fetch government contracts data' });
-//    }
-// });
 app.get('/api/contracts', async (req, res) => {
    let data = await getCachedData('contracts');
    
@@ -165,14 +138,6 @@ app.get('/api/contracts/:ticker', async (req, res) => {
 });
 
 // News endpoints
-// app.get('/api/news', async(req, res) => {
-//     const data = await fetchNewsData();
-//     if (data) {
-//         res.json(data)
-//     } else {
-//        res.status(500).json({ error: 'Failed to fetch government contracts data' });
-//     }
-// });
 app.get('/api/news', async(req, res) => {
     let data = await getCachedData('news');
     
@@ -247,23 +212,69 @@ app.get('/api/stocklist', async(req, res) => {
     }
 });
 // get from finnhub and save to file storage
+// app.post('/api/stocklist', async (req, res) => {
+//   try {
+//     console.log("req.body:", req.body);
+//     const { stocklist } = req.body;
+
+//     if (!stocklist || !Array.isArray(stocklist)) {
+//       return res.status(400).json({ error: 'Invalid stocklist' });
+//     }
+
+//     const stockData = await fetchRealTimeStockData(stocklist);
+//     res.json(stockData);
+//   } catch (error) {
+//     console.error('Error in /stocklist route:', error.message);
+//     res.status(500).json({ error: 'Failed to get stocklist' });
+//   }
+// });
+// get from finnhub and save to file storage
 app.post('/api/stocklist', async (req, res) => {
   try {
-    console.log("req.body:", req.body);
     const { stocklist } = req.body;
 
     if (!stocklist || !Array.isArray(stocklist)) {
       return res.status(400).json({ error: 'Invalid stocklist' });
     }
 
-    const stockData = await fetchRealTimeStockData(stocklist);
+    // Check if we have valid cached stock data
+    let stockData = await getCachedStockData();
+    
+    if (stockData) {
+      // Verify cached data has all requested tickers WITH VALID PRICE DATA
+      const allTickersValid = stocklist.every(ticker => {
+        const data = stockData[ticker];
+        // Check if ticker exists AND has valid price data (not null, not empty array)
+        return data && 
+               Array.isArray(data) && 
+               data.length > 0 && 
+               data[0] !== null && 
+               data[0] !== undefined &&
+               !isNaN(data[0]);
+      });
+      
+      if (allTickersValid) {
+        console.log('Returning cached stock data (all tickers have valid prices)');
+        return res.json(stockData);
+      } else {
+        console.log('Cache incomplete or has invalid data - fetching fresh data');
+      }
+    }
+
+    // Cache miss or incomplete - fetch fresh data
+    console.log('Fetching fresh stock data from Finnhub...');
+    stockData = await fetchRealTimeStockData(stocklist);
+    
+    if (!stockData) {
+      return res.status(500).json({ error: 'Failed to fetch stock data' });
+    }
+    
     res.json(stockData);
   } catch (error) {
-    console.error('Error in /stocklist route:', error.message);
+    console.error('Error in /api/stocklist route:', error.message);
     res.status(500).json({ error: 'Failed to get stocklist' });
   }
 });
-
 
 // Static stock/legislator information from JSON
 app.get('/api/search/stocks', async (req, res) => {

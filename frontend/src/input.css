@@ -14,7 +14,7 @@
     display: flex;
     gap: 60px;
     width: max-content;
-    animation: ticker-scroll 45s linear infinite;
+    animation: ticker-scroll 120s linear infinite;
     align-items: center;
     height: 100%;
 }

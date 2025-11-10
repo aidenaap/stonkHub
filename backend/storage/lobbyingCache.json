@@ -1,0 +1,452 @@
+[
+  {
+    "Date": "2025-11-10",
+    "Amount": "0.0",
+    "Client": "HOGAN LOVELLS US LLP (ON BEHALF OF BECTON DICKINSON & CO.)",
+    "Issue": null,
+    "Specific_Issue": null,
+    "Registrant": "TRADEWINS, LLC",
+    "Ticker": "BDX"
+  },
+  {
+    "Date": "2025-11-10",
+    "Amount": "0.0",
+    "Client": "MAXEON SOLAR TECHNOLOGIES LTD.",
+    "Issue": "Trade (domestic/foreign)",
+    "Specific_Issue": "solar trade and industrial policy issues",
+    "Registrant": "TRADEWINS, LLC",
+    "Ticker": "MAXN"
+  },
+  {
+    "Date": "2025-11-10",
+    "Amount": "40000.0",
+    "Client": "CLOVER HEALTH",
+    "Issue": "Health Issues",
+    "Specific_Issue": "Medicare Advantage",
+    "Registrant": "LOPER CONSULTING LLC",
+    "Ticker": "CLOV"
+  },
+  {
+    "Date": "2025-11-10",
+    "Amount": "5000.0",
+    "Client": "POTOMAC STRATEGIC ON BEHALF OF K12 INC",
+    "Issue": "Education",
+    "Specific_Issue": "education funding, charter schools, school lunch, adult education",
+    "Registrant": "MS. KAREN JOHNSON",
+    "Ticker": "LRN"
+  },
+  {
+    "Date": "2025-11-10",
+    "Amount": "0.0",
+    "Client": "MAXTERIALS INC.",
+    "Issue": "Defense",
+    "Specific_Issue": "Issues related to hexavalent chromium",
+    "Registrant": "NORTH BRIDGE STRATEGIC, LLC (FORMERLY KNOWN AS SCISSORTAIL STRATEGIC CONSULTING PARTNERS LLC)",
+    "Ticker": "AXTI"
+  },
+  {
+    "Date": "2025-11-10",
+    "Amount": "190000.0",
+    "Client": "SHOPIFY INC",
+    "Issue": "Computer Industry \n Taxation/Internal Revenue Code \n Trade (domestic/foreign) \n Small Business \n Consumer Issues/Safety/Products \n Copyright/Patent/Trademark \n Banking \n Unemployment",
+    "Specific_Issue": "Issues related to accessibility standards for website design. Issues related to artificial intelligence and its benefits for small business. Issues related to the regulation of financial technology. \n Issues related to small business and corporate tax reform, including support for H.R. 703 / S. 213, the Main Street Tax Certainty Act, and H.R. 1, One Big Beautiful Bill Act. \n Issues related to the impact of tariffs and changes to the de minimis exemption on small businesses. \n Issues related to the growth of independent small businesses in the digital economy. Issues related to online government resources for small businesses, including support for the One Stop Shop for Small Business Licensing Act. Issues related to modernizing small business grants and mentoring to promote a greater focus on e-commerce. \n Issues related to combating online sale of counterfeit goods. Issues related to consumer privacy. \n Issues related to the reform of laws relating to the protection of intellectual property rights. \n Issues related to competition in the market for credit card routing, including support for The Credit Card Competition Act. \n Issues related to Self-Employment Assistance programs and removing barriers to entrepreneurship in unemployment insurance, including support for The NO BOSS Act.",
+    "Registrant": "SHOPIFY INC",
+    "Ticker": "SHOP"
+  },
+  {
+    "Date": "2025-11-09",
+    "Amount": "12000.0",
+    "Client": "THERMO FISHER SCIENTIFIC INC",
+    "Issue": "Health Issues",
+    "Specific_Issue": "Engage Senate and House on proposed legislation to promote the appropriate use of FDA cleared preeclampsia biomarker testing as part of the Medicaid program",
+    "Registrant": "BLUEBIRD STRATEGIES",
+    "Ticker": "TMO"
+  },
+  {
+    "Date": "2025-11-09",
+    "Amount": "0.0",
+    "Client": "ALTRIA CLIENT SERVICES LLC",
+    "Issue": null,
+    "Specific_Issue": null,
+    "Registrant": "DOBBINS CONSULTING, LLC",
+    "Ticker": "MO"
+  },
+  {
+    "Date": "2025-11-07",
+    "Amount": "30000.0",
+    "Client": "PRIDE MOBILITY PRODUCTS CORP",
+    "Issue": "Medicare/Medicaid",
+    "Specific_Issue": "DME industry relief, wheelchair upgrade legislation, Medicare coverage for power standing systems, wheelchair repair & service reform, tariffs on medical devices.",
+    "Registrant": "PRIDE MOBILITY PRODUCTS CORP.",
+    "Ticker": "CTS"
+  },
+  {
+    "Date": "2025-11-07",
+    "Amount": "5000.0",
+    "Client": "DAHLBERG STRATEGIC ON BEHALF OF HUNTINGTON INGALLS",
+    "Issue": "Defense \n Budget/Appropriations",
+    "Specific_Issue": "Aircraft Carriers and Appropriations \n Aircraft Carriers",
+    "Registrant": "SPLYSS LLC",
+    "Ticker": "HII"
+  },
+  {
+    "Date": "2025-11-07",
+    "Amount": "0.0",
+    "Client": "BLACKBERRY CORP.",
+    "Issue": null,
+    "Specific_Issue": null,
+    "Registrant": "BLACKBERRY CORP.",
+    "Ticker": "BB"
+  },
+  {
+    "Date": "2025-11-07",
+    "Amount": "0.0",
+    "Client": "NEXTERA ENERGY RESOURCES DEVELOPMENT",
+    "Issue": "Energy/Nuclear",
+    "Specific_Issue": "issues related to renewable energy",
+    "Registrant": "E2 STRATEGIES, LLC",
+    "Ticker": "NEE"
+  },
+  {
+    "Date": "2025-11-07",
+    "Amount": "0.0",
+    "Client": "NATIONAL CONFEDERATION OF FINANCIAL INSTITUTIONS",
+    "Issue": "Tariff (miscellaneous tariff bills) \n Trade (domestic/foreign) \n Financial Institutions/Investments/Securities",
+    "Specific_Issue": "Trade and financial regulatory matters. \n Trade and financial regulatory matters. \n Trade and financial regulatory matters.",
+    "Registrant": "HOLLAND & KNIGHT LLP",
+    "Ticker": "FISI"
+  },
+  {
+    "Date": "2025-11-07",
+    "Amount": "0.0",
+    "Client": "AMERICAN BATTERY TECHNOLOGY COMPANY",
+    "Issue": "Energy/Nuclear",
+    "Specific_Issue": "Advocacy on policies pertaining to domestic battery materials production, processing, and recycling; support the U.S. efforts to secure the clean energy supply chain and expand domestic manufacturing capacity.",
+    "Registrant": "BALLARD PARTNERS",
+    "Ticker": "ABAT"
+  },
+  {
+    "Date": "2025-11-07",
+    "Amount": "0.0",
+    "Client": "KIMBERLY-CLARK CORPORATION",
+    "Issue": "Manufacturing",
+    "Specific_Issue": "Issues related to corporate transactions, regulatory compliance, and general business matters.",
+    "Registrant": "BALLARD PARTNERS",
+    "Ticker": "KMB"
+  },
+  {
+    "Date": "2025-11-07",
+    "Amount": "30000.0",
+    "Client": "NMI HOLDINGS INC.",
+    "Issue": "Housing",
+    "Specific_Issue": "*No specific bill number/all matters relating to housing and PMI Insurance",
+    "Registrant": "THE OB-C GROUP, LLC",
+    "Ticker": "NMIH"
+  },
+  {
+    "Date": "2025-11-07",
+    "Amount": "30000.0",
+    "Client": "ANHEUSER-BUSCH COMPANIES INC.",
+    "Issue": "Beverage Industry \n Taxation/Internal Revenue Code",
+    "Specific_Issue": "No specific Bill/monitor all activity with respect to beer industry. \n No Specific bill number/all activity on all proposed Tax Bills.",
+    "Registrant": "THE OB-C GROUP, LLC",
+    "Ticker": "BUD"
+  },
+  {
+    "Date": "2025-11-07",
+    "Amount": "110000.0",
+    "Client": "XYLEM INC.",
+    "Issue": "Environment/Superfund \n Budget/Appropriations \n Taxation/Internal Revenue Code \n Manufacturing",
+    "Specific_Issue": "Monitor issues affecting water technology sector; support of HR2940 Advancing Water Reuse Act; support of S2388 Water Infrastructure Modernization Act; issues related to artificial intelligence and water reuse; \n Monitor development of Interior and Energy-Water Appropriations bills \n Support of HR2940 Advancing Water Reuse Act \n Issues affecting the water technology sector.",
+    "Registrant": "XYLEM INC.",
+    "Ticker": "XYL"
+  },
+  {
+    "Date": "2025-11-07",
+    "Amount": "30000.0",
+    "Client": "AXON ENTERPRISE INC.",
+    "Issue": "Homeland Security \n Aviation/Airlines/Airports",
+    "Specific_Issue": "Priorities for Counter Drone, Drone legislative and TASER legislative policy \n Priorities for Counter Drone, Drone legislative and TASER legislative policy",
+    "Registrant": "HOWE STREET GROUP LLC",
+    "Ticker": "AXON"
+  },
+  {
+    "Date": "2025-11-07",
+    "Amount": "0.0",
+    "Client": "MERIDIAN STRATEGIC RESOURCES LLC",
+    "Issue": null,
+    "Specific_Issue": null,
+    "Registrant": "MERIDIAN STRATEGIC RESOURCES, LLC",
+    "Ticker": "MRBK"
+  },
+  {
+    "Date": "2025-11-07",
+    "Amount": "15000.0",
+    "Client": "AXOGEN INC.",
+    "Issue": "Health Issues",
+    "Specific_Issue": "Issues relating to sensation loss after mastectomy.",
+    "Registrant": "LKB STRATEGIES LLC",
+    "Ticker": "AXGN"
+  },
+  {
+    "Date": "2025-11-06",
+    "Amount": "15000.0",
+    "Client": "LEONARDO DRS INC",
+    "Issue": "Defense \n Budget/Appropriations",
+    "Specific_Issue": "FY 25/26/27 Defense bills, Defense issues \n Appropriations bills - FY25/26",
+    "Registrant": "HITHER CREEK STRATEGIES, LLC",
+    "Ticker": "DRS"
+  },
+  {
+    "Date": "2025-11-06",
+    "Amount": "21000.0",
+    "Client": "GENERAL ELECTRIC COMPANY",
+    "Issue": "Defense",
+    "Specific_Issue": "fiscal year 2025, fiscal year 2026, 2027 Defense Authorization and Appropriations bills",
+    "Registrant": "HITHER CREEK STRATEGIES, LLC",
+    "Ticker": "GE"
+  },
+  {
+    "Date": "2025-11-06",
+    "Amount": "545841.0",
+    "Client": "INTERDIGITAL INC.",
+    "Issue": "Taxation/Internal Revenue Code \n Copyright/Patent/Trademark \n Trade (domestic/foreign) \n Telecommunications",
+    "Specific_Issue": "Corporate tax issues and other tax matters affecting publicly traded companies \n Pro-IP legislation including RESTORE, PREVAIL and PERA including other general patent and IP issues as well as IP issues related to China \n Matters related to the ITC, other IP issues and IP matters related to China and other trade agreements or matters concerning IP and Trade \n Wireless communications, 5G, 6G, IoT, ORAN, spectrum matters, streaming services and other broadband, wireless and video standards issues",
+    "Registrant": "INTERDIGITAL, INC.",
+    "Ticker": "IDCC"
+  },
+  {
+    "Date": "2025-11-06",
+    "Amount": "0.0",
+    "Client": "ALMONTY INDUSTRIES INC.",
+    "Issue": "Defense \n Trade (domestic/foreign) \n Natural Resources",
+    "Specific_Issue": "Potential long-term offtake agreement with the Defense Logistics Agency for tungsten supply to meet US defense industrial base requirements. \n Potential long-term offtake agreement with the Defense Logistics Agency for tungsten supply to meet US defense industrial base requirements. EXIM Bank financing for expansion of Almonty's operations under the Supply Chain Resiliency Initiative. \n Potential long-term offtake agreement with the Defense Logistics Agency for tungsten supply to meet US defense industrial base requirements. EXIM Bank financing for expansion of Almonty's operations under the Supply Chain Resiliency Initiative.",
+    "Registrant": "PARK STRATEGIES, LLC",
+    "Ticker": "ALM"
+  },
+  {
+    "Date": "2025-11-06",
+    "Amount": "0.0",
+    "Client": "ISAIAH HOUSE TREATMENT CENTER",
+    "Issue": null,
+    "Specific_Issue": null,
+    "Registrant": "NORTH STAR STRATEGIES, LLC",
+    "Ticker": "SAIA"
+  },
+  {
+    "Date": "2025-11-06",
+    "Amount": "11000.0",
+    "Client": "RAYONIER",
+    "Issue": "Agriculture",
+    "Specific_Issue": "Forestry Issues",
+    "Registrant": "MR. THAD HUGULEY",
+    "Ticker": "RYN"
+  },
+  {
+    "Date": "2025-11-06",
+    "Amount": "0.0",
+    "Client": "AMERICAN RESOURCES CORPORATION",
+    "Issue": null,
+    "Specific_Issue": null,
+    "Registrant": "NORTH STAR STRATEGIES, LLC",
+    "Ticker": "AREC"
+  },
+  {
+    "Date": "2025-11-06",
+    "Amount": "0.0",
+    "Client": "THE TORO COMPANY",
+    "Issue": "Consumer Issues/Safety/Products \n Manufacturing \n Taxation/Internal Revenue Code",
+    "Specific_Issue": "Electrification, consumer safety, right to repair \n Tax, environment, right to repair \n Business tax issues",
+    "Registrant": "THE TORO COMPANY",
+    "Ticker": "TTC"
+  },
+  {
+    "Date": "2025-11-06",
+    "Amount": "0.0",
+    "Client": "JABIL INC.",
+    "Issue": null,
+    "Specific_Issue": null,
+    "Registrant": "WOODBERRY ASSOCIATES",
+    "Ticker": "JBL"
+  },
+  {
+    "Date": "2025-11-06",
+    "Amount": "0.0",
+    "Client": "DAVITA INC.",
+    "Issue": null,
+    "Specific_Issue": null,
+    "Registrant": "COLETTE DESMARAIS",
+    "Ticker": "DVA"
+  },
+  {
+    "Date": "2025-11-06",
+    "Amount": "30000.0",
+    "Client": "UNIVERSAL SYNAPTICS CORPORATION",
+    "Issue": "Defense",
+    "Specific_Issue": "General support for the inclusion of language pertaining to intermittent fault detection and isolation and related electronic diagnostics in the FY 26 National Defense Authorization Act and the FY 25 and FY 26 Defense Appropriations legislation.",
+    "Registrant": "CAPEDC ADVISORS, LLC",
+    "Ticker": "SYNA"
+  },
+  {
+    "Date": "2025-11-06",
+    "Amount": "60000.0",
+    "Client": "BOSTON SCIENTIFIC",
+    "Issue": "Taxation/Internal Revenue Code",
+    "Specific_Issue": "Interntational tax reform, TCJA reauthorization",
+    "Registrant": "HOLLIER & ASSOCIATES",
+    "Ticker": "BSX"
+  },
+  {
+    "Date": "2025-11-06",
+    "Amount": "45000.0",
+    "Client": "BLUE BIRD BODY COMPANY",
+    "Issue": "Transportation \n Trucking/Shipping \n Budget/Appropriations \n Taxation/Internal Revenue Code \n Clean Air and Water (quality)",
+    "Specific_Issue": "Implementation of PL 117-58, Infrastructure Investment and Jobs Act, and PL 117-169, Inflation Reduction Act, relating to programs to advance the manufacture and deployment of school buses and preservation of tax incentives for deployment of electric commercial vehicles. \n Implementation of PL 117-58, Infrastructure Investment and Jobs Act, and PL 117-169, Inflation Reduction Act, relating to programs to advance the manufacture and deployment of school buses and preservation of tax incentives for deployment of electric commercial vehicles. \n Implementation of PL 117-58, Infrastructure Investment and Jobs Act, and PL 117-169, Inflation Reduction Act, relating to programs to advance the manufacture and deployment of school buses and preservation of tax incentives for deployment of electric commercial vehicles. \n Implementation of PL 117-58, Infrastructure Investment and Jobs Act, and PL 117-169, Inflation Reduction Act, relating to programs to advance the manufacture and deployment of school buses and preservation of tax incentives for deployment of electric commercial vehicles. \n Implementation of PL 117-58, Infrastructure Investment and Jobs Act, and PL 117-169, Inflation Reduction Act, relating to programs to advance the manufacture and deployment of school buses and preservation of tax incentives for deployment of electric commercial vehicles.",
+    "Registrant": "NATIONAL STRATEGIES, LLC",
+    "Ticker": "BLBD"
+  },
+  {
+    "Date": "2025-11-06",
+    "Amount": "20000.0",
+    "Client": "DME CORPORATION (ASTRONICS CORPORATION)",
+    "Issue": "Transportation",
+    "Specific_Issue": "radio test equipment",
+    "Registrant": "MONUMENT STRATEGIES, LLC",
+    "Ticker": "ATRO"
+  },
+  {
+    "Date": "2025-11-06",
+    "Amount": "30000.0",
+    "Client": "T-MOBILE USA INC",
+    "Issue": "Telecommunications",
+    "Specific_Issue": "Issues involving telecommunications and technology",
+    "Registrant": "THE MAJORITY GROUP, LLC",
+    "Ticker": "TMUS"
+  },
+  {
+    "Date": "2025-11-06",
+    "Amount": "20000.0",
+    "Client": "VERIZON COMMUNICATIONS",
+    "Issue": "Telecommunications",
+    "Specific_Issue": "FCC Auction Authority Issues related to the development of a spectrum pipeline, Issues related to FirstNet Issues related to cybersecurity",
+    "Registrant": "RESOLUTION PUBLIC AFFAIRS, LLC",
+    "Ticker": "VZ"
+  },
+  {
+    "Date": "2025-11-06",
+    "Amount": "0.0",
+    "Client": "BLOOM ENERGY",
+    "Issue": "Accounting",
+    "Specific_Issue": "Energy and Tax",
+    "Registrant": "ODONNELL & SON LLC",
+    "Ticker": "BE"
+  },
+  {
+    "Date": "2025-11-06",
+    "Amount": "0.0",
+    "Client": "NATIONAL ASSOCIATION OF WORKFORCE BOARDS",
+    "Issue": "Labor Issues/Antitrust/Workplace \n Education \n Budget/Appropriations",
+    "Specific_Issue": "WIOA reauthorization (A Stronger Workforce for America Act) \n WIOA reauthorization (aka A Stronger Workforce for America Act) Labor-H Appropriations bill \n funding for Workforce Innovation and Opportunity Act",
+    "Registrant": "NATIONAL ASSOCIATION OF WORKFORCE BOARDS",
+    "Ticker": "KFRC"
+  },
+  {
+    "Date": "2025-11-06",
+    "Amount": "45000.0",
+    "Client": "ETSY",
+    "Issue": "Taxation/Internal Revenue Code \n Budget/Appropriations \n Tariff (miscellaneous tariff bills) \n Telecommunications \n Retirement \n Small Business \n Consumer Issues/Safety/Products \n Copyright/Patent/Trademark",
+    "Specific_Issue": "IRS modernization \n General appropriations \n de minimis tariffs \n internet/broadband \n portable benefits \n general small business issues: access to capital, definitions, \n consumer safety issues \n monitoring copyright/patent/trademark issues and impact on small business",
+    "Registrant": "PUBLIC PRIVATE STRATEGIES",
+    "Ticker": "ETSY"
+  },
+  {
+    "Date": "2025-11-06",
+    "Amount": "15000.0",
+    "Client": "CONSTELLATION ENERGY",
+    "Issue": null,
+    "Specific_Issue": null,
+    "Registrant": "ODONNELL & SON LLC",
+    "Ticker": "CEG"
+  },
+  {
+    "Date": "2025-11-06",
+    "Amount": "30000.0",
+    "Client": "MIMEDX",
+    "Issue": "Medicare/Medicaid",
+    "Specific_Issue": "regulatory issues related to the delivery of wound management and skin substitutes for Medicare patients",
+    "Registrant": "ARMORY HILL ADVOCATES (FORMERLY KNOWN AS RAWLSON POLICY GROUP)",
+    "Ticker": "MDXG"
+  },
+  {
+    "Date": "2025-11-06",
+    "Amount": "0.0",
+    "Client": "SURGERY PARTNERS",
+    "Issue": null,
+    "Specific_Issue": null,
+    "Registrant": "ARMORY HILL ADVOCATES (FORMERLY KNOWN AS RAWLSON POLICY GROUP)",
+    "Ticker": "SGRY"
+  },
+  {
+    "Date": "2025-11-06",
+    "Amount": "22500.0",
+    "Client": "FALCON HEALTHCARE INC.",
+    "Issue": "Medicare/Medicaid",
+    "Specific_Issue": "Issues related the the delivery of home health & hospice services to Medicare patients",
+    "Registrant": "ARMORY HILL ADVOCATES (FORMERLY KNOWN AS RAWLSON POLICY GROUP)",
+    "Ticker": "ALC"
+  },
+  {
+    "Date": "2025-11-06",
+    "Amount": "0.0",
+    "Client": "ACADIA HEALTHCARE INC.",
+    "Issue": null,
+    "Specific_Issue": null,
+    "Registrant": "ARMORY HILL ADVOCATES (FORMERLY KNOWN AS RAWLSON POLICY GROUP)",
+    "Ticker": "ACHC"
+  },
+  {
+    "Date": "2025-11-06",
+    "Amount": "50000.0",
+    "Client": "NRG ENERGY INC.",
+    "Issue": "Energy/Nuclear",
+    "Specific_Issue": "Issues related to power generation, infrastructure and energy policy Energy/Water Appropriations",
+    "Registrant": "JIM MASSIE & PARTNERS, LLC",
+    "Ticker": "NRG"
+  },
+  {
+    "Date": "2025-11-06",
+    "Amount": "21000.0",
+    "Client": "HUNTINGTON INGALLS INDUSTRIES INCORPORATED",
+    "Issue": "Defense \n Budget/Appropriations",
+    "Specific_Issue": "Navy shipbuilding \n Navy shipbuilding",
+    "Registrant": "DAHLBERG STRATEGIC",
+    "Ticker": "HII"
+  },
+  {
+    "Date": "2025-11-06",
+    "Amount": "50000.0",
+    "Client": "BENTLEY SYSTEMS INCORPORATED",
+    "Issue": "Computer Industry \n Transportation",
+    "Specific_Issue": "Provide strategic counsel and advocate on issues related to transportation and infrastructure as well as emerging technologies. \n Provide strategic counsel and advocate on issues related to transportation and infrastructure as well as emerging technologies.",
+    "Registrant": "BGR GOVERNMENT AFFAIRS",
+    "Ticker": "BSY"
+  },
+  {
+    "Date": "2025-11-06",
+    "Amount": "40000.0",
+    "Client": "THE GEO GROUP",
+    "Issue": "Homeland Security",
+    "Specific_Issue": "GEO's political and governmental relations activities focus on promoting the use of public-private partnerships in the delivery of correctional services including evidence-based rehabilitation programs, both in-custody and post-release, aimed at reducing recidivism and helping the men and women in GEOs care successfully reintegrate into their communities. GEO does not take a position on or advocate for or against criminal justice policy related to criminalizing certain behaviors or determining the length of criminal sentences. Furthermore, GEO does not take a position on, nor advocate for or against, immigration enforcement policies such as the basis or length of an individuals detention.",
+    "Registrant": "AVANT BISHOP WASHINGTON & BLACK LLC",
+    "Ticker": "GEO"
+  },
+  {
+    "Date": "2025-11-06",
+    "Amount": "10000.0",
+    "Client": "HONEYWELL INTERNATIONAL INC.",
+    "Issue": "Defense",
+    "Specific_Issue": "National Defense Authorization Act, provisions relating to electronic warfare technology. Department of Defense Appropriations Act, provisions relating to electronic warfare technology.",
+    "Registrant": "AMERICAN DEFENSE INTERNATIONAL, INC.",
+    "Ticker": "HON"
+  }
+]

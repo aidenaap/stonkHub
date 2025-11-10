@@ -54,10 +54,6 @@ document.addEventListener('DOMContentLoaded', function() { // Initialize filters
 });
 
 
-// UPDATE HERE
-// Initial data should be obtained as follows:
-// once a day : news, contracts, lobbying, trades
-// upon load: stock prices/watchlist updates
 async function loadInitialData() { // get all API data on initial load
 
     // show loading until we displayTableData
@@ -205,33 +201,256 @@ async function loadNewsPage() {
         showError('Failed to load news data');
     }
 }
+// async function loadWatchlistPage() {
+//     try {
+//         setActiveTab(document.getElementById('watchlist-btn')); // if you add the button
+//         document.getElementById('table-title').textContent = 'My Watchlist';
+        
+//         currentDataType = 'watchlist';
+
+//         // going to have to load in watchlist, then stock data, then convert to table-friendly format
+//         const tableData = Object.entries(watchlistData).map(([ticker, values]) => ({
+//             "Ticker": ticker,
+//             "Current": values[0],
+//             "Change": parseFloat(values[1].toFixed(2)),
+//             "% Change": parseFloat(values[2].toFixed(2)),
+//             "Open": values[3],
+//             "Prev Close": values[4]
+//         }));
+        
+//         currentData = tableData;
+//         displayTableData(tableData, watchlistHeaders);
+//     } catch (error) {
+//         console.error('Error loading watchlist:', error);
+//         showError('Failed to load watchlist');
+//     }
+// }
+
+
+// ===== Page Display ===== //
+
 async function loadWatchlistPage() {
     try {
-        setActiveTab(document.getElementById('watchlist-btn')); // if you add the button
+        setActiveTab(document.getElementById('watchlist-btn'));
         document.getElementById('table-title').textContent = 'My Watchlist';
         
         currentDataType = 'watchlist';
 
-        // going to have to load in watchlist, then stock data, then convert to table-friendly format
-        const tableData = Object.entries(watchlistData).map(([ticker, values]) => ({
-            "Ticker": ticker,
-            "Current": values[0],
-            "Change": parseFloat(values[1].toFixed(2)),
-            "% Change": parseFloat(values[2].toFixed(2)),
-            "Open": values[3],
-            "Prev Close": values[4]
-        }));
+        // Show loading while we fetch data
+        showLoading();
+
+        // Get current watchlist
+        const watchlistResponse = await fetch(`${API_BASE}/watchlist`);
+        watchlistData = await watchlistResponse.json();
         
+        // Check if watchlist is empty
+        if (!watchlistData || Object.keys(watchlistData).length === 0) {
+            document.getElementById('loading').innerHTML = `
+                <div class="text-center">
+                    <div class="text-[#76ABAE] text-xl mb-4">Your watchlist is empty</div>
+                    <div class="text-[#EEEEEE]/70">Add stocks using the search button to get started</div>
+                </div>
+            `;
+            document.getElementById('data-table').classList.add('hidden');
+            return;
+        }
+
+        const tickers = Object.keys(watchlistData);
+        
+        // Check if any ticker has missing/invalid data
+        const invalidTickers = tickers.filter(ticker => {
+            const data = watchlistData[ticker];
+            return !data || data.length === 0 || data[0] === null || data[0] === undefined;
+        });
+
+        // If there are invalid tickers, fetch fresh data for them
+        if (invalidTickers.length > 0) {
+            console.log('Fetching fresh stock data for:', invalidTickers);
+            
+            try {
+                const stockResponse = await fetch(`${API_BASE}/stocklist`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ stocklist: invalidTickers })
+                });
+                
+                if (stockResponse.ok) {
+                    const freshStockData = await stockResponse.json();
+                    
+                    // Update watchlistData with fresh data
+                    invalidTickers.forEach(ticker => {
+                        if (freshStockData[ticker]) {
+                            watchlistData[ticker] = freshStockData[ticker];
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching stock data for invalid tickers:', error);
+            }
+        }
+
+        // Convert watchlist data to table-friendly format, filtering out any still-invalid entries
+        const tableData = Object.entries(watchlistData)
+            .filter(([ticker, values]) => values && values.length > 0 && values[0] !== null && values[0] !== undefined)
+            .map(([ticker, values]) => ({
+                "Ticker": ticker,
+                "Current": values[0],
+                "Change": parseFloat(values[1].toFixed(2)),
+                "% Change": parseFloat(values[2].toFixed(2)),
+                "Open": values[3],
+                "Prev Close": values[4]
+            }));
+        
+        if (tableData.length === 0) {
+            document.getElementById('loading').innerHTML = `
+                <div class="text-center">
+                    <div class="text-[#76ABAE] text-xl mb-4">Unable to load stock data</div>
+                    <div class="text-[#EEEEEE]/70">Please check your watchlist and try again</div>
+                </div>
+            `;
+            document.getElementById('data-table').classList.add('hidden');
+            return;
+        }
+
         currentData = tableData;
-        displayTableData(tableData, watchlistHeaders);
+        displayTableData(tableData, watchlistHeaders, false, true);
+        
+        // Update ticker bar with current data
+        populateTickerBar();
+        
     } catch (error) {
         console.error('Error loading watchlist:', error);
-        showError('Failed to load watchlist');
+        document.getElementById('loading').innerHTML = `
+            <div class="text-center">
+                <div class="text-red-400 text-xl mb-4">Failed to load watchlist</div>
+                <div class="text-[#EEEEEE]/70">${error.message}</div>
+            </div>
+        `;
+        document.getElementById('data-table').classList.add('hidden');
+    }
+}
+// async function toggleWatchlist(ticker) {
+//     const isInWatchlist = watchlistData && watchlistData.hasOwnProperty(ticker);
+    
+//     try {
+//         if (isInWatchlist) {
+//             // Remove from watchlist
+//             const response = await fetch(`${API_BASE}/watchlist/${ticker}`, {
+//                 method: 'DELETE'
+//             });
+            
+//             if (response.ok) {
+//                 const updatedWatchlist = await response.json();
+//                 watchlistData = updatedWatchlist;
+//                 console.log(`${ticker} removed from watchlist`);
+                
+//                 // Update ticker bar
+//                 populateTickerBar();
+                
+//                 // Refresh the display
+//                 await displayStockDetails(ticker);
+                
+//                 // If on watchlist page, reload it
+//                 if (currentDataType === 'watchlist') {
+//                     await loadWatchlistPage();
+//                 }
+//             } else {
+//                 console.error('Failed to remove from watchlist');
+//             }
+//         } else {
+//             // Add to watchlist
+//             console.log(`Adding ${ticker} to watchlist...`);
+//             const response = await fetch(`${API_BASE}/watchlist`, {
+//                 method: 'POST',
+//                 headers: { 'Content-Type': 'application/json' },
+//                 body: JSON.stringify({ ticker: ticker })
+//             });
+            
+//             if (response.ok) {
+//                 const updatedWatchlist = await response.json();
+//                 watchlistData = updatedWatchlist;
+//                 console.log(`${ticker} added to watchlist`);
+                
+//                 // Update ticker bar
+//                 populateTickerBar();
+                
+//                 // Refresh the display
+//                 await displayStockDetails(ticker);
+//             } else {
+//                 const errorData = await response.json();
+//                 console.error('Failed to add to watchlist:', errorData);
+//                 alert('Failed to add to watchlist. Please try again.');
+//             }
+//         }
+//     } catch (error) {
+//         console.error('Error toggling watchlist:', error);
+//         alert('An error occurred. Please try again.');
+//     }
+// }
+
+async function toggleWatchlist(ticker) {
+    const isInWatchlist = watchlistData && watchlistData.hasOwnProperty(ticker);
+    
+    try {
+        if (isInWatchlist) {
+            // Remove from watchlist
+            const response = await fetch(`${API_BASE}/watchlist/${ticker}`, {
+                method: 'DELETE'
+            });
+            
+            if (response.ok) {
+                const updatedWatchlist = await response.json();
+                watchlistData = updatedWatchlist;
+                console.log(`${ticker} removed from watchlist`);
+                
+                // Update ticker bar
+                populateTickerBar();
+                
+                // Refresh the display
+                await displayStockDetails(ticker);
+                
+                // If on watchlist page, reload it
+                if (currentDataType === 'watchlist') {
+                    await loadWatchlistPage();
+                }
+            } else {
+                console.error('Failed to remove from watchlist');
+            }
+        } else {
+            // Add to watchlist
+            console.log(`Adding ${ticker} to watchlist...`);
+            const response = await fetch(`${API_BASE}/watchlist`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ticker: ticker })
+            });
+            
+            if (response.ok) {
+                const updatedWatchlist = await response.json();
+                watchlistData = updatedWatchlist;
+                console.log(`${ticker} added to watchlist`);
+                
+                // Update ticker bar
+                populateTickerBar();
+                
+                // Simply update the button state without refreshing all details
+                const button = document.getElementById('watchlist-toggle-btn');
+                if (button) {
+                    button.className = 'w-full bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors';
+                    button.textContent = 'Remove from Watchlist';
+                }
+            } else {
+                const errorData = await response.json();
+                console.error('Failed to add to watchlist:', errorData);
+                alert('Failed to add to watchlist. Please try again.');
+            }
+        }
+    } catch (error) {
+        console.error('Error toggling watchlist:', error);
+        alert('An error occurred. Please try again.');
     }
 }
 
-
-// ===== Page Display ===== //
 function shouldHighlightRow(item, dataType) { // determine if a row should be highlighted
 
     if (dataType != 'news') {
@@ -998,59 +1217,59 @@ async function displayLegislatorDetails(bioguideId) {
 }
 
 // ===== Watchlist Functionality (add/remove) ===== //
-async function toggleWatchlist(ticker) {
-    const isInWatchlist = watchlistData && watchlistData.hasOwnProperty(ticker);
+// async function toggleWatchlist(ticker) {
+//     const isInWatchlist = watchlistData && watchlistData.hasOwnProperty(ticker);
     
-    try {
-        if (isInWatchlist) {
-            // Remove from watchlist
-            const response = await fetch(`${API_BASE}/watchlist/${ticker}`, {
-                method: 'DELETE'
-            });
+//     try {
+//         if (isInWatchlist) {
+//             // Remove from watchlist
+//             const response = await fetch(`${API_BASE}/watchlist/${ticker}`, {
+//                 method: 'DELETE'
+//             });
             
-            if (response.ok) {
-                delete watchlistData[ticker];
-                console.log(`${ticker} removed from watchlist`);
+//             if (response.ok) {
+//                 delete watchlistData[ticker];
+//                 console.log(`${ticker} removed from watchlist`);
                 
-                // Update ticker bar
-                populateTickerBar();
+//                 // Update ticker bar
+//                 populateTickerBar();
                 
-                // Refresh the display
-                displayStockDetails(ticker);
+//                 // Refresh the display
+//                 displayStockDetails(ticker);
                 
-                // If on watchlist page, reload it
-                if (currentDataType === 'watchlist') {
-                    await loadWatchlistPage();
-                }
-            } else {
-                console.error('Failed to remove from watchlist');
-            }
-        } else {
-            // Add to watchlist
-            const response = await fetch(`${API_BASE}/watchlist`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ticker: ticker })
-            });
+//                 // If on watchlist page, reload it
+//                 if (currentDataType === 'watchlist') {
+//                     await loadWatchlistPage();
+//                 }
+//             } else {
+//                 console.error('Failed to remove from watchlist');
+//             }
+//         } else {
+//             // Add to watchlist
+//             const response = await fetch(`${API_BASE}/watchlist`, {
+//                 method: 'POST',
+//                 headers: { 'Content-Type': 'application/json' },
+//                 body: JSON.stringify({ ticker: ticker })
+//             });
             
-            if (response.ok) {
-                const updatedWatchlist = await response.json();
-                watchlistData = updatedWatchlist;
-                console.log(`${ticker} added to watchlist`);
+//             if (response.ok) {
+//                 const updatedWatchlist = await response.json();
+//                 watchlistData = updatedWatchlist;
+//                 console.log(`${ticker} added to watchlist`);
                 
-                // Update ticker bar
-                populateTickerBar();
+//                 // Update ticker bar
+//                 populateTickerBar();
                 
-                // Refresh the display
-                displayStockDetails(ticker);
-            } else {
-                console.error('Failed to add to watchlist');
-            }
-        }
-    } catch (error) {
-        console.error('Error toggling watchlist:', error);
-    }
-}
+//                 // Refresh the display
+//                 displayStockDetails(ticker);
+//             } else {
+//                 console.error('Failed to add to watchlist');
+//             }
+//         }
+//     } catch (error) {
+//         console.error('Error toggling watchlist:', error);
+//     }
+// }
 
 // ===== AI Summary Modal ===== //
 async function openAIModal(url, title, description) {

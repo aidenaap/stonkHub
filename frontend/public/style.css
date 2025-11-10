@@ -17,7 +17,7 @@
   gap: 60px;
   width: -moz-max-content;
   width: max-content;
-  animation: ticker-scroll 45s linear infinite;
+  animation: ticker-scroll 120s linear infinite;
   align-items: center;
   height: 100%;
 }
