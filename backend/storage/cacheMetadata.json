@@ -1,0 +1,18 @@
+{
+  "lobbying": {
+    "lastUpdated": "2025-11-10T22:08:47.089Z",
+    "cacheFile": "lobbyingCache.json"
+  },
+  "congress": {
+    "lastUpdated": "2025-11-10T22:08:48.098Z",
+    "cacheFile": "congressCache.json"
+  },
+  "contracts": {
+    "lastUpdated": "2025-11-10T22:08:48.725Z",
+    "cacheFile": "contractsCache.json"
+  },
+  "news": {
+    "lastUpdated": "2025-11-10T22:08:49.541Z",
+    "cacheFile": "newsCache.json"
+  }
+}
