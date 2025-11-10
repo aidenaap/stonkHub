@@ -9,6 +9,7 @@ yarn-error.log*
 
 # Custom caching
 *cache*.js
+*cache*.json
 !cacheService.js
 
 # dotenv environment variables file
