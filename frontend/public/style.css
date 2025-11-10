@@ -74,6 +74,10 @@
   white-space: nowrap;
 }
 
+.isHighlightedRow {
+  background-color: #76ABAE;
+}
+
 /* END OF CUSTOM NON TAILWIND CSS */
 
 *, ::before, ::after {

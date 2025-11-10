@@ -189,7 +189,7 @@ async function loadContractsPage() {
 async function loadNewsPage() {
     try {
         setActiveTab(document.getElementById('news-btn'));
-        document.getElementById('table-title').textContent = 'Top Headlines & Tech News';
+        document.getElementById('table-title').textContent = 'Top Business & Tech News Today';
         
         currentDataType = 'news';
 
@@ -211,8 +211,8 @@ async function loadWatchlistPage() {
         const tableData = Object.entries(watchlistData).map(([ticker, values]) => ({
             "Ticker": ticker,
             "Current": values[0],
-            "Change": values[1],
-            "% Change": values[2],
+            "Change": parseFloat(values[1].toFixed(2)),
+            "% Change": parseFloat(values[2].toFixed(2)),
             "Open": values[3],
             "Prev Close": values[4]
         }));
@@ -260,7 +260,7 @@ function displayTableData(data, headers, firstTime=false, stockRefresh=false) { 
     // Create headers
     headers.forEach(header => {
         const th = document.createElement('th');
-        th.className = 'px-4 py-3 text-left text-[#76ABAE] font-semibold border-b border-[#76ABAE]/20';
+        th.className = 'px-4 py-3 text-left text-[#76ABAE] font-semibold border-b border-[#76ABAE]/20 z-50';
         th.textContent = header.replace('_', ' ');
         tableHeaders.appendChild(th);
     });
@@ -272,7 +272,7 @@ function displayTableData(data, headers, firstTime=false, stockRefresh=false) { 
         // Check if row should be highlighted
         const isHighlighted = shouldHighlightRow(item, currentDataType);
         tr.className = isHighlighted 
-        ? 'border-b border-[#76ABAE]/10 hover:bg-[#76ABAE]/30 bg-[#76ABAE]/20' 
+        ? 'border-b border-[#76ABAE]/10 hover:bg-[#76ABAE]/30 bg-[#76ABAE]/20 isHighlightedRow' 
         : 'border-b border-[#76ABAE]/10 hover:bg-[#222831]/50';
 
         // Create table data cell for each header iterating through the data
@@ -379,7 +379,7 @@ function displayTableData(data, headers, firstTime=false, stockRefresh=false) { 
                 td.appendChild(alpha);
             } else if (header === 'Ticker' && value) {
                 td.style.cursor = 'pointer';
-                td.style.color = '#76ABAE';
+                td.style.color = isHighlighted ? '#ffffff': '#76ABAE';
                 td.style.textDecoration = 'underline';
                 td.textContent = value;
                 td.addEventListener('click', () => {
@@ -391,7 +391,7 @@ function displayTableData(data, headers, firstTime=false, stockRefresh=false) { 
                 });
             } else if (header === 'Representative' && value) {
                 td.style.cursor = 'pointer';
-                td.style.color = '#76ABAE';
+                td.style.color = isHighlighted ? '#ffffff': '#76ABAE';
                 td.style.textDecoration = 'underline';
                 td.textContent = value;
                 td.addEventListener('click', async () => {
@@ -569,7 +569,7 @@ function displayFilteredData(data, headers) {
                 td.appendChild(alpha);
             } else if (header === 'Ticker' && value) {
                 td.style.cursor = 'pointer';
-                td.style.color = '#76ABAE';
+                td.style.color = isHighlighted ? '#ffffff': '#76ABAE';
                 td.style.textDecoration = 'underline';
                 td.textContent = value;
                 td.addEventListener('click', () => {
@@ -581,7 +581,7 @@ function displayFilteredData(data, headers) {
                 });
             } else if (header === 'Representative' && value) {
                 td.style.cursor = 'pointer';
-                td.style.color = '#76ABAE';
+                td.style.color = isHighlighted ? '#ffffff': '#76ABAE';
                 td.style.textDecoration = 'underline';
                 td.textContent = value;
                 td.addEventListener('click', async () => {
@@ -603,48 +603,6 @@ function displayFilteredData(data, headers) {
             } else {
                 td.textContent = value || 'N/A';
             }
-
-            // if ((header === 'Amount' || header === 'Current' || header === 'Open' || header === 'Prev Close') && value) {
-            //     value = '$' + Number(value).toLocaleString();
-            //     // Make the amount bold if highlighted
-            //     if (isHighlighted) {
-            //         td.classList.add('font-bold');
-            //     }
-            // } else if (header.includes('Date') && value) {
-            //     value = new Date(value).toLocaleDateString();
-            // }
-
-            // if (header === 'Ticker' && value) {
-            //     td.style.cursor = 'pointer';
-            //     td.style.textDecoration = 'underline';
-            //     td.textContent = value;
-            //     td.addEventListener('click', () => {
-            //         openSearchModal();
-            //         setTimeout(() => {
-            //             displayStockDetails(value);
-            //         }, 100);
-            //     });
-            // } else if (header === 'Representative' && value) {
-            //     td.style.cursor = 'pointer';
-            //     td.style.textDecoration = 'underline';
-            //     td.textContent = value;
-            //     td.addEventListener('click', () => {
-            //         openSearchModal();
-            //         setTimeout(() => {
-            //             const legislator = legislatorList.find(l => 
-            //                 l.name.fullname.toLowerCase() === value.toLowerCase()
-            //             );
-            //             if (legislator) {
-            //                 displayLegislatorDetails(legislator.id.bioguide);
-            //             } else {
-            //                 document.getElementById('search-results').innerHTML = 
-            //                     '<div class="text-[#76ABAE]/50 text-center">Legislator not found</div>';
-            //             }
-            //         }, 100);
-            //     });
-            // } else {
-            //     td.textContent = value || 'N/A';
-            // }
 
             tr.appendChild(td);
         });
