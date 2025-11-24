@@ -1,22 +1,26 @@
 {
   "lobbying": {
-    "lastUpdated": "2025-11-10T22:08:47.089Z",
+    "lastUpdated": "2025-11-24T22:37:55.409Z",
     "cacheFile": "lobbyingCache.json"
   },
   "congress": {
-    "lastUpdated": "2025-11-10T23:09:07.709Z",
+    "lastUpdated": "2025-11-24T22:37:56.398Z",
     "cacheFile": "congressCache.json"
   },
   "contracts": {
-    "lastUpdated": "2025-11-10T22:08:48.725Z",
+    "lastUpdated": "2025-11-24T22:37:57.027Z",
     "cacheFile": "contractsCache.json"
   },
   "news": {
-    "lastUpdated": "2025-11-10T22:08:49.541Z",
+    "lastUpdated": "2025-11-24T22:37:57.820Z",
     "cacheFile": "newsCache.json"
   },
   "stockData": {
-    "lastUpdated": "2025-11-10T23:05:18.492Z",
+    "lastUpdated": "2025-11-24T22:37:59.625Z",
     "cacheFile": "stonkData.json"
+  },
+  "homepage": {
+    "lastUpdated": null,
+    "cacheFile": "homepageCache.json"
   }
 }

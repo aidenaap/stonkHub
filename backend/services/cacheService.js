@@ -76,7 +76,8 @@ const readMetadata = async () => {
             congress: { lastUpdated: null, cacheFile: 'congressCache.json' },
             contracts: { lastUpdated: null, cacheFile: 'contractsCache.json' },
             news: { lastUpdated: null, cacheFile: 'newsCache.json' },
-            stockData: { lastUpdated: null, cacheFile: 'stonkData.json' }
+            stockData: { lastUpdated: null, cacheFile: 'stonkData.json' },
+            homepage: {lastUpdated: null, cacheFile: 'homepageCache.json' },
         };
         
         try {

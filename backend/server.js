@@ -16,6 +16,7 @@ const { getWatchlist, addToWatchlist, removeFromWatchlist } = require('./service
 const { fetchRealTimeStockData, getStockData } = require('./services/stockService');
 const { getStockList, getLegislatorList } = require('./services/staticServices');
 const { summarizeArticle } = require('./services/openaiService');
+const { generateHomepageCache } = require('./services/homepageService');
 
 // Caching
 const { getCachedData, setCachedData, getCachedStockData } = require('./services/cacheService');
@@ -167,6 +168,42 @@ app.post('/api/news/summarize', async (req, res) => { // AI Summary endpoint
     } catch (error) {
         console.error('Error generating summary:', error);
         res.status(500).json({ error: 'Failed to generate AI summary' });
+    }
+});
+
+// homepage
+app.get('/api/homepage', async (req, res) => {
+    try {
+        // Check if cached homepage data exists and is valid
+        let homepageData = await getCachedData('homepage');
+        
+        if (!homepageData) {
+            // Need to regenerate - fetch all required data
+            const congressData = await getCachedData('congress');
+            const lobbyingData = await getCachedData('lobbying');
+            const contractData = await getCachedData('contracts');
+            
+            if (!congressData || !lobbyingData || !contractData) {
+                return res.status(503).json({ 
+                    error: 'Source data not available. Please wait for initial data load.' 
+                });
+            }
+            
+            homepageData = await generateHomepageCache(congressData, lobbyingData, contractData);
+            
+            if (homepageData) {
+                await setCachedData('homepage', homepageData);
+            }
+        }
+        
+        if (homepageData) {
+            res.json(homepageData);
+        } else {
+            res.status(500).json({ error: 'Failed to generate homepage data' });
+        }
+    } catch (error) {
+        console.error('Error in homepage endpoint:', error);
+        res.status(500).json({ error: 'Failed to fetch homepage data' });
     }
 });
 
