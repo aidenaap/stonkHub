@@ -18,24 +18,27 @@
        <!-- Navbar -->
        <nav class="bg-[#31363F] px-6 py-4 flex justify-between items-center shadow-lg">
            <div class="flex space-x-4">
-               <button onclick="loadLobbyingPage()" id="lobbying-btn" class="bg-[#76ABAE] hover:bg-[#76ABAE]/80 text-[#222831] px-6 py-2 rounded-lg font-semibold transition-colors active-tab">
+                <button onclick="loadHomePage()" id="home-btn" class="bg-[#76ABAE] hover:bg-[#76ABAE]/80 text-[#222831] px-6 py-2 rounded-lg font-semibold transition-colors active-tab">
+                   Home
+                </button>
+                <button onclick="loadLobbyingPage()" id="lobbying-btn" class="bg-transparent hover:bg-[#76ABAE]/20 text-[#EEEEEE] hover:text-[#76ABAE] px-6 py-2 rounded-lg font-semibold transition-colors border border-[#76ABAE]/30">
                    Lobbying
-               </button>
-               <button onclick="loadCongressPage()" id="congress-btn" class="bg-transparent hover:bg-[#76ABAE]/20 text-[#EEEEEE] hover:text-[#76ABAE] px-6 py-2 rounded-lg font-semibold transition-colors border border-[#76ABAE]/30">
+                </button>
+                <button onclick="loadCongressPage()" id="congress-btn" class="bg-transparent hover:bg-[#76ABAE]/20 text-[#EEEEEE] hover:text-[#76ABAE] px-6 py-2 rounded-lg font-semibold transition-colors border border-[#76ABAE]/30">
                    Congress
-               </button>
-               <button onclick="loadContractsPage()" id="contracts-btn" class="bg-transparent hover:bg-[#76ABAE]/20 text-[#EEEEEE] hover:text-[#76ABAE] px-6 py-2 rounded-lg font-semibold transition-colors border border-[#76ABAE]/30">
+                </button>
+                <button onclick="loadContractsPage()" id="contracts-btn" class="bg-transparent hover:bg-[#76ABAE]/20 text-[#EEEEEE] hover:text-[#76ABAE] px-6 py-2 rounded-lg font-semibold transition-colors border border-[#76ABAE]/30">
                    Awarded Contracts
-               </button>
-               <button onclick="loadNewsPage()" id="news-btn" class="bg-transparent hover:bg-[#76ABAE]/20 text-[#EEEEEE] hover:text-[#76ABAE] px-6 py-2 rounded-lg font-semibold transition-colors border border-[#76ABAE]/30">
+                </button>
+                <button onclick="loadNewsPage()" id="news-btn" class="bg-transparent hover:bg-[#76ABAE]/20 text-[#EEEEEE] hover:text-[#76ABAE] px-6 py-2 rounded-lg font-semibold transition-colors border border-[#76ABAE]/30">
                    News
-               </button>
-               <button id="insider-btn" class="bg-transparent hover:bg-[#76ABAE]/20 text-[#EEEEEE] hover:text-[#76ABAE] px-6 py-2 rounded-lg font-semibold transition-colors border border-[#76ABAE]/30">
+                </button>
+                <button id="insider-btn" class="bg-transparent hover:bg-[#76ABAE]/20 text-[#EEEEEE] hover:text-[#76ABAE] px-6 py-2 rounded-lg font-semibold transition-colors border border-[#76ABAE]/30">
                    <a style="text-decoration: none; color: inherit;" href="http://openinsider.com/screener?s=&o=&pl=&ph=&ll=&lh=&fd=30&fdr=&td=0&tdr=&fdlyl=&fdlyh=&daysago=&xp=1&xs=1&vl=&vh=&ocl=&och=&sic1=-1&sicl=100&sich=9999&grp=0&nfl=&nfh=&nil=&nih=&nol=&noh=&v2l=&v2h=&oc2l=&oc2h=&sortcol=1&cnt=100&page=1"  target="_blank">Open Insider</a>
-               </button>
-               <button onclick="loadWatchlistPage()" id="watchlist-btn" class="bg-transparent hover:bg-[#76ABAE]/20 text-[#EEEEEE] hover:text-[#76ABAE] px-6 py-2 rounded-lg font-semibold transition-colors border border-[#76ABAE]/30">
+                </button>
+                <button onclick="loadWatchlistPage()" id="watchlist-btn" class="bg-transparent hover:bg-[#76ABAE]/20 text-[#EEEEEE] hover:text-[#76ABAE] px-6 py-2 rounded-lg font-semibold transition-colors border border-[#76ABAE]/30">
                    My Watchlist
-               </button>
+                </button>
            </div>
            <div class="flex items-center">
                 <button onclick="openSearchModal()" id="search-icon-btn" class="bg-[#76ABAE] hover:bg-[#76ABAE]/80 text-[#222831] px-6 py-3 rounded-lg transition-colors flex items-center justify-center gap-2 font-semibold">

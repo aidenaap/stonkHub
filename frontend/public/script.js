@@ -11,6 +11,7 @@ let stockList = {};
 let legislatorList = [];
 
 // storage for api calls upon startup
+let homepageData;
 let lobbyingData;
 let congressData;
 let contractData;
@@ -53,7 +54,6 @@ document.addEventListener('DOMContentLoaded', function() { // Initialize filters
     });
 });
 
-
 async function loadInitialData() { // get all API data on initial load
 
     // show loading until we displayTableData
@@ -66,6 +66,11 @@ async function loadInitialData() { // get all API data on initial load
     congressData = await congressResponse.json();
     const contractResponse = await fetch(`${API_BASE}/contracts`);
     contractData = await contractResponse.json();
+
+    // Generate homepage data
+    const homepageResponse = await fetch(`${API_BASE}/homepage`);
+    homepageData = await homepageResponse.json();
+    console.log('Homepage data loaded:', homepageData);
 
     // news data
     const newsResponse = await fetch(`${API_BASE}/news`);
@@ -88,9 +93,11 @@ async function loadInitialData() { // get all API data on initial load
     populateTickerBar();
 
     // Display lobbying upon startup
-    currentData=lobbyingData;
-    displayTableData(lobbyingData, lobbyingHeaders, true);
+    currentDataType='home';
+    displayHomePage();
+    // displayTableDataType(lobbyingData, lobbyingHeaders, true);
 }
+
 
 // ===== Ticker Bar ===== //
 function populateTickerBar() {
@@ -131,6 +138,7 @@ function populateTickerBar() {
     tickerTrack.innerHTML = tickerHTML + tickerHTML + tickerHTML;
 }
 
+
 // ===== Dynamic Page Changes ===== //
 function setActiveTab(activeButton) { // button styling
     // Remove active class from all buttons
@@ -142,6 +150,18 @@ function setActiveTab(activeButton) { // button styling
     // Add active class to clicked button
     activeButton.classList.add('active-tab', 'bg-[#76ABAE]', 'text-[#222831]');
     activeButton.classList.remove('bg-transparent', 'text-[#EEEEEE]', 'border', 'border-[#76ABAE]/30');
+}
+// Homepage
+async function loadHomePage() {
+    try {
+        setActiveTab(document.getElementById('home-btn'));
+        currentDataType = 'home';
+        
+        displayHomePage();
+    } catch (error) {
+        console.error('Error loading homepage:', error);
+        showError('Failed to load homepage');
+    }
 }
 // For each, set active tab, title above table, currentData, and currentDataType
 // Meanwhile call displayTableData 
@@ -201,34 +221,7 @@ async function loadNewsPage() {
         showError('Failed to load news data');
     }
 }
-// async function loadWatchlistPage() {
-//     try {
-//         setActiveTab(document.getElementById('watchlist-btn')); // if you add the button
-//         document.getElementById('table-title').textContent = 'My Watchlist';
-        
-//         currentDataType = 'watchlist';
-
-//         // going to have to load in watchlist, then stock data, then convert to table-friendly format
-//         const tableData = Object.entries(watchlistData).map(([ticker, values]) => ({
-//             "Ticker": ticker,
-//             "Current": values[0],
-//             "Change": parseFloat(values[1].toFixed(2)),
-//             "% Change": parseFloat(values[2].toFixed(2)),
-//             "Open": values[3],
-//             "Prev Close": values[4]
-//         }));
-        
-//         currentData = tableData;
-//         displayTableData(tableData, watchlistHeaders);
-//     } catch (error) {
-//         console.error('Error loading watchlist:', error);
-//         showError('Failed to load watchlist');
-//     }
-// }
-
-
-// ===== Page Display ===== //
-
+// Watchlist functionality
 async function loadWatchlistPage() {
     try {
         setActiveTab(document.getElementById('watchlist-btn'));
@@ -329,65 +322,6 @@ async function loadWatchlistPage() {
         document.getElementById('data-table').classList.add('hidden');
     }
 }
-// async function toggleWatchlist(ticker) {
-//     const isInWatchlist = watchlistData && watchlistData.hasOwnProperty(ticker);
-    
-//     try {
-//         if (isInWatchlist) {
-//             // Remove from watchlist
-//             const response = await fetch(`${API_BASE}/watchlist/${ticker}`, {
-//                 method: 'DELETE'
-//             });
-            
-//             if (response.ok) {
-//                 const updatedWatchlist = await response.json();
-//                 watchlistData = updatedWatchlist;
-//                 console.log(`${ticker} removed from watchlist`);
-                
-//                 // Update ticker bar
-//                 populateTickerBar();
-                
-//                 // Refresh the display
-//                 await displayStockDetails(ticker);
-                
-//                 // If on watchlist page, reload it
-//                 if (currentDataType === 'watchlist') {
-//                     await loadWatchlistPage();
-//                 }
-//             } else {
-//                 console.error('Failed to remove from watchlist');
-//             }
-//         } else {
-//             // Add to watchlist
-//             console.log(`Adding ${ticker} to watchlist...`);
-//             const response = await fetch(`${API_BASE}/watchlist`, {
-//                 method: 'POST',
-//                 headers: { 'Content-Type': 'application/json' },
-//                 body: JSON.stringify({ ticker: ticker })
-//             });
-            
-//             if (response.ok) {
-//                 const updatedWatchlist = await response.json();
-//                 watchlistData = updatedWatchlist;
-//                 console.log(`${ticker} added to watchlist`);
-                
-//                 // Update ticker bar
-//                 populateTickerBar();
-                
-//                 // Refresh the display
-//                 await displayStockDetails(ticker);
-//             } else {
-//                 const errorData = await response.json();
-//                 console.error('Failed to add to watchlist:', errorData);
-//                 alert('Failed to add to watchlist. Please try again.');
-//             }
-//         }
-//     } catch (error) {
-//         console.error('Error toggling watchlist:', error);
-//         alert('An error occurred. Please try again.');
-//     }
-// }
-
 async function toggleWatchlist(ticker) {
     const isInWatchlist = watchlistData && watchlistData.hasOwnProperty(ticker);
     
@@ -450,7 +384,7 @@ async function toggleWatchlist(ticker) {
         alert('An error occurred. Please try again.');
     }
 }
-
+// Data display
 function shouldHighlightRow(item, dataType) { // determine if a row should be highlighted
 
     if (dataType != 'news') {
@@ -652,6 +586,198 @@ function displayTableData(data, headers, firstTime=false, stockRefresh=false) { 
 
     filteredData = data;
     document.getElementById('filter-input').value = '';
+}
+function displayHomePage() {
+    const mainContent = document.querySelector('.flex-1.p-6.overflow-hidden');
+    
+    if (!homepageData) {
+        mainContent.innerHTML = `
+            <div class="flex items-center justify-center h-full">
+                <div class="text-[#76ABAE] text-xl">Loading homepage data...</div>
+            </div>
+        `;
+        return;
+    }
+
+    const { greedFearIndex, noticeableTrades, frequentTrades, multipleIndicators } = homepageData;
+    
+    // Sort noticeably large trades by date (most recent first)
+    const sortedNoticeableTrades = [...noticeableTrades].sort((a, b) => 
+        new Date(b.TransactionDate) - new Date(a.TransactionDate)
+    );
+    
+    // Calculate greed/fear color
+    const getIndexColor = (index) => {
+        if (index <= 3) return '#f87171'; // Red (fear)
+        if (index <= 7) return '#fbbf24'; // Yellow (neutral)
+        return '#4ade80'; // Green (greed)
+    };
+    
+    mainContent.innerHTML = `
+        <div class="bg-[#31363F] rounded-lg shadow-lg h-full overflow-auto p-6">
+            <h1 class="text-3xl font-bold text-[#76ABAE] mb-6">Market Intelligence Dashboard</h1>
+            
+            <!-- Top Stats Row - 4 Columns -->
+            <div class="flex justify-between gap-6" style="margin-bottom: 10px;">
+                <!-- Greed/Fear Index -->
+                <div class="bg-[#222831] rounded-lg p-6">
+                    <h2 class="text-lg font-semibold text-[#76ABAE] mb-3">Greed/Fear Index</h2>
+
+                    <div class="text-center">
+
+                        <!-- TOP ROW: number, emoji, label -->
+                        <div class="flex items-center justify-between gap-6 mb-4">
+
+                            <!-- Number -->
+                            <div class="text-5xl font-bold" style="color: ${getIndexColor(greedFearIndex.index)}">
+                                ${greedFearIndex.index}/10
+                            </div>
+
+                            <!-- Emoji -->
+                            <div class="text-3xl">
+                                ${greedFearIndex.index <= 3 ? '🐻' : 
+                                greedFearIndex.index <= 4 ? '😰' :
+                                greedFearIndex.index <= 6 ? '😐' :
+                                greedFearIndex.index <= 8 ? '😊' : '🚀'}
+                            </div>
+
+                            <!-- Label -->
+                            <div class="text-sm text-[#EEEEEE]/70">
+                                ${greedFearIndex.index <= 3 ? 'Extreme Fear' : 
+                                greedFearIndex.index <= 4 ? 'Fear' :
+                                greedFearIndex.index <= 6 ? 'Neutral' :
+                                greedFearIndex.index <= 8 ? 'Greed' : 'Extreme Greed'}
+                            </div>
+                        </div>
+
+                        <!-- BOTTOM ROW: purchases / sales -->
+                        <div class="flex items-center justify-between mt-2 text-xs text-[#EEEEEE]/50">
+                            <div class="text-[#4ade80] font-semibold">${greedFearIndex.purchaseCount} purchases/</div>
+                            <div class="text-[#f87171] font-semibold">${greedFearIndex.saleCount} sales</div>
+                        </div>
+
+                    </div>
+                </div>
+                
+                <!-- Large Trades -->
+                <div class="bg-[#222831] rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-[#76ABAE] mb-3">Large Trades</h3>
+                    <div class="text-center">
+                        <div class="text-5xl font-bold text-[#EEEEEE] mb-2">${sortedNoticeableTrades.length}</div>
+                        <div class="text-sm text-[#EEEEEE]/70">Trades ≥ $50,001</div>
+                    </div>
+                </div>
+                
+                <!-- Frequent Trades -->
+                <div class="bg-[#222831] rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-[#76ABAE] mb-3">Frequent Trades</h3>
+                    <div class="text-center">
+                        <div class="text-5xl font-bold text-[#EEEEEE] mb-2">${frequentTrades.length}</div>
+                        <div class="text-sm text-[#EEEEEE]/70">Stocks traded 3+ times</div>
+                    </div>
+                </div>
+                
+                <!-- Hot Stocks -->
+                <div class="bg-[#222831] rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-[#76ABAE] mb-3">Hot Stocks</h3>
+                    <div class="text-center">
+                        <div class="text-5xl font-bold text-[#EEEEEE] mb-2">${multipleIndicators.length}</div>
+                        <div class="text-sm text-[#EEEEEE]/70">10+ combined indicators</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Large Trades Section -->
+            <div class="bg-[#222831] rounded-lg p-6" style="margin-bottom: 10px;">
+                <h3 class="text-xl font-semibold text-[#76ABAE] mb-4">Large Trades (Recent First)</h3>
+                <div class="overflow-auto" style="max-height: 500px;">
+                    ${sortedNoticeableTrades.length === 0 ? 
+                        '<div class="text-[#EEEEEE]/50 text-center py-4">No large trades found</div>' :
+                        sortedNoticeableTrades.map(trade => `
+                            <div class="border-b border-[#76ABAE]/10 py-3 last:border-0 hover:bg-[#76ABAE]/10 cursor-pointer transition-colors" onclick="openStockFromHomepage('${trade.Ticker}')">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex-1">
+                                        <div class="font-semibold text-[#76ABAE] text-lg">${trade.Ticker}</div>
+                                        <div class="text-sm text-[#EEEEEE]/70 mt-1">${trade.Representative}</div>
+                                        <div class="text-xs text-[#EEEEEE]/50 mt-1">
+                                            ${new Date(trade.TransactionDate).toLocaleDateString('en-US', { 
+                                                year: 'numeric', 
+                                                month: 'short', 
+                                                day: 'numeric' 
+                                            })}
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="font-bold text-[#EEEEEE] text-lg">$${Number(trade.Amount).toLocaleString()}</div>
+                                        <div class="text-sm ${trade.Transaction.toLowerCase().includes('purchase') || trade.Transaction.toLowerCase().includes('buy') ? 'text-[#4ade80]' : 'text-[#f87171]'} mt-1">
+                                            ${trade.Transaction}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')
+                    }
+                </div>
+            </div>
+
+            <!-- Frequent Trades Section -->
+            <div class="bg-[#222831] rounded-lg p-6" style="margin-bottom: 10px;">
+                <h3 class="text-xl font-semibold text-[#76ABAE] mb-4">Most Frequently Traded Stocks</h3>
+                <div class="overflow-auto" style="max-height: 500px;">
+                    ${frequentTrades.length === 0 ? 
+                        '<div class="text-[#EEEEEE]/50 text-center py-4">No frequent trades found</div>' :
+                        frequentTrades.map(item => `
+                            <div class="border-b border-[#76ABAE]/10 py-3 last:border-0 hover:bg-[#76ABAE]/10 cursor-pointer transition-colors" onclick="openStockFromHomepage('${item.ticker}')">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <div class="font-semibold text-[#76ABAE] text-lg">${item.ticker}</div>
+                                        <div class="text-sm text-[#EEEEEE]/70 mt-1">
+                                            ${item.count} trades in past 6 months
+                                        </div>
+                                    </div>
+                                    <div class="text-3xl font-bold text-[#EEEEEE]">${item.count}</div>
+                                </div>
+                            </div>
+                        `).join('')
+                    }
+                </div>
+            </div>
+
+            <!-- Multiple Indicators Section -->
+            <div class="bg-[#222831] rounded-lg p-6">
+                <h3 class="text-xl font-semibold text-[#76ABAE] mb-4">Stocks with Multiple Indicators</h3>
+                <div class="overflow-auto" style="max-height: 500px;">
+                    ${multipleIndicators.length === 0 ? 
+                        '<div class="text-[#EEEEEE]/50 text-center py-4">No stocks with multiple indicators</div>' :
+                        multipleIndicators.map(item => `
+                            <div class="border-b border-[#76ABAE]/10 py-3 last:border-0 hover:bg-[#76ABAE]/10 cursor-pointer transition-colors" onclick="openStockFromHomepage('${item.ticker}')">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex-1">
+                                        <div class="font-semibold text-[#76ABAE] text-lg">${item.ticker}</div>
+                                        <div class="text-sm text-[#EEEEEE]/70 mt-1">
+                                            <span class="text-[#4ade80]">${item.congressCount} congress</span> · 
+                                            <span class="text-[#fbbf24]">${item.lobbyingCount} lobbying</span> · 
+                                            <span class="text-[#60a5fa]">${item.contractCount} contracts</span>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-3xl font-bold text-[#EEEEEE]">${item.totalCount}</div>
+                                        <div class="text-xs text-[#EEEEEE]/50">total activities</div>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')
+                    }
+                </div>
+            </div>
+        </div>
+    `;
+}
+function openStockFromHomepage(ticker) {
+    openSearchModal();
+    setTimeout(() => {
+        displayStockDetails(ticker);
+    }, 100);
 }
 // Filtering functionality
 function filterData(searchTerm) {
@@ -1216,60 +1342,6 @@ async function displayLegislatorDetails(bioguideId) {
     }
 }
 
-// ===== Watchlist Functionality (add/remove) ===== //
-// async function toggleWatchlist(ticker) {
-//     const isInWatchlist = watchlistData && watchlistData.hasOwnProperty(ticker);
-    
-//     try {
-//         if (isInWatchlist) {
-//             // Remove from watchlist
-//             const response = await fetch(`${API_BASE}/watchlist/${ticker}`, {
-//                 method: 'DELETE'
-//             });
-            
-//             if (response.ok) {
-//                 delete watchlistData[ticker];
-//                 console.log(`${ticker} removed from watchlist`);
-                
-//                 // Update ticker bar
-//                 populateTickerBar();
-                
-//                 // Refresh the display
-//                 displayStockDetails(ticker);
-                
-//                 // If on watchlist page, reload it
-//                 if (currentDataType === 'watchlist') {
-//                     await loadWatchlistPage();
-//                 }
-//             } else {
-//                 console.error('Failed to remove from watchlist');
-//             }
-//         } else {
-//             // Add to watchlist
-//             const response = await fetch(`${API_BASE}/watchlist`, {
-//                 method: 'POST',
-//                 headers: { 'Content-Type': 'application/json' },
-//                 body: JSON.stringify({ ticker: ticker })
-//             });
-            
-//             if (response.ok) {
-//                 const updatedWatchlist = await response.json();
-//                 watchlistData = updatedWatchlist;
-//                 console.log(`${ticker} added to watchlist`);
-                
-//                 // Update ticker bar
-//                 populateTickerBar();
-                
-//                 // Refresh the display
-//                 displayStockDetails(ticker);
-//             } else {
-//                 console.error('Failed to add to watchlist');
-//             }
-//         }
-//     } catch (error) {
-//         console.error('Error toggling watchlist:', error);
-//     }
-// }
 
 // ===== AI Summary Modal ===== //
 async function openAIModal(url, title, description) {
