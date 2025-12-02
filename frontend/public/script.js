@@ -24,7 +24,7 @@ const lobbyingHeaders = ['Ticker', 'Client', 'Date', 'Amount', 'Issue', 'Specifi
 const congressHeaders = ['Representative', 'Ticker', 'Transaction', 'Amount', 'Range', 'TransactionDate', 'ReportDate', 'Party', 'House'];
 const contractHeaders = ['Ticker', 'Agency', 'Date', 'Amount', 'Description'];
 const newsHeaders = ['Title', 'Description', 'Type', 'URL', 'AI Review'];
-const watchlistHeaders = ['Ticker', 'Current', 'Change', '% Change', 'Open', 'Prev Close', 'Remove'];
+const watchlistHeaders = ['Ticker', 'Daily', 'Current', 'Change', '% Change', 'Open', 'Prev Close', 'Remove'];
 
 
 // ===== Initial Setup ===== //
@@ -97,7 +97,6 @@ async function loadInitialData() { // get all API data on initial load
     toggleHomePage(); // Changed from displayHomePage()
 }
 
-
 // ===== Ticker Bar ===== //
 function populateTickerBar() {
     const tickerTrack = document.getElementById('ticker-track');
@@ -137,6 +136,57 @@ function populateTickerBar() {
     tickerTrack.innerHTML = tickerHTML + tickerHTML + tickerHTML;
 }
 
+// ===== Watchlist Sparkline Charts ===== //
+function generateSparkline(ticker, prices, isPositive) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 80;
+    canvas.height = 30;
+    canvas.style.display = 'block';
+    
+    const ctx = canvas.getContext('2d');
+    const color = isPositive ? '#4ade80' : '#f87171';
+    
+    if (!prices || prices.length === 0) {
+        return canvas;
+    }
+    
+    // Calculate scaling
+    const max = Math.max(...prices);
+    const min = Math.min(...prices);
+    const range = max - min || 1;
+    const xStep = canvas.width / (prices.length - 1);
+    
+    // Draw line
+    ctx.beginPath();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.5;
+    
+    prices.forEach((price, i) => {
+        const x = i * xStep;
+        const y = canvas.height - ((price - min) / range) * canvas.height;
+        
+        if (i === 0) {
+            ctx.moveTo(x, y);
+        } else {
+            ctx.lineTo(x, y);
+        }
+    });
+    
+    ctx.stroke();
+    
+    // Fill area under line with gradient
+    ctx.lineTo(canvas.width, canvas.height);
+    ctx.lineTo(0, canvas.height);
+    ctx.closePath();
+    
+    const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    gradient.addColorStop(0, color + '40'); // 25% opacity
+    gradient.addColorStop(1, color + '00'); // 0% opacity
+    ctx.fillStyle = gradient;
+    ctx.fill();
+    
+    return canvas;
+}
 
 // ===== Dynamic Page Changes ===== //
 function setActiveTab(activeButton) { // button styling
@@ -481,6 +531,33 @@ function displayTableData(data, headers, firstTime=false, stockRefresh=false) { 
                     td.classList.add('neg-change');
                 }
                 td.textContent = value || 'N/A';
+            } else if (header === 'Daily' && value === undefined) {
+                // Fetch and display sparkline
+                const ticker = item.Ticker;
+                const change = parseFloat(item.Change) || 0;
+                
+                td.innerHTML = '<div class="text-[#EEEEEE]/50 text-xs">Loading...</div>';
+                
+                // Fetch intraday data
+                fetch(`${API_BASE}/stocklist/intraday`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ticker })
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.prices && data.prices.length > 0) {
+                        const sparkline = generateSparkline(ticker, data.prices, change >= 0);
+                        td.innerHTML = '';
+                        td.appendChild(sparkline);
+                    } else {
+                        td.innerHTML = '<div class="text-[#EEEEEE]/50 text-xs">N/A</div>';
+                    }
+                })
+                .catch(err => {
+                    console.error('Error loading sparkline:', err);
+                    td.innerHTML = '<div class="text-[#EEEEEE]/50 text-xs">N/A</div>';
+                });
             } else if (header === 'URL') {  // Article URL Button
                 const alpha = document.createElement('a');
                 alpha.href = value;

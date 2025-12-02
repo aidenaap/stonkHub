@@ -125,7 +125,7 @@ const getCurrentTimestamp = () => {
     return new Date().toISOString();
 };
 
-// Write cache metadata
+// Overwrite cache metadata
 const writeMetadata = async (metadata) => {
     await fs.writeFile(METADATA_FILE, JSON.stringify(metadata, null, 2));
 };

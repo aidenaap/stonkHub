@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const fs = require('fs').promises;
 const path = require('path');
+const axios = require('axios');
 const { 
    fetchLobbying, 
    fetchHistoricalLobbying,
@@ -238,8 +239,9 @@ app.delete('/api/watchlist/:ticker', async (req, res) => {
     }
 });
 
-// Stock data endpoints
-// get from file storage
+
+// ===== Finnhub Endpoints ===== //
+// Get live stock data 
 app.get('/api/stocklist', async(req, res) => {
     try {
         const jsonStockData = await getStockData();
@@ -296,7 +298,41 @@ app.post('/api/stocklist', async (req, res) => {
   }
 });
 
-// Static stock/legislator information from JSON
+// ===== Yahoo Finance Endpoints ===== //
+// get timeseries for intraday charting
+app.post('/api/stocklist/intraday', async (req, res) => {
+    try {
+        const { ticker } = req.body;
+        
+        if (!ticker) {
+            return res.status(400).json({ error: 'Ticker required' });
+        }
+        
+        // Use Yahoo Finance - no API key needed, no rate limits
+        const response = await axios.get(`https://query1.finance.yahoo.com/v8/finance/chart/${ticker}`, {
+            params: {
+                interval: '5m',
+                range: '1d'
+            }
+        });
+        
+        const result = response.data.chart.result[0];
+        
+        if (result && result.indicators.quote[0].close) {
+            const prices = result.indicators.quote[0].close.filter(p => p !== null);
+            console.log(`Obtained ${prices.length} prices for ${ticker}`);
+            res.json({ prices });
+        } else {
+            console.log(`No intraday data for ${ticker}`);
+            res.json({ prices: [] });
+        }
+    } catch (error) {
+        console.error(`Error fetching intraday data for ${ticker}:`, error.message);
+        res.json({ prices: [] });
+    }
+});
+
+// ===== Static JSON File Endpoints ===== //
 app.get('/api/search/stocks', async (req, res) => {
     try {
         const stockList = await getStockList();
