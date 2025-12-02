@@ -45,7 +45,7 @@ const fetchLobbying = async (options = {
 };
 const fetchHistoricalLobbying = async (ticker, options = {
    page: 1,
-   page_size: 50
+   page_size: 10
 }) => {
    try {
        const response = await axios.get(`https://api.quiverquant.com/beta/historical/lobbying/${ticker}`, {
@@ -117,7 +117,7 @@ const fetchCongressTrading = async (options = {
 };
 const fetchHistoricalCongressTrading = async (ticker, options = {
    page: 1,
-   page_size: 50
+   page_size: 10
 }) => {
    try {
        const response = await axios.get(`https://api.quiverquant.com/beta/historical/congresstrading/${ticker}`, {
@@ -182,7 +182,7 @@ const fetchGovContracts = async (options = {
 };
 const fetchHistoricalGovContracts = async (ticker, options = {
    page: 1,
-   page_size: 50
+   page_size: 10
 }) => {
    try {
        const response = await axios.get(`https://api.quiverquant.com/beta/historical/govcontractsall/${ticker}`, {

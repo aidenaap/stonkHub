@@ -4,7 +4,7 @@ const path = require('path');
 const CACHE_DIR = path.join(__dirname, '../storage');
 const METADATA_FILE = path.join(CACHE_DIR, 'cacheMetadata.json');
 
-// Check if data is from today (US/Pacific timezone)
+// Cache datetime validity helpers
 const isFromToday = (timestamp) => {
     if (!timestamp) return false;
     
@@ -17,8 +17,6 @@ const isFromToday = (timestamp) => {
     
     return nowPacific.toDateString() === cachedPacific.toDateString();
 };
-
-// Add this function after isFromToday()
 const isMarketHours = () => {
     const now = new Date();
     const pacificTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
@@ -39,8 +37,7 @@ const isMarketHours = () => {
     
     return totalMinutes >= marketOpen && totalMinutes < marketClose;
 };
-
-// Check if stock cache is still valid
+// Check if stock cache is still valid based on market hours
 const isStockCacheValid = (timestamp) => {
     if (!timestamp) return false;
     
@@ -55,8 +52,8 @@ const isStockCacheValid = (timestamp) => {
             // During market hours: cache valid for 10 minutes
             return diffMinutes < 10;
         } else {
-            // Outside market hours: cache valid for 1 hour
-            return diffMinutes < 60;
+            // Outside market hours: cache valid for 4 hours
+            return diffMinutes < 240;
         }
     } catch (error) {
         console.error('Error checking stock cache validity:', error);
@@ -64,12 +61,13 @@ const isStockCacheValid = (timestamp) => {
     }
 };
 
-// Update the readMetadata function to include stockData
-const readMetadata = async () => {
+
+// Obtain all cache metadata
+const readCacheMetadata = async () => {
     try {
         const data = await fs.readFile(METADATA_FILE, 'utf8');
         return JSON.parse(data);
-    } catch (error) {
+    } catch (error) { // if no file exists, create one and return default metadata
         console.log('Creating new metadata file');
         const defaultMetadata = {
             lobbying: { lastUpdated: null, cacheFile: 'lobbyingCache.json' },
@@ -81,6 +79,7 @@ const readMetadata = async () => {
         };
         
         try {
+            console.log("Creating new metadata file within storage/cacheMetadata.json");
             await fs.writeFile(METADATA_FILE, JSON.stringify(defaultMetadata, null, 2));
         } catch (writeError) {
             console.error('Error creating metadata file:', writeError);
@@ -90,10 +89,10 @@ const readMetadata = async () => {
     }
 };
 
-// Add new function for getting cached stock data
+// Check for and get cached stock data
 const getCachedStockData = async () => {
     try {
-        const metadata = await readMetadata();
+        const metadata = await readCacheMetadata();
         const stockMetadata = metadata.stockData;
         
         if (!stockMetadata) {
@@ -131,10 +130,10 @@ const writeMetadata = async (metadata) => {
     await fs.writeFile(METADATA_FILE, JSON.stringify(metadata, null, 2));
 };
 
-// Get cached data if valid
+// Get cached data if valid, if not null is returned
 const getCachedData = async (dataType) => {
     try {
-        const metadata = await readMetadata();
+        const metadata = await readCacheMetadata();
         const typeMetadata = metadata[dataType];
         
         if (!typeMetadata || !isFromToday(typeMetadata.lastUpdated)) {
@@ -153,7 +152,7 @@ const getCachedData = async (dataType) => {
 // Save data to cache
 const setCachedData = async (dataType, data) => {
     try {
-        const metadata = await readMetadata();
+        const metadata = await readCacheMetadata();
         
         // Update metadata
         metadata[dataType].lastUpdated = getCurrentTimestamp();

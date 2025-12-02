@@ -4,7 +4,7 @@ const API_BASE = '/api';
 // setup for dynamic filtering
 let currentData = [];
 let filteredData = [];
-let currentDataType = 'lobbying';
+let currentDataType = 'home';
 
 // storage to get info from static json
 let stockList = {};
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() { // Initialize filters
 
 async function loadInitialData() { // get all API data on initial load
 
-    // show loading until we displayTableData
+    // show loading until we displayHomePage
     showLoading();
 
     // get all Quiver data
@@ -588,8 +588,9 @@ function displayTableData(data, headers, firstTime=false, stockRefresh=false) { 
     document.getElementById('filter-input').value = '';
 }
 function displayHomePage() {
-    const mainContent = document.querySelector('.flex-1.p-6.overflow-hidden');
-    
+    // const mainContent = document.querySelector('.flex-1.p-6.overflow-hidden');
+    const mainContent = document.querySelector('.flex-1.p-6.overflow-hidden > .bg-\\[\\#31363F\\]');
+
     if (!homepageData) {
         mainContent.innerHTML = `
             <div class="flex items-center justify-center h-full">

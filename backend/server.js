@@ -85,7 +85,7 @@ app.get('/api/congress', async (req, res) => {
    if (data) {
        res.json(data);
    } else {
-       res.status(500).json({ error: 'Failed to fetch congress trading data' });
+       res.status(500).json({ error: 'Failed to fetch congress trading data from cache' });
    }
 });
 app.get('/api/congress/:ticker', async (req, res) => {
@@ -248,23 +248,6 @@ app.get('/api/stocklist', async(req, res) => {
         res.status(500).json({error: 'Failed to get stocklist'});
     }
 });
-// get from finnhub and save to file storage
-// app.post('/api/stocklist', async (req, res) => {
-//   try {
-//     console.log("req.body:", req.body);
-//     const { stocklist } = req.body;
-
-//     if (!stocklist || !Array.isArray(stocklist)) {
-//       return res.status(400).json({ error: 'Invalid stocklist' });
-//     }
-
-//     const stockData = await fetchRealTimeStockData(stocklist);
-//     res.json(stockData);
-//   } catch (error) {
-//     console.error('Error in /stocklist route:', error.message);
-//     res.status(500).json({ error: 'Failed to get stocklist' });
-//   }
-// });
 // get from finnhub and save to file storage
 app.post('/api/stocklist', async (req, res) => {
   try {
