@@ -94,8 +94,7 @@ async function loadInitialData() { // get all API data on initial load
 
     // Display lobbying upon startup
     currentDataType='home';
-    displayHomePage();
-    // displayTableDataType(lobbyingData, lobbyingHeaders, true);
+    toggleHomePage(); // Changed from displayHomePage()
 }
 
 
@@ -157,23 +156,26 @@ async function loadHomePage() {
         setActiveTab(document.getElementById('home-btn'));
         currentDataType = 'home';
         
-        displayHomePage();
+        toggleHomePage();
     } catch (error) {
         console.error('Error loading homepage:', error);
         showError('Failed to load homepage');
     }
 }
+
 // For each, set active tab, title above table, currentData, and currentDataType
 // Meanwhile call displayTableData 
 async function loadLobbyingPage() {
     try {
+        currentDataType = 'lobbying';
+        currentData = lobbyingData;
+
+        toggleHomePage();
+
         setActiveTab(document.getElementById('lobbying-btn'));
         document.getElementById('table-title').textContent = 'Lobbying Data';
 
-        currentDataType = 'lobbying';
-
-        currentData = lobbyingData;
-        displayTableData(lobbyingData, lobbyingHeaders);
+        displayTableData(lobbyingData, lobbyingHeaders, true);
     } catch (error) {
         console.error('Error loading lobbying data:', error);
         showError('Failed to load lobbying data');
@@ -181,13 +183,15 @@ async function loadLobbyingPage() {
 }
 async function loadCongressPage() {
     try {
+        currentDataType = 'congress';
+        currentData = congressData;
+
+        toggleHomePage();
+
         setActiveTab(document.getElementById('congress-btn'));
         document.getElementById('table-title').textContent = 'Congress Trading Data';
         
-        currentDataType = 'congress';
-
-        currentData = congressData;
-        displayTableData(congressData, congressHeaders);
+        displayTableData(congressData, congressHeaders, true);
     } catch (error) {
         console.error('Error loading congress data:', error);
         showError('Failed to load congress trading data');
@@ -195,13 +199,15 @@ async function loadCongressPage() {
 }
 async function loadContractsPage() {
     try {
+        currentDataType = 'contracts';
+        currentData = contractData;
+
+        toggleHomePage();
+
         setActiveTab(document.getElementById('contracts-btn'));
         document.getElementById('table-title').textContent = 'Government Contracts Data';
         
-        currentDataType = 'contracts';
-
-        currentData = contractData;
-        displayTableData(contractData, contractHeaders);
+        displayTableData(contractData, contractHeaders, true);
     } catch (error) {
         console.error('Error loading contracts data:', error);
         showError('Failed to load government contracts data');
@@ -209,13 +215,15 @@ async function loadContractsPage() {
 }
 async function loadNewsPage() {
     try {
+        currentDataType = 'news';
+        currentData = newsData;
+
+        toggleHomePage();
+
         setActiveTab(document.getElementById('news-btn'));
         document.getElementById('table-title').textContent = 'Top Business & Tech News Today';
         
-        currentDataType = 'news';
-
-        currentData = newsData;
-        displayTableData(newsData, newsHeaders);
+        displayTableData(newsData, newsHeaders, true);
     } catch (error) {
         console.error('Error loading news', error);
         showError('Failed to load news data');
@@ -224,11 +232,13 @@ async function loadNewsPage() {
 // Watchlist functionality
 async function loadWatchlistPage() {
     try {
+        currentDataType = 'watchlist';
+        
+        toggleHomePage();
+        
         setActiveTab(document.getElementById('watchlist-btn'));
         document.getElementById('table-title').textContent = 'My Watchlist';
         
-        currentDataType = 'watchlist';
-
         // Show loading while we fetch data
         showLoading();
 
@@ -587,10 +597,17 @@ function displayTableData(data, headers, firstTime=false, stockRefresh=false) { 
     filteredData = data;
     document.getElementById('filter-input').value = '';
 }
-function displayHomePage() {
-    // const mainContent = document.querySelector('.flex-1.p-6.overflow-hidden');
+function toggleHomePage() {
+    console.log("Current Data Type inside of toggleHomePage function")
+    console.log(currentDataType);
+    if (currentDataType !== 'home') {
+        console.log("Should be restoring table structure");
+        restoreTableStructure();
+        return; // Exit early - don't modify DOM if not on home page
+    }
+    
     const mainContent = document.querySelector('.flex-1.p-6.overflow-hidden > .bg-\\[\\#31363F\\]');
-
+    
     if (!homepageData) {
         mainContent.innerHTML = `
             <div class="flex items-center justify-center h-full">
@@ -773,6 +790,37 @@ function displayHomePage() {
             </div>
         </div>
     `;
+}
+// restore table structure when toggling from homepage
+function restoreTableStructure() {
+    const mainContent = document.querySelector('.flex-1.p-6.overflow-hidden');
+    mainContent.innerHTML = `
+        <div class="bg-[#31363F] rounded-lg shadow-lg h-full flex flex-col">
+            <div class="p-4 border-b border-[#76ABAE]/20">
+                <div id="table-header-row" class="flex justify-between items-center">
+                    <h2 id="table-title" class="text-2xl font-bold text-[#76ABAE]">Data</h2>
+                    <div class="flex items-center space-x-4">
+                        <input type="text" id="filter-input" placeholder="Filter data..." class="bg-[#222831] text-[#EEEEEE] px-4 py-2 rounded-lg border border-[#76ABAE]/30 focus:border-[#76ABAE] focus:outline-none w-64">
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-1 overflow-auto">
+                <div id="loading" class="flex items-center justify-center h-full">
+                    <div class="text-[#76ABAE] text-xl">Loading data...</div>
+                </div>
+                <table id="data-table" class="w-full hidden">
+                    <thead class="bg-[#222831] sticky top-0">
+                        <tr id="table-headers"></tr>
+                    </thead>
+                    <tbody id="table-body"></tbody>
+                </table>
+            </div>
+        </div>
+    `;
+    
+    // Re-setup filter listener
+    setupFilterListener();
 }
 function openStockFromHomepage(ticker) {
     openSearchModal();
