@@ -402,7 +402,7 @@ function shouldHighlightRow(item, dataType) { // determine if a row should be hi
 
         switch(dataType) {
             case 'lobbying':
-                return amount >= 100000;
+                return amount >= 300000;
             case 'congress':
                 return amount >= 50001;
             case 'contracts':
@@ -465,7 +465,21 @@ function displayTableData(data, headers, firstTime=false, stockRefresh=false) { 
                 }
                 td.textContent = value || 'N/A';
             } else if (header.includes('Date') && value) {
-                value = new Date(value).toLocaleDateString();
+                // Parse as UTC to avoid timezone shifting
+                const date = new Date(value + 'T00:00:00Z');
+                value = date.toLocaleDateString('en-US', { 
+                    timeZone: 'UTC',
+                    year: 'numeric', 
+                    month: '2-digit', 
+                    day: '2-digit' 
+                });
+                td.textContent = value || 'N/A';
+            } else if (header.includes('Change') && value) {
+                if (value > 0) {
+                    td.classList.add('pos-change');
+                } else {
+                    td.classList.add('neg-change');
+                }
                 td.textContent = value || 'N/A';
             } else if (header === 'URL') {  // Article URL Button
                 const alpha = document.createElement('a');
@@ -502,7 +516,7 @@ function displayTableData(data, headers, firstTime=false, stockRefresh=false) { 
                     await openAIModal(item.url, item.title, item.description);
                 });
                 td.appendChild(alpha); 
-            } else if (header==='Remove') {
+            } else if (header === 'Remove') {
                 const alpha = document.createElement('a');
                 alpha.href = "#";
                 alpha.rel = "noopener noreferrer";
@@ -706,86 +720,93 @@ function toggleHomePage() {
             </div>
 
             <!-- Large Trades Section -->
-            <div class="bg-[#222831] rounded-lg p-6" style="margin-bottom: 10px;">
-                <h3 class="text-xl font-semibold text-[#76ABAE] mb-4">Large Trades (Recent First)</h3>
-                <div class="overflow-auto" style="max-height: 500px;">
-                    ${sortedNoticeableTrades.length === 0 ? 
-                        '<div class="text-[#EEEEEE]/50 text-center py-4">No large trades found</div>' :
-                        sortedNoticeableTrades.map(trade => `
-                            <div class="border-b border-[#76ABAE]/10 py-3 last:border-0 hover:bg-[#76ABAE]/10 cursor-pointer transition-colors" onclick="openStockFromHomepage('${trade.Ticker}')">
-                                <div class="flex justify-between items-start">
-                                    <div class="flex-1">
-                                        <div class="font-semibold text-[#76ABAE] text-lg">${trade.Ticker}</div>
-                                        <div class="text-sm text-[#EEEEEE]/70 mt-1">${trade.Representative}</div>
-                                        <div class="text-xs text-[#EEEEEE]/50 mt-1">
-                                            ${new Date(trade.TransactionDate).toLocaleDateString('en-US', { 
-                                                year: 'numeric', 
-                                                month: 'short', 
-                                                day: 'numeric' 
-                                            })}
+            <div style="margin-bottom: 10px;">
+                <h3 class="text-xl font-semibold text-[#76ABAE]" style="margin-bottom: 5px;">Large Trades (Recent First)</h3>
+                <div class="bg-[#222831] rounded-lg p-6">
+                    <div class="overflow-auto" style="max-height: 500px;">
+                        ${sortedNoticeableTrades.length === 0 ? 
+                            '<div class="text-[#EEEEEE]/50 text-center py-4">No large trades found</div>' :
+                            sortedNoticeableTrades.map(trade => `
+                                <div class="border-b border-[#76ABAE]/10 py-3 last:border-0 hover:bg-[#76ABAE]/10 cursor-pointer transition-colors" onclick="openStockFromHomepage('${trade.Ticker}')">
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex-1">
+                                            <div class="font-semibold text-[#76ABAE] text-lg">${trade.Ticker}</div>
+                                            <div class="text-sm text-[#EEEEEE]/70 mt-1">${trade.Representative}</div>
+                                            <div class="text-xs text-[#EEEEEE]/50 mt-1">
+                                                ${new Date(trade.TransactionDate + 'T00:00:00Z').toLocaleDateString('en-US', { 
+                                                    timeZone: 'UTC',
+                                                    year: 'numeric', 
+                                                    month: 'short', 
+                                                    day: 'numeric' 
+                                                })}
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="text-right">
-                                        <div class="font-bold text-[#EEEEEE] text-lg">$${Number(trade.Amount).toLocaleString()}</div>
-                                        <div class="text-sm ${trade.Transaction.toLowerCase().includes('purchase') || trade.Transaction.toLowerCase().includes('buy') ? 'text-[#4ade80]' : 'text-[#f87171]'} mt-1">
-                                            ${trade.Transaction}
+                                        <div class="text-right">
+                                            <div class="font-bold text-[#EEEEEE] text-lg">$${Number(trade.Amount).toLocaleString()}</div>
+                                            <div class="text-sm ${trade.Transaction.toLowerCase().includes('purchase') || trade.Transaction.toLowerCase().includes('buy') ? 'text-[#4ade80]' : 'text-[#f87171]'} mt-1">
+                                                ${trade.Transaction}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        `).join('')
-                    }
+                            `).join('')
+                        }
+                    </div>
                 </div>
             </div>
 
             <!-- Frequent Trades Section -->
-            <div class="bg-[#222831] rounded-lg p-6" style="margin-bottom: 10px;">
-                <h3 class="text-xl font-semibold text-[#76ABAE] mb-4">Most Frequently Traded Stocks</h3>
-                <div class="overflow-auto" style="max-height: 500px;">
-                    ${frequentTrades.length === 0 ? 
-                        '<div class="text-[#EEEEEE]/50 text-center py-4">No frequent trades found</div>' :
-                        frequentTrades.map(item => `
-                            <div class="border-b border-[#76ABAE]/10 py-3 last:border-0 hover:bg-[#76ABAE]/10 cursor-pointer transition-colors" onclick="openStockFromHomepage('${item.ticker}')">
-                                <div class="flex justify-between items-center">
-                                    <div>
-                                        <div class="font-semibold text-[#76ABAE] text-lg">${item.ticker}</div>
-                                        <div class="text-sm text-[#EEEEEE]/70 mt-1">
-                                            ${item.count} trades in past 6 months
+            <div style="margin-bottom: 10px;">
+                <h3 class="text-xl font-semibold text-[#76ABAE]" style="margin-bottom: 5px;">Most Frequently Traded Stocks</h3>
+                <div class="bg-[#222831] rounded-lg p-6">
+                    <div class="overflow-auto" style="max-height: 500px;">
+                        ${frequentTrades.length === 0 ? 
+                            '<div class="text-[#EEEEEE]/50 text-center py-4">No frequent trades found</div>' :
+                            frequentTrades.map(item => `
+                                <div class="border-b border-[#76ABAE]/10 py-3 last:border-0 hover:bg-[#76ABAE]/10 cursor-pointer transition-colors" onclick="openStockFromHomepage('${item.ticker}')">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <div class="font-semibold text-[#76ABAE] text-lg">${item.ticker}</div>
+                                            <div class="text-sm text-[#EEEEEE]/70 mt-1">
+                                                ${item.count} trades in past 6 months
+                                            </div>
                                         </div>
+                                        <div class="text-3xl font-bold text-[#EEEEEE]">${item.count}</div>
                                     </div>
-                                    <div class="text-3xl font-bold text-[#EEEEEE]">${item.count}</div>
                                 </div>
-                            </div>
-                        `).join('')
-                    }
+                            `).join('')
+                        }
+                    </div>
                 </div>
             </div>
 
             <!-- Multiple Indicators Section -->
-            <div class="bg-[#222831] rounded-lg p-6">
-                <h3 class="text-xl font-semibold text-[#76ABAE] mb-4">Stocks with Multiple Indicators</h3>
-                <div class="overflow-auto" style="max-height: 500px;">
-                    ${multipleIndicators.length === 0 ? 
-                        '<div class="text-[#EEEEEE]/50 text-center py-4">No stocks with multiple indicators</div>' :
-                        multipleIndicators.map(item => `
-                            <div class="border-b border-[#76ABAE]/10 py-3 last:border-0 hover:bg-[#76ABAE]/10 cursor-pointer transition-colors" onclick="openStockFromHomepage('${item.ticker}')">
-                                <div class="flex justify-between items-start">
-                                    <div class="flex-1">
-                                        <div class="font-semibold text-[#76ABAE] text-lg">${item.ticker}</div>
-                                        <div class="text-sm text-[#EEEEEE]/70 mt-1">
-                                            <span class="text-[#4ade80]">${item.congressCount} congress</span> · 
-                                            <span class="text-[#fbbf24]">${item.lobbyingCount} lobbying</span> · 
-                                            <span class="text-[#60a5fa]">${item.contractCount} contracts</span>
+            <div>
+                <h3 class="text-xl font-semibold text-[#76ABAE]" style="margin-bottom: 5px;">Stocks with Multiple Indicators</h3>
+                <div class="bg-[#222831] rounded-lg p-6">
+                    <div class="overflow-auto" style="max-height: 500px;">
+                        ${multipleIndicators.length === 0 ? 
+                            '<div class="text-[#EEEEEE]/50 text-center py-4">No stocks with multiple indicators</div>' :
+                            multipleIndicators.map(item => `
+                                <div class="border-b border-[#76ABAE]/10 py-3 last:border-0 hover:bg-[#76ABAE]/10 cursor-pointer transition-colors" onclick="openStockFromHomepage('${item.ticker}')">
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex-1">
+                                            <div class="font-semibold text-[#76ABAE] text-lg">${item.ticker}</div>
+                                            <div class="text-sm text-[#EEEEEE]/70 mt-1">
+                                                <span class="text-[#4ade80]">${item.congressCount} congress</span> · 
+                                                <span class="text-[#fbbf24]">${item.lobbyingCount} lobbying</span> · 
+                                                <span class="text-[#60a5fa]">${item.contractCount} contracts</span>
+                                            </div>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="text-3xl font-bold text-[#EEEEEE]">${item.totalCount}</div>
+                                            <div class="text-xs text-[#EEEEEE]/50">total activities</div>
                                         </div>
                                     </div>
-                                    <div class="text-right">
-                                        <div class="text-3xl font-bold text-[#EEEEEE]">${item.totalCount}</div>
-                                        <div class="text-xs text-[#EEEEEE]/50">total activities</div>
-                                    </div>
                                 </div>
-                            </div>
-                        `).join('')
-                    }
+                            `).join('')
+                        }
+                    </div>
                 </div>
             </div>
         </div>
@@ -886,7 +907,14 @@ function displayFilteredData(data, headers) {
                 }
                 td.textContent = value || 'N/A';
             } else if (header.includes('Date') && value) {
-                value = new Date(value).toLocaleDateString();
+                // Parse as UTC to avoid timezone shifting
+                const date = new Date(value + 'T00:00:00Z');
+                value = date.toLocaleDateString('en-US', { 
+                    timeZone: 'UTC',
+                    year: 'numeric', 
+                    month: '2-digit', 
+                    day: '2-digit' 
+                });
                 td.textContent = value || 'N/A';
             } else if (header === 'URL') {  // Article URL Button
                 const alpha = document.createElement('a');
