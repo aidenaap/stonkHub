@@ -365,6 +365,26 @@ async function loadWatchlistPage() {
             return;
         }
 
+        // Fetch all intraday data at once (using tickers already declared above)
+        let intradayData = {};
+
+        try {
+            const intradayResponse = await fetch(`${API_BASE}/stocklist/intraday/batch`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tickers })
+            });
+            
+            if (intradayResponse.ok) {
+                intradayData = await intradayResponse.json();
+            }
+        } catch (error) {
+            console.error('Error fetching intraday data:', error);
+        }
+
+        // Store globally so displayTableData can access it
+        window.currentIntradayData = intradayData;
+
         currentData = tableData;
         displayTableData(tableData, watchlistHeaders, false, true);
         
@@ -524,40 +544,37 @@ function displayTableData(data, headers, firstTime=false, stockRefresh=false) { 
                     day: '2-digit' 
                 });
                 td.textContent = value || 'N/A';
-            } else if (header.includes('Change') && value) {
+            } else if (header === 'Change' && value !== null && value !== undefined) {
                 if (value > 0) {
                     td.classList.add('pos-change');
                 } else {
                     td.classList.add('neg-change');
                 }
-                td.textContent = value || 'N/A';
+                const absValue = Math.abs(value);
+                td.textContent = value < 0 ? '-$' + absValue.toFixed(2) : '$' + Number(value).toFixed(2);
+            } else if (header === '% Change' && value !== null && value !== undefined) {
+                if (value > 0) {
+                    td.classList.add('pos-change');
+                } else {
+                    td.classList.add('neg-change');
+                }
+                td.textContent = Number(value).toFixed(2) + ' %';
             } else if (header === 'Daily' && value === undefined) {
-                // Fetch and display sparkline
                 const ticker = item.Ticker;
                 const change = parseFloat(item.Change) || 0;
                 
-                td.innerHTML = '<div class="text-[#EEEEEE]/50 text-xs">Loading...</div>';
-                
-                // Fetch intraday data
-                fetch(`${API_BASE}/stocklist/intraday`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ ticker })
-                })
-                .then(r => r.json())
-                .then(data => {
-                    if (data.prices && data.prices.length > 0) {
-                        const sparkline = generateSparkline(ticker, data.prices, change >= 0);
-                        td.innerHTML = '';
+                // Use pre-fetched intraday data
+                if (window.currentIntradayData && window.currentIntradayData[ticker]) {
+                    const prices = window.currentIntradayData[ticker];
+                    if (prices.length > 0) {
+                        const sparkline = generateSparkline(ticker, prices, change >= 0);
                         td.appendChild(sparkline);
                     } else {
                         td.innerHTML = '<div class="text-[#EEEEEE]/50 text-xs">N/A</div>';
                     }
-                })
-                .catch(err => {
-                    console.error('Error loading sparkline:', err);
+                } else {
                     td.innerHTML = '<div class="text-[#EEEEEE]/50 text-xs">N/A</div>';
-                });
+                }
             } else if (header === 'URL') {  // Article URL Button
                 const alpha = document.createElement('a');
                 alpha.href = value;
@@ -723,93 +740,95 @@ function toggleHomePage() {
     };
     
     mainContent.innerHTML = `
-        <div class="bg-[#31363F] rounded-lg shadow-lg h-full overflow-auto p-6">
-            <h1 class="text-3xl font-bold text-[#76ABAE] mb-6">Market Intelligence Dashboard</h1>
-            
-            <!-- Top Stats Row - 4 Columns -->
-            <div class="flex justify-between gap-6" style="margin-bottom: 10px;">
-                <!-- Greed/Fear Index -->
-                <div class="bg-[#222831] rounded-lg p-6">
-                    <h2 class="text-lg font-semibold text-[#76ABAE] mb-3">Greed/Fear Index</h2>
+    <div class="bg-[#31363F] rounded-lg shadow-lg h-full overflow-auto p-6">
+        <h1 class="text-3xl font-bold text-[#76ABAE] mb-6">Market Intelligence Dashboard</h1>
+        
+        <!-- Top Stats Row - 4 Columns -->
+        <div class="flex justify-between gap-6" style="margin-bottom: 24px;">
+            <!-- Greed/Fear Index -->
+            <div class="bg-[#222831] rounded-lg p-6">
+                <h2 class="text-lg font-semibold text-[#76ABAE] mb-3">Greed/Fear Index</h2>
 
-                    <div class="text-center">
+                <div class="text-center">
 
-                        <!-- TOP ROW: number, emoji, label -->
-                        <div class="flex items-center justify-between gap-6 mb-4">
+                    <!-- TOP ROW: number, emoji, label -->
+                    <div class="flex items-center justify-between gap-6 mb-4">
 
-                            <!-- Number -->
-                            <div class="text-5xl font-bold" style="color: ${getIndexColor(greedFearIndex.index)}">
-                                ${greedFearIndex.index}/10
-                            </div>
-
-                            <!-- Emoji -->
-                            <div class="text-3xl">
-                                ${greedFearIndex.index <= 3 ? '🐻' : 
-                                greedFearIndex.index <= 4 ? '😰' :
-                                greedFearIndex.index <= 6 ? '😐' :
-                                greedFearIndex.index <= 8 ? '😊' : '🚀'}
-                            </div>
-
-                            <!-- Label -->
-                            <div class="text-sm text-[#EEEEEE]/70">
-                                ${greedFearIndex.index <= 3 ? 'Extreme Fear' : 
-                                greedFearIndex.index <= 4 ? 'Fear' :
-                                greedFearIndex.index <= 6 ? 'Neutral' :
-                                greedFearIndex.index <= 8 ? 'Greed' : 'Extreme Greed'}
-                            </div>
+                        <!-- Number -->
+                        <div class="text-5xl font-bold" style="color: ${getIndexColor(greedFearIndex.index)}">
+                            ${greedFearIndex.index}/10
                         </div>
 
-                        <!-- BOTTOM ROW: purchases / sales -->
-                        <div class="flex items-center justify-between mt-2 text-xs text-[#EEEEEE]/50">
-                            <div class="text-[#4ade80] font-semibold">${greedFearIndex.purchaseCount} purchases/</div>
-                            <div class="text-[#f87171] font-semibold">${greedFearIndex.saleCount} sales</div>
+                        <!-- Emoji -->
+                        <div class="text-3xl">
+                            ${greedFearIndex.index <= 3 ? '🐻' : 
+                            greedFearIndex.index <= 4 ? '😰' :
+                            greedFearIndex.index <= 6 ? '😐' :
+                            greedFearIndex.index <= 8 ? '😊' : '🚀'}
                         </div>
 
+                        <!-- Label -->
+                        <div class="text-sm text-[#EEEEEE]/70">
+                            ${greedFearIndex.index <= 3 ? 'Extreme Fear' : 
+                            greedFearIndex.index <= 4 ? 'Fear' :
+                            greedFearIndex.index <= 6 ? 'Neutral' :
+                            greedFearIndex.index <= 8 ? 'Greed' : 'Extreme Greed'}
+                        </div>
                     </div>
-                </div>
-                
-                <!-- Large Trades -->
-                <div class="bg-[#222831] rounded-lg p-6">
-                    <h3 class="text-lg font-semibold text-[#76ABAE] mb-3">Large Trades</h3>
-                    <div class="text-center">
-                        <div class="text-5xl font-bold text-[#EEEEEE] mb-2">${sortedNoticeableTrades.length}</div>
-                        <div class="text-sm text-[#EEEEEE]/70">Trades ≥ $50,001</div>
+
+                    <!-- BOTTOM ROW: purchases / sales -->
+                    <div class="flex items-center justify-between mt-2 text-xs text-[#EEEEEE]/50">
+                        <div class="text-[#4ade80] font-semibold">${greedFearIndex.purchaseCount} purchases/</div>
+                        <div class="text-[#f87171] font-semibold">${greedFearIndex.saleCount} sales</div>
                     </div>
-                </div>
-                
-                <!-- Frequent Trades -->
-                <div class="bg-[#222831] rounded-lg p-6">
-                    <h3 class="text-lg font-semibold text-[#76ABAE] mb-3">Frequent Trades</h3>
-                    <div class="text-center">
-                        <div class="text-5xl font-bold text-[#EEEEEE] mb-2">${frequentTrades.length}</div>
-                        <div class="text-sm text-[#EEEEEE]/70">Stocks traded 3+ times</div>
-                    </div>
-                </div>
-                
-                <!-- Hot Stocks -->
-                <div class="bg-[#222831] rounded-lg p-6">
-                    <h3 class="text-lg font-semibold text-[#76ABAE] mb-3">Hot Stocks</h3>
-                    <div class="text-center">
-                        <div class="text-5xl font-bold text-[#EEEEEE] mb-2">${multipleIndicators.length}</div>
-                        <div class="text-sm text-[#EEEEEE]/70">10+ combined indicators</div>
-                    </div>
+
                 </div>
             </div>
+            
+            <!-- Large Trades -->
+            <div class="bg-[#222831] rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-[#76ABAE] mb-3">Large Trades</h3>
+                <div class="text-center">
+                    <div class="text-5xl font-bold text-[#EEEEEE] mb-2">${sortedNoticeableTrades.length}</div>
+                    <div class="text-sm text-[#EEEEEE]/70">Trades ≥ $50,001</div>
+                </div>
+            </div>
+            
+            <!-- Frequent Trades -->
+            <div class="bg-[#222831] rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-[#76ABAE] mb-3">Frequent Trades</h3>
+                <div class="text-center">
+                    <div class="text-5xl font-bold text-[#EEEEEE] mb-2">${frequentTrades.length}</div>
+                    <div class="text-sm text-[#EEEEEE]/70">Stocks traded 3+ times</div>
+                </div>
+            </div>
+            
+            <!-- Hot Stocks -->
+            <div class="bg-[#222831] rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-[#76ABAE] mb-3">Hot Stocks</h3>
+                <div class="text-center">
+                    <div class="text-5xl font-bold text-[#EEEEEE] mb-2">${multipleIndicators.length}</div>
+                    <div class="text-sm text-[#EEEEEE]/70">10+ combined indicators</div>
+                </div>
+            </div>
+        </div>
 
+        <!-- Three Column Layout for Sections -->
+        <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
             <!-- Large Trades Section -->
-            <div style="margin-bottom: 10px;">
-                <h3 class="text-xl font-semibold text-[#76ABAE]" style="margin-bottom: 5px;">Large Trades (Recent First)</h3>
-                <div class="bg-[#222831] rounded-lg p-6">
-                    <div class="overflow-auto" style="max-height: 500px;">
+            <div style="flex: 1; min-width: 300px; display: flex; flex-direction: column;">
+                <h3 class="text-xl font-semibold text-[#76ABAE]" style="margin-bottom: 12px;">Notable Trades</h3>
+                <div class="bg-[#222831] rounded-lg p-6" style="flex: 1;">
+                    <div class="overflow-auto" style="max-height: 600px; padding-right: 12px;">
                         ${sortedNoticeableTrades.length === 0 ? 
                             '<div class="text-[#EEEEEE]/50 text-center py-4">No large trades found</div>' :
                             sortedNoticeableTrades.map(trade => `
-                                <div class="border-b border-[#76ABAE]/10 py-3 last:border-0 hover:bg-[#76ABAE]/10 cursor-pointer transition-colors" onclick="openStockFromHomepage('${trade.Ticker}')">
-                                    <div class="flex justify-between items-start">
-                                        <div class="flex-1">
+                                <div class="border-b border-[#76ABAE]/10 py-3 last:border-0 hover:bg-[#76ABAE]/10 cursor-pointer transition-colors" onclick="openStockFromHomepage('${trade.Ticker}')" style="cursor: pointer;">
+                                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                        <div style="flex: 1;">
                                             <div class="font-semibold text-[#76ABAE] text-lg">${trade.Ticker}</div>
-                                            <div class="text-sm text-[#EEEEEE]/70 mt-1">${trade.Representative}</div>
-                                            <div class="text-xs text-[#EEEEEE]/50 mt-1">
+                                            <div class="text-sm text-[#EEEEEE]/70" style="margin-top: 4px;">${trade.Representative}</div>
+                                            <div class="text-xs text-[#EEEEEE]/50" style="margin-top: 4px;">
                                                 ${new Date(trade.TransactionDate + 'T00:00:00Z').toLocaleDateString('en-US', { 
                                                     timeZone: 'UTC',
                                                     year: 'numeric', 
@@ -818,9 +837,9 @@ function toggleHomePage() {
                                                 })}
                                             </div>
                                         </div>
-                                        <div class="text-right">
+                                        <div style="text-align: right;">
                                             <div class="font-bold text-[#EEEEEE] text-lg">$${Number(trade.Amount).toLocaleString()}</div>
-                                            <div class="text-sm ${trade.Transaction.toLowerCase().includes('purchase') || trade.Transaction.toLowerCase().includes('buy') ? 'text-[#4ade80]' : 'text-[#f87171]'} mt-1">
+                                            <div class="text-sm ${trade.Transaction.toLowerCase().includes('purchase') || trade.Transaction.toLowerCase().includes('buy') ? 'text-[#4ade80]' : 'text-[#f87171]'}" style="margin-top: 4px;">
                                                 ${trade.Transaction}
                                             </div>
                                         </div>
@@ -833,19 +852,19 @@ function toggleHomePage() {
             </div>
 
             <!-- Frequent Trades Section -->
-            <div style="margin-bottom: 10px;">
-                <h3 class="text-xl font-semibold text-[#76ABAE]" style="margin-bottom: 5px;">Most Frequently Traded Stocks</h3>
-                <div class="bg-[#222831] rounded-lg p-6">
-                    <div class="overflow-auto" style="max-height: 500px;">
+            <div style="flex: 1; min-width: 300px; display: flex; flex-direction: column;">
+                <h3 class="text-xl font-semibold text-[#76ABAE]" style="margin-bottom: 12px;">Frequently Traded Stocks</h3>
+                <div class="bg-[#222831] rounded-lg p-6" style="flex: 1;">
+                    <div class="overflow-auto" style="max-height: 600px; padding-right: 12px;">
                         ${frequentTrades.length === 0 ? 
                             '<div class="text-[#EEEEEE]/50 text-center py-4">No frequent trades found</div>' :
                             frequentTrades.map(item => `
-                                <div class="border-b border-[#76ABAE]/10 py-3 last:border-0 hover:bg-[#76ABAE]/10 cursor-pointer transition-colors" onclick="openStockFromHomepage('${item.ticker}')">
-                                    <div class="flex justify-between items-center">
+                                <div class="border-b border-[#76ABAE]/10 py-3 last:border-0 hover:bg-[#76ABAE]/10 cursor-pointer transition-colors" onclick="openStockFromHomepage('${item.ticker}')" style="cursor: pointer;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
                                         <div>
                                             <div class="font-semibold text-[#76ABAE] text-lg">${item.ticker}</div>
-                                            <div class="text-sm text-[#EEEEEE]/70 mt-1">
-                                                ${item.count} trades in past 6 months
+                                            <div class="text-sm text-[#EEEEEE]/70" style="margin-top: 4px;">
+                                                ${item.count} trades in past 3 months
                                             </div>
                                         </div>
                                         <div class="text-3xl font-bold text-[#EEEEEE]">${item.count}</div>
@@ -858,24 +877,24 @@ function toggleHomePage() {
             </div>
 
             <!-- Multiple Indicators Section -->
-            <div>
-                <h3 class="text-xl font-semibold text-[#76ABAE]" style="margin-bottom: 5px;">Stocks with Multiple Indicators</h3>
-                <div class="bg-[#222831] rounded-lg p-6">
-                    <div class="overflow-auto" style="max-height: 500px;">
+            <div style="flex: 1; min-width: 300px; display: flex; flex-direction: column;">
+                <h3 class="text-xl font-semibold text-[#76ABAE]" style="margin-bottom: 12px;">Stocks with Multiple Indicators (10+)</h3>
+                <div class="bg-[#222831] rounded-lg p-6" style="flex: 1;">
+                    <div class="overflow-auto" style="max-height: 600px; padding-right: 12px;">
                         ${multipleIndicators.length === 0 ? 
                             '<div class="text-[#EEEEEE]/50 text-center py-4">No stocks with multiple indicators</div>' :
                             multipleIndicators.map(item => `
-                                <div class="border-b border-[#76ABAE]/10 py-3 last:border-0 hover:bg-[#76ABAE]/10 cursor-pointer transition-colors" onclick="openStockFromHomepage('${item.ticker}')">
-                                    <div class="flex justify-between items-start">
-                                        <div class="flex-1">
+                                <div class="border-b border-[#76ABAE]/10 py-3 last:border-0 hover:bg-[#76ABAE]/10 cursor-pointer transition-colors" onclick="openStockFromHomepage('${item.ticker}')" style="cursor: pointer;">
+                                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                        <div style="flex: 1;">
                                             <div class="font-semibold text-[#76ABAE] text-lg">${item.ticker}</div>
-                                            <div class="text-sm text-[#EEEEEE]/70 mt-1">
+                                            <div class="text-sm text-[#EEEEEE]/70" style="margin-top: 4px;">
                                                 <span class="text-[#4ade80]">${item.congressCount} congress</span> · 
                                                 <span class="text-[#fbbf24]">${item.lobbyingCount} lobbying</span> · 
                                                 <span class="text-[#60a5fa]">${item.contractCount} contracts</span>
                                             </div>
                                         </div>
-                                        <div class="text-right">
+                                        <div style="text-align: right;">
                                             <div class="text-3xl font-bold text-[#EEEEEE]">${item.totalCount}</div>
                                             <div class="text-xs text-[#EEEEEE]/50">total activities</div>
                                         </div>
@@ -887,6 +906,7 @@ function toggleHomePage() {
                 </div>
             </div>
         </div>
+    </div>
     `;
 }
 // restore table structure when toggling from homepage

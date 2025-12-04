@@ -37,8 +37,8 @@ const isMarketHours = () => {
     
     return totalMinutes >= marketOpen && totalMinutes < marketClose;
 };
-// Check if stock cache is still valid based on market hours
-const isStockCacheValid = (timestamp) => {
+
+const isStockCacheValid = (timestamp) => { // Check if stock cache is still valid based on market hours
     if (!timestamp) return false;
     
     try {
@@ -60,6 +60,21 @@ const isStockCacheValid = (timestamp) => {
         return false;
     }
 };
+const isIntradayCacheValid = (timestamp) => { // Check if intraday cache is still valid (30 minutes)
+    if (!timestamp) return false;
+    
+    try {
+        const now = new Date();
+        const cached = new Date(timestamp);
+        const diffMinutes = (now - cached) / (1000 * 60);
+        
+        // Cache valid for 30 minutes
+        return diffMinutes < 30;
+    } catch (error) {
+        console.error('Error checking intraday cache validity:', error);
+        return false;
+    }
+};
 
 
 // Obtain all cache metadata
@@ -76,6 +91,7 @@ const readCacheMetadata = async () => {
             news: { lastUpdated: null, cacheFile: 'newsCache.json' },
             stockData: { lastUpdated: null, cacheFile: 'stonkData.json' },
             homepage: {lastUpdated: null, cacheFile: 'homepageCache.json' },
+            intraday: {lastUpdated: null, cacheFile: 'intradayCache.json'}
         };
         
         try {
@@ -116,6 +132,27 @@ const getCachedStockData = async () => {
         return parsedData;
     } catch (error) {
         console.log(`Error reading stock cache:`, error.message);
+        return null;
+    }
+};
+const getCachedIntradayData = async () => { // check/get intraday stock data
+    try {
+        const metadata = await readCacheMetadata();
+        const intradayMetadata = metadata.intraday;
+        
+        if (!intradayMetadata || !isIntradayCacheValid(intradayMetadata.lastUpdated)) {
+            console.log('Intraday cache is stale (30 minute interval)');
+            return null;
+        }
+        
+        const cacheFile = path.join(CACHE_DIR, intradayMetadata.cacheFile);
+        const data = await fs.readFile(cacheFile, 'utf8');
+        const parsedData = JSON.parse(data);
+        
+        console.log(`Using cached intraday data from ${intradayMetadata.lastUpdated}`);
+        return parsedData;
+    } catch (error) {
+        console.log(`Error reading intraday cache:`, error.message);
         return null;
     }
 };
@@ -172,6 +209,7 @@ module.exports = {
     getCachedData,
     setCachedData,
     getCachedStockData,
+    getCachedIntradayData,
     isFromToday,
     isMarketHours,
     isStockCacheValid

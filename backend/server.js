@@ -20,7 +20,7 @@ const { summarizeArticle } = require('./services/openaiService');
 const { generateHomepageCache } = require('./services/homepageService');
 
 // Caching
-const { getCachedData, setCachedData, getCachedStockData } = require('./services/cacheService');
+const { getCachedData, setCachedData, getCachedStockData, getCachedIntradayData } = require('./services/cacheService');
 
 // App setup
 const app = express();
@@ -329,6 +329,67 @@ app.post('/api/stocklist/intraday', async (req, res) => {
     } catch (error) {
         console.error(`Error fetching intraday data for ${ticker}:`, error.message);
         res.json({ prices: [] });
+    }
+});
+// Batch fetch intraday data for all watchlist tickers
+app.post('/api/stocklist/intraday/batch', async (req, res) => {
+    try {
+        const { tickers } = req.body;
+        
+        if (!tickers || !Array.isArray(tickers)) {
+            return res.status(400).json({ error: 'Tickers array required' });
+        }
+        
+        // Check cache first
+        let cachedData = await getCachedIntradayData();
+        
+        if (cachedData) {
+            // Verify all tickers are present
+            const allPresent = tickers.every(t => cachedData[t]);
+            if (allPresent) {
+                console.log('Returning cached intraday data');
+                return res.json(cachedData);
+            }
+        }
+        
+        // Fetch fresh data
+        console.log(`Fetching fresh intraday data for ${tickers.length} tickers...`);
+        const intradayData = {};
+        
+        for (const ticker of tickers) {
+            try {
+                const response = await axios.get(`https://query1.finance.yahoo.com/v8/finance/chart/${ticker}`, {
+                    params: {
+                        interval: '5m',
+                        range: '1d'
+                    }
+                });
+                
+                const result = response.data.chart.result[0];
+                
+                if (result && result.indicators.quote[0].close) {
+                    const prices = result.indicators.quote[0].close.filter(p => p !== null);
+                    intradayData[ticker] = prices;
+                } else {
+                    intradayData[ticker] = [];
+                }
+                
+                // Small delay to avoid rate limiting
+                await new Promise(resolve => setTimeout(resolve, 100));
+            } catch (error) {
+                console.error(`Error fetching ${ticker}:`, error.message);
+                intradayData[ticker] = [];
+            }
+        }
+        
+        // Cache the data
+        await setCachedData('intraday', intradayData);
+        console.log(`✓ Cached intraday data for ${tickers.length} tickers`);
+        
+        res.json(intradayData);
+    } catch (error) {
+        console.error('Error in batch intraday fetch:', error);
+        res.status(500).json({ error: 'Failed to fetch intraday data' });
     }
 });
 

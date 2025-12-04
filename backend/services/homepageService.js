@@ -50,18 +50,18 @@ function getNoticeableTrades(congressData) {
 }
 
 /**
- * Find stocks with 3+ trades in past 6 months
+ * Find stocks with 3+ trades in past 3 months
  */
 function getFrequentTrades(congressData) {
-    const sixMonthsAgo = new Date();
-    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+    const threeMonthsAgo = new Date();
+    threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
     
     // Group by ticker
     const tickerCounts = {};
     
     congressData.forEach(trade => {
-        const reportDate = new Date(trade.ReportDate);
-        if (reportDate >= sixMonthsAgo) {
+    const reportDate = new Date(trade.ReportDate);
+        if (reportDate >= threeMonthsAgo) {
             const ticker = trade.Ticker;
             if (!tickerCounts[ticker]) {
                 tickerCounts[ticker] = {
