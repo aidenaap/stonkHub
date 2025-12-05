@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() { // Initialize filters
     });
 });
 
-async function loadInitialData() { // get all API data on initial load
+async function loadInitialData() { // get all API data on initial load as needed
 
     // show loading until we displayHomePage
     showLoading();
@@ -200,8 +200,8 @@ function setActiveTab(activeButton) { // button styling
     activeButton.classList.add('active-tab', 'bg-[#76ABAE]', 'text-[#222831]');
     activeButton.classList.remove('bg-transparent', 'text-[#EEEEEE]', 'border', 'border-[#76ABAE]/30');
 }
-// Homepage
-async function loadHomePage() {
+// For each, set active tab, title above table, currentData, currentDataType, and displayTableData
+async function loadHomePage() { // unique functionality
     try {
         setActiveTab(document.getElementById('home-btn'));
         currentDataType = 'home';
@@ -212,9 +212,193 @@ async function loadHomePage() {
         showError('Failed to load homepage');
     }
 }
+function toggleHomePage() { // homepage toggle on/off
+    console.log("Current Data Type inside of toggleHomePage function")
+    console.log(currentDataType);
+    if (currentDataType !== 'home') {
+        console.log("Should be restoring table structure");
+        restoreTableStructure();
+        return; // Exit early - don't modify DOM if not on home page
+    }
+    
+    const mainContent = document.querySelector('.flex-1.p-6.overflow-hidden > .bg-\\[\\#31363F\\]');
+    
+    if (!homepageData) {
+        mainContent.innerHTML = `
+            <div class="flex items-center justify-center h-full">
+                <div class="text-[#76ABAE] text-xl">Loading homepage data...</div>
+            </div>
+        `;
+        return;
+    }
 
-// For each, set active tab, title above table, currentData, and currentDataType
-// Meanwhile call displayTableData 
+    const { greedFearIndex, noticeableTrades, frequentTrades, multipleIndicators } = homepageData;
+    
+    // Sort noticeably large trades by date (most recent first)
+    const sortedNoticeableTrades = [...noticeableTrades].sort((a, b) => 
+        new Date(b.TransactionDate) - new Date(a.TransactionDate)
+    );
+    
+    // Add actual content
+    mainContent.innerHTML = `
+    <div class="bg-[#31363F] rounded-lg shadow-lg h-full overflow-auto p-6">
+        <h1 class="text-3xl font-bold text-[#76ABAE] mb-6">Market Intelligence Dashboard</h1>
+        
+        <!-- Top Stats Row - 4 Columns -->
+        <div class="flex justify-between gap-6" style="margin-bottom: 24px;">
+            <!-- Greed/Fear Index -->
+            <div class="bg-[#222831] rounded-lg p-6">
+                <h2 class="text-lg font-semibold text-[#76ABAE] mb-3">Congressional Greed/Fear Index</h2>
+                <div class="text-center">
+                    <!-- Gauge Chart Container -->
+                    <div id="greed-fear-gauge"></div>
+                    
+                    <!-- Label -->
+                    <div class="text-lg font-semibold text-[#EEEEEE] mt-2 flex items-center justify-center">
+                        ${greedFearIndex.index <= 3 ? 'Extreme Fear 🐻' : 
+                        greedFearIndex.index <= 4 ? 'Fear 😰' :
+                        greedFearIndex.index <= 6 ? 'Neutral 😐' :
+                        greedFearIndex.index <= 8 ? 'Greed 😊' : 'Extreme Greed 🚀'}
+                    </div>
+                    
+                    <!-- Purchases / Sales -->
+                    <div class="flex items-center justify-center gap-4 mt-3 text-sm">
+                        <div class="text-[#4ade80] font-semibold">${greedFearIndex.purchaseCount} buys</div>
+                        <div class="text-[#EEEEEE]/30"> | </div>
+                        <div class="text-[#f87171] font-semibold">${greedFearIndex.saleCount} sales</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Large Trades -->
+            <div class="bg-[#222831] rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-[#76ABAE] mb-3">Large Trades</h3>
+                <div class="text-center">
+                    <div class="text-5xl font-bold text-[#EEEEEE] mb-2">${sortedNoticeableTrades.length}</div>
+                    <div class="text-sm text-[#EEEEEE]/70">Trades ≥ $50,001</div>
+                </div>
+            </div>
+            
+            <!-- Frequent Trades -->
+            <div class="bg-[#222831] rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-[#76ABAE] mb-3">Frequent Trades</h3>
+                <div class="text-center">
+                    <div class="text-5xl font-bold text-[#EEEEEE] mb-2">${frequentTrades.length}</div>
+                    <div class="text-sm text-[#EEEEEE]/70">Stocks traded 3+ times</div>
+                </div>
+            </div>
+            
+            <!-- Hot Stocks -->
+            <div class="bg-[#222831] rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-[#76ABAE] mb-3">Hot Stocks</h3>
+                <div class="text-center">
+                    <div class="text-5xl font-bold text-[#EEEEEE] mb-2">${multipleIndicators.length}</div>
+                    <div class="text-sm text-[#EEEEEE]/70">10+ combined indicators</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Three Column Layout for Sections -->
+        <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
+            <!-- Large Trades Section -->
+            <div style="flex: 1; min-width: 300px; display: flex; flex-direction: column;">
+                <h3 class="text-xl font-semibold text-[#76ABAE]" style="margin-bottom: 12px;">Notable Trades (≥ $50,000) - ${sortedNoticeableTrades.length}</h3>
+                <div class="bg-[#222831] rounded-lg p-6" style="flex: 1;">
+                    <div class="overflow-auto" style="max-height: 600px; padding-right: 12px;">
+                        ${sortedNoticeableTrades.length === 0 ? 
+                            '<div class="text-[#EEEEEE]/50 text-center py-4">No large trades found</div>' :
+                            sortedNoticeableTrades.map(trade => `
+                                <div class="border-b border-[#76ABAE]/10 py-3 last:border-0 hover:bg-[#76ABAE]/10 cursor-pointer transition-colors" onclick="openStockFromHomepage('${trade.Ticker}')" style="cursor: pointer;">
+                                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                        <div style="flex: 1;">
+                                            <div class="font-semibold text-[#76ABAE] text-lg">${trade.Ticker}</div>
+                                            <div class="text-sm text-[#EEEEEE]/70" style="margin-top: 4px;">${trade.Representative}</div>
+                                            <div class="text-xs text-[#EEEEEE]/50" style="margin-top: 4px;">
+                                                ${new Date(trade.TransactionDate + 'T00:00:00Z').toLocaleDateString('en-US', { 
+                                                    timeZone: 'UTC',
+                                                    year: 'numeric', 
+                                                    month: 'short', 
+                                                    day: 'numeric' 
+                                                })}
+                                            </div>
+                                        </div>
+                                        <div style="text-align: right;">
+                                            <div class="font-bold text-[#EEEEEE] text-lg">$${Number(trade.Amount).toLocaleString()}</div>
+                                            <div class="text-sm ${trade.Transaction.toLowerCase().includes('purchase') || trade.Transaction.toLowerCase().includes('buy') ? 'text-[#4ade80]' : 'text-[#f87171]'}" style="margin-top: 4px;">
+                                                ${trade.Transaction}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Frequent Trades Section -->
+            <div style="flex: 1; min-width: 300px; display: flex; flex-direction: column;">
+                <h3 class="text-xl font-semibold text-[#76ABAE]" style="margin-bottom: 12px;">Frequently Traded Stocks (3+) - ${frequentTrades.length}</h3>
+                <div class="bg-[#222831] rounded-lg p-6" style="flex: 1;">
+                    <div class="overflow-auto" style="max-height: 600px; padding-right: 12px;">
+                        ${frequentTrades.length === 0 ? 
+                            '<div class="text-[#EEEEEE]/50 text-center py-4">No frequent trades found</div>' :
+                            frequentTrades.map(item => `
+                                <div class="border-b border-[#76ABAE]/10 py-3 last:border-0 hover:bg-[#76ABAE]/10 cursor-pointer transition-colors" onclick="openStockFromHomepage('${item.ticker}')" style="cursor: pointer;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <div>
+                                            <div class="font-semibold text-[#76ABAE] text-lg">${item.ticker}</div>
+                                            <div class="text-sm text-[#EEEEEE]/70" style="margin-top: 4px;">
+                                                ${item.count} trades in past 3 months
+                                            </div>
+                                        </div>
+                                        <div class="text-3xl font-bold text-[#EEEEEE]">${item.count}</div>
+                                    </div>
+                                </div>
+                            `).join('')
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Multiple Indicators Section -->
+            <div style="flex: 1; min-width: 300px; display: flex; flex-direction: column;">
+                <h3 class="text-xl font-semibold text-[#76ABAE]" style="margin-bottom: 12px;">Stocks with Multiple Indicators (10+) - ${multipleIndicators.length}</h3>
+                <div class="bg-[#222831] rounded-lg p-6" style="flex: 1;">
+                    <div class="overflow-auto" style="max-height: 600px; padding-right: 12px;">
+                        ${multipleIndicators.length === 0 ? 
+                            '<div class="text-[#EEEEEE]/50 text-center py-4">No stocks with multiple indicators</div>' :
+                            multipleIndicators.map(item => `
+                                <div class="border-b border-[#76ABAE]/10 py-3 last:border-0 hover:bg-[#76ABAE]/10 cursor-pointer transition-colors" onclick="openStockFromHomepage('${item.ticker}')" style="cursor: pointer;">
+                                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                        <div style="flex: 1;">
+                                            <div class="font-semibold text-[#76ABAE] text-lg">${item.ticker}</div>
+                                            <div class="text-sm text-[#EEEEEE]/70" style="margin-top: 4px;">
+                                                <span class="text-[#4ade80]">${item.congressCount} congress</span> · 
+                                                <span class="text-[#fbbf24]">${item.lobbyingCount} lobbying</span> · 
+                                                <span class="text-[#60a5fa]">${item.contractCount} contracts</span>
+                                            </div>
+                                        </div>
+                                        <div style="text-align: right;">
+                                            <div class="text-3xl font-bold text-[#EEEEEE]">${item.totalCount}</div>
+                                            <div class="text-xs text-[#EEEEEE]/50">total activities</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    `;
+
+    // Render the gauge chart after DOM is updated
+    setTimeout(() => {
+        renderGreedFearGauge(greedFearIndex.index);
+    }, 100);
+}
 async function loadLobbyingPage() {
     try {
         currentDataType = 'lobbying';
@@ -279,8 +463,7 @@ async function loadNewsPage() {
         showError('Failed to load news data');
     }
 }
-// Watchlist functionality
-async function loadWatchlistPage() {
+async function loadWatchlistPage() {  // unique functionality
     try {
         currentDataType = 'watchlist';
         
@@ -402,7 +585,7 @@ async function loadWatchlistPage() {
         document.getElementById('data-table').classList.add('hidden');
     }
 }
-async function toggleWatchlist(ticker) {
+async function toggleWatchlist(ticker) { // watchlist add/rm functionality
     const isInWatchlist = watchlistData && watchlistData.hasOwnProperty(ticker);
     
     try {
@@ -464,7 +647,8 @@ async function toggleWatchlist(ticker) {
         alert('An error occurred. Please try again.');
     }
 }
-// Data display
+
+// ===== Primary Table Display ===== //
 function shouldHighlightRow(item, dataType) { // determine if a row should be highlighted
 
     if (dataType != 'news') {
@@ -483,6 +667,168 @@ function shouldHighlightRow(item, dataType) { // determine if a row should be hi
     } else {
         return false;
     }
+}
+function createTableCell(header, item, isHighlighted, tr) {
+    const td = document.createElement('td');
+    td.className = isHighlighted 
+        ? 'px-4 py-3 text-[#EEEEEE] font-medium' 
+        : 'px-4 py-3 text-[#EEEEEE]';
+
+    let value = item[header];
+    if (currentDataType === 'news') {
+        value = item[header.toLowerCase()];
+    }
+
+    // Handle different column types
+    if ((header === 'Amount' || header === 'Current' || header === 'Open' || header === 'Prev Close') && value) {
+        value = '$' + Number(value).toLocaleString();
+        if (isHighlighted) {
+            td.classList.add('font-bold');
+        }
+        td.textContent = value || 'N/A';
+    } else if (header.includes('Date') && value) {
+        const date = new Date(value + 'T00:00:00Z');
+        value = date.toLocaleDateString('en-US', { 
+            timeZone: 'UTC',
+            year: 'numeric', 
+            month: '2-digit', 
+            day: '2-digit' 
+        });
+        td.textContent = value || 'N/A';
+    } else if (header === 'Change' && value !== null && value !== undefined) {
+        td.classList.add(value > 0 ? 'pos-change' : 'neg-change');
+        const absValue = Math.abs(value);
+        td.textContent = value < 0 ? '-$' + absValue.toFixed(2) : '$' + Number(value).toFixed(2);
+    } else if (header === '% Change' && value !== null && value !== undefined) {
+        td.classList.add(value > 0 ? 'pos-change' : 'neg-change');
+        td.textContent = Number(value).toFixed(2) + ' %';
+    } else if (header === 'Daily' && value === undefined) {
+        const ticker = item.Ticker;
+        const change = parseFloat(item.Change) || 0;
+        
+        if (window.currentIntradayData && window.currentIntradayData[ticker]) {
+            const prices = window.currentIntradayData[ticker];
+            if (prices.length > 0) {
+                const sparkline = generateSparkline(ticker, prices, change >= 0);
+                td.appendChild(sparkline);
+            } else {
+                td.innerHTML = '<div class="text-[#EEEEEE]/50 text-xs">N/A</div>';
+            }
+        } else {
+            td.innerHTML = '<div class="text-[#EEEEEE]/50 text-xs">N/A</div>';
+        }
+    } else if (header === 'URL') {
+        const alpha = document.createElement('a');
+        alpha.href = value;
+        alpha.target = "_blank";
+        alpha.rel = "noopener noreferrer";
+        alpha.classList.add('newsArticleBtn');
+        alpha.style.display = 'inline-block';
+        
+        const icon = document.createElement('img');
+        icon.src = '/images/eye_svg.svg';
+        icon.alt = 'View Article';
+        icon.style.width = '24px';
+        icon.style.height = '24px';
+        icon.style.filter = 'brightness(0) saturate(100%) invert(64%) sepia(23%) saturate(612%) hue-rotate(138deg) brightness(91%) contrast(86%)';
+        icon.style.transition = 'filter 0.2s';
+        
+        alpha.addEventListener('mouseenter', () => {
+            icon.style.filter = 'brightness(0) saturate(100%) invert(64%) sepia(23%) saturate(612%) hue-rotate(138deg) brightness(91%) contrast(86%) opacity(80%)';
+        });
+        alpha.addEventListener('mouseleave', () => {
+            icon.style.filter = 'brightness(0) saturate(100%) invert(64%) sepia(23%) saturate(612%) hue-rotate(138deg) brightness(91%) contrast(86%)';
+        });
+        
+        alpha.appendChild(icon);
+        td.appendChild(alpha);
+    } else if (header === 'AI Review') {
+        const alpha = document.createElement('a');
+        alpha.href = "#";
+        alpha.textContent = "Summarize";
+        alpha.classList.add('aiReviewBtn');
+        alpha.addEventListener('click', async (e) => {
+            e.preventDefault();
+            await openAIModal(item.url, item.title, item.description);
+        });
+        td.appendChild(alpha);
+    } else if (header === 'Remove') {
+        const alpha = document.createElement('a');
+        alpha.href = "#";
+        alpha.rel = "noopener noreferrer";
+        alpha.classList.add('deleteWatchlistBtn');
+        alpha.style.display = 'inline-block';
+        alpha.style.cursor = 'pointer';
+        
+        const icon = document.createElement('img');
+        icon.src = '/images/delete_svg.svg';
+        icon.alt = 'Delete';
+        icon.style.width = '24px';
+        icon.style.height = '24px';
+        icon.style.transition = 'opacity 0.2s';
+        
+        alpha.addEventListener('mouseenter', () => {
+            icon.style.opacity = '0.7';
+        });
+        alpha.addEventListener('mouseleave', () => {
+            icon.style.opacity = '1';
+        });
+        
+        alpha.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const ticker = item.Ticker;
+            try {
+                const response = await fetch(`${API_BASE}/watchlist/${ticker}`, {
+                    method: "DELETE"
+                });
+                if (response.ok) {
+                    console.log(`${ticker} deleted successfully`);
+                    tr.remove();
+                } else {
+                    console.error("Error deleting ticker:", ticker);
+                }
+            } catch (err) {
+                console.error("Error deleting ticker:", err);
+            }
+        });
+        
+        alpha.appendChild(icon);
+        td.appendChild(alpha);
+    } else if (header === 'Ticker' && value) {
+        td.style.cursor = 'pointer';
+        td.style.color = isHighlighted ? '#ffffff': '#76ABAE';
+        td.style.textDecoration = 'underline';
+        td.textContent = value;
+        td.addEventListener('click', () => {
+            openSearchModal();
+            setTimeout(() => {
+                displayStockDetails(value);
+            }, 100);
+        });
+    } else if (header === 'Representative' && value) {
+        td.style.cursor = 'pointer';
+        td.style.color = isHighlighted ? '#ffffff': '#76ABAE';
+        td.style.textDecoration = 'underline';
+        td.textContent = value;
+        td.addEventListener('click', async () => {
+            openSearchModal();
+            setTimeout(() => {
+                const legislator = legislatorList.find(l => 
+                    l.name.fullname.toLowerCase() === value.toLowerCase()
+                );
+                if (legislator) {
+                    displayLegislatorDetails(legislator.id.bioguide);
+                } else {
+                    document.getElementById('search-results').innerHTML = 
+                        '<div class="text-[#76ABAE]/50 text-center">Legislator not found</div>';
+                }
+            }, 100);
+        });
+    } else {
+        td.textContent = value || 'N/A';
+    }
+
+    return td;
 }
 function displayTableData(data, headers, firstTime=false, stockRefresh=false) { // primary display
 
@@ -513,183 +859,8 @@ function displayTableData(data, headers, firstTime=false, stockRefresh=false) { 
         ? 'border-b border-[#76ABAE]/10 hover:bg-[#76ABAE]/30 bg-[#76ABAE]/20 isHighlightedRow' 
         : 'border-b border-[#76ABAE]/10 hover:bg-[#222831]/50';
 
-        // Create table data cell for each header iterating through the data
         headers.forEach(header => {
-            const td = document.createElement('td');
-            td.className = isHighlighted 
-                ? 'px-4 py-3 text-[#EEEEEE] font-medium' 
-                : 'px-4 py-3 text-[#EEEEEE]';
-
-            // get value from data list based on header (news is lowercase)
-            let value = item[header];
-            if (currentDataType == 'news') {
-                value = item[header.toLowerCase()];
-            }
-
-            // Tranform text if amount, date, review, URL, tickers, or representatives
-            if ((header === 'Amount' || header === 'Current' || header === 'Open' || header === 'Prev Close') && value) {
-                value = '$' + Number(value).toLocaleString();
-                // Make the amount bold if highlighted
-                if (isHighlighted) {
-                    td.classList.add('font-bold');
-                }
-                td.textContent = value || 'N/A';
-            } else if (header.includes('Date') && value) {
-                // Parse as UTC to avoid timezone shifting
-                const date = new Date(value + 'T00:00:00Z');
-                value = date.toLocaleDateString('en-US', { 
-                    timeZone: 'UTC',
-                    year: 'numeric', 
-                    month: '2-digit', 
-                    day: '2-digit' 
-                });
-                td.textContent = value || 'N/A';
-            } else if (header === 'Change' && value !== null && value !== undefined) {
-                if (value > 0) {
-                    td.classList.add('pos-change');
-                } else {
-                    td.classList.add('neg-change');
-                }
-                const absValue = Math.abs(value);
-                td.textContent = value < 0 ? '-$' + absValue.toFixed(2) : '$' + Number(value).toFixed(2);
-            } else if (header === '% Change' && value !== null && value !== undefined) {
-                if (value > 0) {
-                    td.classList.add('pos-change');
-                } else {
-                    td.classList.add('neg-change');
-                }
-                td.textContent = Number(value).toFixed(2) + ' %';
-            } else if (header === 'Daily' && value === undefined) {
-                const ticker = item.Ticker;
-                const change = parseFloat(item.Change) || 0;
-                
-                // Use pre-fetched intraday data
-                if (window.currentIntradayData && window.currentIntradayData[ticker]) {
-                    const prices = window.currentIntradayData[ticker];
-                    if (prices.length > 0) {
-                        const sparkline = generateSparkline(ticker, prices, change >= 0);
-                        td.appendChild(sparkline);
-                    } else {
-                        td.innerHTML = '<div class="text-[#EEEEEE]/50 text-xs">N/A</div>';
-                    }
-                } else {
-                    td.innerHTML = '<div class="text-[#EEEEEE]/50 text-xs">N/A</div>';
-                }
-            } else if (header === 'URL') {  // Article URL Button
-                const alpha = document.createElement('a');
-                alpha.href = value;
-                alpha.target = "_blank";
-                alpha.rel = "noopener noreferrer";
-                alpha.classList.add('newsArticleBtn');
-                alpha.style.display = 'inline-block';
-                
-                const icon = document.createElement('img');
-                icon.src = '/images/eye_svg.svg';
-                icon.alt = 'View Article';
-                icon.style.width = '24px';
-                icon.style.height = '24px';
-                icon.style.filter = 'brightness(0) saturate(100%) invert(64%) sepia(23%) saturate(612%) hue-rotate(138deg) brightness(91%) contrast(86%)';
-                icon.style.transition = 'filter 0.2s';
-                
-                alpha.addEventListener('mouseenter', () => {
-                    icon.style.filter = 'brightness(0) saturate(100%) invert(64%) sepia(23%) saturate(612%) hue-rotate(138deg) brightness(91%) contrast(86%) opacity(80%)';
-                });
-                alpha.addEventListener('mouseleave', () => {
-                    icon.style.filter = 'brightness(0) saturate(100%) invert(64%) sepia(23%) saturate(612%) hue-rotate(138deg) brightness(91%) contrast(86%)';
-                });
-                
-                alpha.appendChild(icon);
-                td.appendChild(alpha);
-            } else if (header === 'AI Review') {    // AI Summary Button
-                const alpha = document.createElement('a');
-                alpha.href = "#";
-                alpha.textContent = "Summarize";
-                alpha.classList.add('aiReviewBtn');
-                alpha.addEventListener('click', async (e) => {
-                    e.preventDefault();
-                    await openAIModal(item.url, item.title, item.description);
-                });
-                td.appendChild(alpha); 
-            } else if (header === 'Remove') {
-                const alpha = document.createElement('a');
-                alpha.href = "#";
-                alpha.rel = "noopener noreferrer";
-                alpha.classList.add('deleteWatchlistBtn');
-                alpha.style.display = 'inline-block';
-                alpha.style.cursor = 'pointer';
-                
-                const icon = document.createElement('img');
-                icon.src = '/images/delete_svg.svg';
-                icon.alt = 'Delete';
-                icon.style.width = '24px';
-                icon.style.height = '24px';
-                icon.style.transition = 'opacity 0.2s';
-                
-                alpha.addEventListener('mouseenter', () => {
-                    icon.style.opacity = '0.7';
-                });
-                alpha.addEventListener('mouseleave', () => {
-                    icon.style.opacity = '1';
-                });
-                
-                // upon click, delete from the watchlist
-                alpha.addEventListener('click', async (e) => {
-                    e.preventDefault();
-                    const ticker = item.Ticker;
-                    try {
-                        const response = await fetch(`${API_BASE}/watchlist/${ticker}`, {
-                            method: "DELETE"
-                        });
-                        if (response.ok) {
-                            console.log(`${ticker} deleted successfully`);
-                            tr.remove();
-                        } else {
-                            console.error("Failed to delete ticker:", ticker);
-                        }
-                    } catch (err) {
-                        console.error("Error deleting ticker:", err);
-                    }
-                });
-                
-                alpha.appendChild(icon);
-                td.appendChild(alpha);
-            } else if (header === 'Ticker' && value) {
-                td.style.cursor = 'pointer';
-                td.style.color = isHighlighted ? '#ffffff': '#76ABAE';
-                td.style.textDecoration = 'underline';
-                td.textContent = value;
-                td.addEventListener('click', () => {
-                    openSearchModal();
-                    // Small delay to ensure modal is open and data is loaded
-                    setTimeout(() => {
-                        displayStockDetails(value);
-                    }, 100);
-                });
-            } else if (header === 'Representative' && value) {
-                td.style.cursor = 'pointer';
-                td.style.color = isHighlighted ? '#ffffff': '#76ABAE';
-                td.style.textDecoration = 'underline';
-                td.textContent = value;
-                td.addEventListener('click', async () => {
-                    openSearchModal();
-                    // Small delay to ensure modal is open and data is loaded
-                    setTimeout(() => {
-                        // Find legislator by name
-                        const legislator = legislatorList.find(l => 
-                            l.name.fullname.toLowerCase() === value.toLowerCase()
-                        );
-                        if (legislator) {
-                            displayLegislatorDetails(legislator.id.bioguide);
-                        } else {
-                            document.getElementById('search-results').innerHTML = 
-                                '<div class="text-[#76ABAE]/50 text-center">Legislator not found</div>';
-                        }
-                    }, 100);
-                });
-            } else {
-                td.textContent = value || 'N/A';
-            }
-
+            const td = createTableCell(header, item, isHighlighted, tr);
             tr.appendChild(td);
         });
 
@@ -705,247 +876,8 @@ function displayTableData(data, headers, firstTime=false, stockRefresh=false) { 
     filteredData = data;
     document.getElementById('filter-input').value = '';
 }
-function toggleHomePage() {
-    console.log("Current Data Type inside of toggleHomePage function")
-    console.log(currentDataType);
-    if (currentDataType !== 'home') {
-        console.log("Should be restoring table structure");
-        restoreTableStructure();
-        return; // Exit early - don't modify DOM if not on home page
-    }
-    
-    const mainContent = document.querySelector('.flex-1.p-6.overflow-hidden > .bg-\\[\\#31363F\\]');
-    
-    if (!homepageData) {
-        mainContent.innerHTML = `
-            <div class="flex items-center justify-center h-full">
-                <div class="text-[#76ABAE] text-xl">Loading homepage data...</div>
-            </div>
-        `;
-        return;
-    }
 
-    const { greedFearIndex, noticeableTrades, frequentTrades, multipleIndicators } = homepageData;
-    
-    // Sort noticeably large trades by date (most recent first)
-    const sortedNoticeableTrades = [...noticeableTrades].sort((a, b) => 
-        new Date(b.TransactionDate) - new Date(a.TransactionDate)
-    );
-    
-    // Calculate greed/fear color
-    const getIndexColor = (index) => {
-        if (index <= 3) return '#f87171'; // Red (fear)
-        if (index <= 7) return '#fbbf24'; // Yellow (neutral)
-        return '#4ade80'; // Green (greed)
-    };
-    
-    mainContent.innerHTML = `
-    <div class="bg-[#31363F] rounded-lg shadow-lg h-full overflow-auto p-6">
-        <h1 class="text-3xl font-bold text-[#76ABAE] mb-6">Market Intelligence Dashboard</h1>
-        
-        <!-- Top Stats Row - 4 Columns -->
-        <div class="flex justify-between gap-6" style="margin-bottom: 24px;">
-            <!-- Greed/Fear Index -->
-            <div class="bg-[#222831] rounded-lg p-6">
-                <h2 class="text-lg font-semibold text-[#76ABAE] mb-3">Greed/Fear Index</h2>
-
-                <div class="text-center">
-
-                    <!-- TOP ROW: number, emoji, label -->
-                    <div class="flex items-center justify-between gap-6 mb-4">
-
-                        <!-- Number -->
-                        <div class="text-5xl font-bold" style="color: ${getIndexColor(greedFearIndex.index)}">
-                            ${greedFearIndex.index}/10
-                        </div>
-
-                        <!-- Emoji -->
-                        <div class="text-3xl">
-                            ${greedFearIndex.index <= 3 ? '🐻' : 
-                            greedFearIndex.index <= 4 ? '😰' :
-                            greedFearIndex.index <= 6 ? '😐' :
-                            greedFearIndex.index <= 8 ? '😊' : '🚀'}
-                        </div>
-
-                        <!-- Label -->
-                        <div class="text-sm text-[#EEEEEE]/70">
-                            ${greedFearIndex.index <= 3 ? 'Extreme Fear' : 
-                            greedFearIndex.index <= 4 ? 'Fear' :
-                            greedFearIndex.index <= 6 ? 'Neutral' :
-                            greedFearIndex.index <= 8 ? 'Greed' : 'Extreme Greed'}
-                        </div>
-                    </div>
-
-                    <!-- BOTTOM ROW: purchases / sales -->
-                    <div class="flex items-center justify-between mt-2 text-xs text-[#EEEEEE]/50">
-                        <div class="text-[#4ade80] font-semibold">${greedFearIndex.purchaseCount} purchases/</div>
-                        <div class="text-[#f87171] font-semibold">${greedFearIndex.saleCount} sales</div>
-                    </div>
-
-                </div>
-            </div>
-            
-            <!-- Large Trades -->
-            <div class="bg-[#222831] rounded-lg p-6">
-                <h3 class="text-lg font-semibold text-[#76ABAE] mb-3">Large Trades</h3>
-                <div class="text-center">
-                    <div class="text-5xl font-bold text-[#EEEEEE] mb-2">${sortedNoticeableTrades.length}</div>
-                    <div class="text-sm text-[#EEEEEE]/70">Trades ≥ $50,001</div>
-                </div>
-            </div>
-            
-            <!-- Frequent Trades -->
-            <div class="bg-[#222831] rounded-lg p-6">
-                <h3 class="text-lg font-semibold text-[#76ABAE] mb-3">Frequent Trades</h3>
-                <div class="text-center">
-                    <div class="text-5xl font-bold text-[#EEEEEE] mb-2">${frequentTrades.length}</div>
-                    <div class="text-sm text-[#EEEEEE]/70">Stocks traded 3+ times</div>
-                </div>
-            </div>
-            
-            <!-- Hot Stocks -->
-            <div class="bg-[#222831] rounded-lg p-6">
-                <h3 class="text-lg font-semibold text-[#76ABAE] mb-3">Hot Stocks</h3>
-                <div class="text-center">
-                    <div class="text-5xl font-bold text-[#EEEEEE] mb-2">${multipleIndicators.length}</div>
-                    <div class="text-sm text-[#EEEEEE]/70">10+ combined indicators</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Three Column Layout for Sections -->
-        <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
-            <!-- Large Trades Section -->
-            <div style="flex: 1; min-width: 300px; display: flex; flex-direction: column;">
-                <h3 class="text-xl font-semibold text-[#76ABAE]" style="margin-bottom: 12px;">Notable Trades</h3>
-                <div class="bg-[#222831] rounded-lg p-6" style="flex: 1;">
-                    <div class="overflow-auto" style="max-height: 600px; padding-right: 12px;">
-                        ${sortedNoticeableTrades.length === 0 ? 
-                            '<div class="text-[#EEEEEE]/50 text-center py-4">No large trades found</div>' :
-                            sortedNoticeableTrades.map(trade => `
-                                <div class="border-b border-[#76ABAE]/10 py-3 last:border-0 hover:bg-[#76ABAE]/10 cursor-pointer transition-colors" onclick="openStockFromHomepage('${trade.Ticker}')" style="cursor: pointer;">
-                                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                                        <div style="flex: 1;">
-                                            <div class="font-semibold text-[#76ABAE] text-lg">${trade.Ticker}</div>
-                                            <div class="text-sm text-[#EEEEEE]/70" style="margin-top: 4px;">${trade.Representative}</div>
-                                            <div class="text-xs text-[#EEEEEE]/50" style="margin-top: 4px;">
-                                                ${new Date(trade.TransactionDate + 'T00:00:00Z').toLocaleDateString('en-US', { 
-                                                    timeZone: 'UTC',
-                                                    year: 'numeric', 
-                                                    month: 'short', 
-                                                    day: 'numeric' 
-                                                })}
-                                            </div>
-                                        </div>
-                                        <div style="text-align: right;">
-                                            <div class="font-bold text-[#EEEEEE] text-lg">$${Number(trade.Amount).toLocaleString()}</div>
-                                            <div class="text-sm ${trade.Transaction.toLowerCase().includes('purchase') || trade.Transaction.toLowerCase().includes('buy') ? 'text-[#4ade80]' : 'text-[#f87171]'}" style="margin-top: 4px;">
-                                                ${trade.Transaction}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            `).join('')
-                        }
-                    </div>
-                </div>
-            </div>
-
-            <!-- Frequent Trades Section -->
-            <div style="flex: 1; min-width: 300px; display: flex; flex-direction: column;">
-                <h3 class="text-xl font-semibold text-[#76ABAE]" style="margin-bottom: 12px;">Frequently Traded Stocks</h3>
-                <div class="bg-[#222831] rounded-lg p-6" style="flex: 1;">
-                    <div class="overflow-auto" style="max-height: 600px; padding-right: 12px;">
-                        ${frequentTrades.length === 0 ? 
-                            '<div class="text-[#EEEEEE]/50 text-center py-4">No frequent trades found</div>' :
-                            frequentTrades.map(item => `
-                                <div class="border-b border-[#76ABAE]/10 py-3 last:border-0 hover:bg-[#76ABAE]/10 cursor-pointer transition-colors" onclick="openStockFromHomepage('${item.ticker}')" style="cursor: pointer;">
-                                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                                        <div>
-                                            <div class="font-semibold text-[#76ABAE] text-lg">${item.ticker}</div>
-                                            <div class="text-sm text-[#EEEEEE]/70" style="margin-top: 4px;">
-                                                ${item.count} trades in past 3 months
-                                            </div>
-                                        </div>
-                                        <div class="text-3xl font-bold text-[#EEEEEE]">${item.count}</div>
-                                    </div>
-                                </div>
-                            `).join('')
-                        }
-                    </div>
-                </div>
-            </div>
-
-            <!-- Multiple Indicators Section -->
-            <div style="flex: 1; min-width: 300px; display: flex; flex-direction: column;">
-                <h3 class="text-xl font-semibold text-[#76ABAE]" style="margin-bottom: 12px;">Stocks with Multiple Indicators (10+)</h3>
-                <div class="bg-[#222831] rounded-lg p-6" style="flex: 1;">
-                    <div class="overflow-auto" style="max-height: 600px; padding-right: 12px;">
-                        ${multipleIndicators.length === 0 ? 
-                            '<div class="text-[#EEEEEE]/50 text-center py-4">No stocks with multiple indicators</div>' :
-                            multipleIndicators.map(item => `
-                                <div class="border-b border-[#76ABAE]/10 py-3 last:border-0 hover:bg-[#76ABAE]/10 cursor-pointer transition-colors" onclick="openStockFromHomepage('${item.ticker}')" style="cursor: pointer;">
-                                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                                        <div style="flex: 1;">
-                                            <div class="font-semibold text-[#76ABAE] text-lg">${item.ticker}</div>
-                                            <div class="text-sm text-[#EEEEEE]/70" style="margin-top: 4px;">
-                                                <span class="text-[#4ade80]">${item.congressCount} congress</span> · 
-                                                <span class="text-[#fbbf24]">${item.lobbyingCount} lobbying</span> · 
-                                                <span class="text-[#60a5fa]">${item.contractCount} contracts</span>
-                                            </div>
-                                        </div>
-                                        <div style="text-align: right;">
-                                            <div class="text-3xl font-bold text-[#EEEEEE]">${item.totalCount}</div>
-                                            <div class="text-xs text-[#EEEEEE]/50">total activities</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            `).join('')
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    `;
-}
-// restore table structure when toggling from homepage
-function restoreTableStructure() {
-    const mainContent = document.querySelector('.flex-1.p-6.overflow-hidden');
-    mainContent.innerHTML = `
-        <div class="bg-[#31363F] rounded-lg shadow-lg h-full flex flex-col">
-            <div class="p-4 border-b border-[#76ABAE]/20">
-                <div id="table-header-row" class="flex justify-between items-center">
-                    <h2 id="table-title" class="text-2xl font-bold text-[#76ABAE]">Data</h2>
-                    <div class="flex items-center space-x-4">
-                        <input type="text" id="filter-input" placeholder="Filter data..." class="bg-[#222831] text-[#EEEEEE] px-4 py-2 rounded-lg border border-[#76ABAE]/30 focus:border-[#76ABAE] focus:outline-none w-64">
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex-1 overflow-auto">
-                <div id="loading" class="flex items-center justify-center h-full">
-                    <div class="text-[#76ABAE] text-xl">Loading data...</div>
-                </div>
-                <table id="data-table" class="w-full hidden">
-                    <thead class="bg-[#222831] sticky top-0">
-                        <tr id="table-headers"></tr>
-                    </thead>
-                    <tbody id="table-body"></tbody>
-                </table>
-            </div>
-        </div>
-    `;
-    
-    // Re-setup filter listener
-    setupFilterListener();
-}
-function openStockFromHomepage(ticker) {
-    openSearchModal();
-    setTimeout(() => {
-        displayStockDetails(ticker);
-    }, 100);
-}
+// ===== Primary Table Filtering ===== //
 // Filtering functionality
 function filterData(searchTerm) {
 
@@ -981,153 +913,11 @@ function displayFilteredData(data, headers) {
         // Check if row should be highlighted
         const isHighlighted = shouldHighlightRow(item, currentDataType);
         tr.className = isHighlighted 
-        ? 'border-b border-[#76ABAE]/10 hover:bg-[#76ABAE]/30 bg-[#76ABAE]/20' 
-        : 'border-b border-[#76ABAE]/10 hover:bg-[#222831]/50';
+            ? 'border-b border-[#76ABAE]/10 hover:bg-[#76ABAE]/30 bg-[#76ABAE]/20 isHighlightedRow' 
+            : 'border-b border-[#76ABAE]/10 hover:bg-[#222831]/50';
 
         headers.forEach(header => {
-            const td = document.createElement('td');
-            td.className = isHighlighted 
-                ? 'px-4 py-3 text-[#EEEEEE] font-medium' 
-                : 'px-4 py-3 text-[#EEEEEE]';
-
-            let value = item[header];
-
-            if (currentDataType == 'news') {
-                value = item[header.toLowerCase()];
-            }
-
-            if ((header === 'Amount' || header === 'Current' || header === 'Open' || header === 'Prev Close') && value) {
-                value = '$' + Number(value).toLocaleString();
-                // Make the amount bold if highlighted
-                if (isHighlighted) {
-                    td.classList.add('font-bold');
-                }
-                td.textContent = value || 'N/A';
-            } else if (header.includes('Date') && value) {
-                // Parse as UTC to avoid timezone shifting
-                const date = new Date(value + 'T00:00:00Z');
-                value = date.toLocaleDateString('en-US', { 
-                    timeZone: 'UTC',
-                    year: 'numeric', 
-                    month: '2-digit', 
-                    day: '2-digit' 
-                });
-                td.textContent = value || 'N/A';
-            } else if (header === 'URL') {  // Article URL Button
-                const alpha = document.createElement('a');
-                alpha.href = value;
-                alpha.target = "_blank";
-                alpha.rel = "noopener noreferrer";
-                alpha.classList.add('newsArticleBtn');
-                alpha.style.display = 'inline-block';
-                
-                const icon = document.createElement('img');
-                icon.src = '/images/eye_svg.svg';
-                icon.alt = 'View Article';
-                icon.style.width = '24px';
-                icon.style.height = '24px';
-                icon.style.filter = 'brightness(0) saturate(100%) invert(64%) sepia(23%) saturate(612%) hue-rotate(138deg) brightness(91%) contrast(86%)';
-                icon.style.transition = 'filter 0.2s';
-                
-                alpha.addEventListener('mouseenter', () => {
-                    icon.style.filter = 'brightness(0) saturate(100%) invert(64%) sepia(23%) saturate(612%) hue-rotate(138deg) brightness(91%) contrast(86%) opacity(80%)';
-                });
-                alpha.addEventListener('mouseleave', () => {
-                    icon.style.filter = 'brightness(0) saturate(100%) invert(64%) sepia(23%) saturate(612%) hue-rotate(138deg) brightness(91%) contrast(86%)';
-                });
-                
-                alpha.appendChild(icon);
-                td.appendChild(alpha);
-            } else if (header === 'AI Review') {    // AI Summary Button
-                const alpha = document.createElement('a');
-                alpha.href = "#";
-                alpha.textContent = "Summarize";
-                alpha.classList.add('aiReviewBtn');
-                alpha.addEventListener('click', async (e) => {
-                    e.preventDefault();
-                    await openAIModal(item.url, item.title, item.description);
-                });
-                td.appendChild(alpha); 
-            } else if (header==='Remove') {
-                const alpha = document.createElement('a');
-                alpha.href = "#";
-                alpha.rel = "noopener noreferrer";
-                alpha.classList.add('deleteWatchlistBtn');
-                alpha.style.display = 'inline-block';
-                alpha.style.cursor = 'pointer';
-                
-                const icon = document.createElement('img');
-                icon.src = '/images/delete_svg.svg';
-                icon.alt = 'Delete';
-                icon.style.width = '24px';
-                icon.style.height = '24px';
-                icon.style.transition = 'opacity 0.2s';
-                
-                alpha.addEventListener('mouseenter', () => {
-                    icon.style.opacity = '0.7';
-                });
-                alpha.addEventListener('mouseleave', () => {
-                    icon.style.opacity = '1';
-                });
-                
-                // upon click, delete from the watchlist
-                alpha.addEventListener('click', async (e) => {
-                    e.preventDefault();
-                    const ticker = item.Ticker;
-                    try {
-                        const response = await fetch(`${API_BASE}/watchlist/${ticker}`, {
-                            method: "DELETE"
-                        });
-                        if (response.ok) {
-                            console.log(`${ticker} deleted successfully`);
-                            tr.remove();
-                        } else {
-                            console.error("Failed to delete ticker:", ticker);
-                        }
-                    } catch (err) {
-                        console.error("Error deleting ticker:", err);
-                    }
-                });
-                
-                alpha.appendChild(icon);
-                td.appendChild(alpha);
-            } else if (header === 'Ticker' && value) {
-                td.style.cursor = 'pointer';
-                td.style.color = isHighlighted ? '#ffffff': '#76ABAE';
-                td.style.textDecoration = 'underline';
-                td.textContent = value;
-                td.addEventListener('click', () => {
-                    openSearchModal();
-                    // Small delay to ensure modal is open and data is loaded
-                    setTimeout(() => {
-                        displayStockDetails(value);
-                    }, 100);
-                });
-            } else if (header === 'Representative' && value) {
-                td.style.cursor = 'pointer';
-                td.style.color = isHighlighted ? '#ffffff': '#76ABAE';
-                td.style.textDecoration = 'underline';
-                td.textContent = value;
-                td.addEventListener('click', async () => {
-                    openSearchModal();
-                    // Small delay to ensure modal is open and data is loaded
-                    setTimeout(() => {
-                        // Find legislator by name
-                        const legislator = legislatorList.find(l => 
-                            l.name.fullname.toLowerCase() === value.toLowerCase()
-                        );
-                        if (legislator) {
-                            displayLegislatorDetails(legislator.id.bioguide);
-                        } else {
-                            document.getElementById('search-results').innerHTML = 
-                                '<div class="text-[#76ABAE]/50 text-center">Legislator not found</div>';
-                        }
-                    }, 100);
-                });
-            } else {
-                td.textContent = value || 'N/A';
-            }
-
+            const td = createTableCell(header, item, isHighlighted, tr);
             tr.appendChild(td);
         });
 
@@ -1135,6 +925,118 @@ function displayFilteredData(data, headers) {
     });
 }
 
+// ===== Homepage Helpers ===== //
+function renderGreedFearGauge(index) {
+    // Calculate color based on index
+    let gaugeColor;
+    if (index <= 3) {
+        gaugeColor = '#f87171'; // Red (fear)
+    } else if (index <= 4) {
+        gaugeColor = '#fb923c'; // Orange
+    } else if (index <= 6) {
+        gaugeColor = '#fbbf24'; // Yellow (neutral)
+    } else if (index <= 8) {
+        gaugeColor = '#a3e635'; // Light green
+    } else {
+        gaugeColor = '#4ade80'; // Green (greed)
+    }
+    
+    const options = {
+        series: [index * 10], // Convert 0-10 scale to 0-100 percentage
+        chart: {
+            type: 'radialBar',
+            height: 220,
+            offsetY: -10,
+            sparkline: {
+                enabled: false
+            },
+            background: 'transparent'
+        },
+        plotOptions: {
+            radialBar: {
+                startAngle: -135,
+                endAngle: 135,
+                hollow: {
+                    margin: 0,
+                    size: '65%',
+                    background: '#222831',
+                },
+                track: {
+                    background: '#31363F',
+                    strokeWidth: '100%',
+                    margin: 5,
+                },
+                dataLabels: {
+                    show: true,
+                    name: {
+                        show: false
+                    },
+                    value: {
+                        offsetY: 5,
+                        fontSize: '32px',
+                        fontWeight: 'bold',
+                        color: '#EEEEEE',
+                        formatter: function(val) {
+                            return (val / 10).toFixed(1);
+                        }
+                    }
+                }
+            }
+        },
+        fill: {
+            type: 'solid',
+            colors: [gaugeColor]
+        },
+        stroke: {
+            lineCap: 'round'
+        },
+        labels: ['Greed/Fear']
+    };
+    
+    // Clear any existing chart
+    const chartElement = document.querySelector('#greed-fear-gauge');
+    if (chartElement) {
+        chartElement.innerHTML = '';
+        const chart = new ApexCharts(chartElement, options);
+        chart.render();
+    }
+}
+function restoreTableStructure() { // restore basic table structure when swapping from homepage
+    const mainContent = document.querySelector('.flex-1.p-6.overflow-hidden');
+    mainContent.innerHTML = `
+        <div class="bg-[#31363F] rounded-lg shadow-lg h-full flex flex-col">
+            <div class="p-4 border-b border-[#76ABAE]/20">
+                <div id="table-header-row" class="flex justify-between items-center">
+                    <h2 id="table-title" class="text-2xl font-bold text-[#76ABAE]">Data</h2>
+                    <div class="flex items-center space-x-4">
+                        <input type="text" id="filter-input" placeholder="Filter data..." class="bg-[#222831] text-[#EEEEEE] px-4 py-2 rounded-lg border border-[#76ABAE]/30 focus:border-[#76ABAE] focus:outline-none w-64">
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-1 overflow-auto">
+                <div id="loading" class="flex items-center justify-center h-full">
+                    <div class="text-[#76ABAE] text-xl">Loading data...</div>
+                </div>
+                <table id="data-table" class="w-full hidden">
+                    <thead class="bg-[#222831] sticky top-0">
+                        <tr id="table-headers"></tr>
+                    </thead>
+                    <tbody id="table-body"></tbody>
+                </table>
+            </div>
+        </div>
+    `;
+    
+    // Re-setup filter listener
+    setupFilterListener();
+}
+function openStockFromHomepage(ticker) {
+    openSearchModal();
+    setTimeout(() => {
+        displayStockDetails(ticker);
+    }, 100);
+}
 
 // ===== Search Modal Pop-up ===== //
 async function openSearchModal() {
@@ -1229,7 +1131,7 @@ function selectSearchResult(type, id) { //open details based on result type/id
         displayLegislatorDetails(id);
     }
 }
-// Pop-up types
+// Display types
 async function displayStockDetails(symbol) {
     const stock = stockList[symbol];
     const isInWatchlist = watchlistData && watchlistData.hasOwnProperty(symbol);
@@ -1516,8 +1418,7 @@ async function displayLegislatorDetails(bioguideId) {
     }
 }
 
-
-// ===== AI Summary Modal ===== //
+// ===== AI News Summary Pop-up ===== //
 async function openAIModal(url, title, description) {
     const modal = document.getElementById('ai-modal');
     modal.style.display = 'flex';
@@ -1575,7 +1476,6 @@ async function openAIModal(url, title, description) {
 function closeAIModal() {
     document.getElementById('ai-modal').style.display = 'none';
 }
-
 
 // ===== Loading / Error ===== //
 function showLoading() {
