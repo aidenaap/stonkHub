@@ -90,8 +90,10 @@ const readCacheMetadata = async () => {
             contracts: { lastUpdated: null, cacheFile: 'contractsCache.json' },
             news: { lastUpdated: null, cacheFile: 'newsCache.json' },
             stockData: { lastUpdated: null, cacheFile: 'stonkData.json' },
-            homepage: {lastUpdated: null, cacheFile: 'homepageCache.json' },
-            intraday: {lastUpdated: null, cacheFile: 'intradayCache.json'}
+            homepage: { lastUpdated: null, cacheFile: 'homepageCache.json' },
+            intraday: { lastUpdated: null, cacheFile: 'intradayCache.json' },
+            sectors: { lastUpdated: null, cacheFile: 'sectorCache.json' },
+            marketOverview: { lastUpdated: null, cacheFile: 'marketOverviewCache.json' },
         };
         
         try {

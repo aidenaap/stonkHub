@@ -74,6 +74,820 @@
   background-color: #76ABAE;
 
 }
+
+/* ===== HOMEPAGE REDESIGN STYLES ===== */
+
+.homepage-container {
+    padding: 1.5rem;
+    height: 100%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-height: 0; /* ADD - critical for flexbox overflow */
+}
+
+/* Top Stats Row */
+.stats-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.2fr;
+    gap: 1.25rem;
+    min-height: 220px;
+    flex-shrink: 0; /* CHANGED - prevents row from shrinking */
+}
+
+/* Card Base Styles */
+.stat-card {
+    background: linear-gradient(145deg, #2a303a 0%, #222831 100%);
+    border-radius: 16px;
+    padding: 1.25rem;
+    border: 1px solid rgba(118, 171, 174, 0.15);
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-card:hover {
+    border-color: rgba(118, 171, 174, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(118, 171, 174, 0.1);
+}
+
+.card-header h3 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #76ABAE;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+}
+
+.card-icon {
+    font-size: 1.1rem;
+}
+
+/* Greed/Fear Card */
+.greed-fear-card .gauge-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.sentiment-label {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 0.25rem;
+}
+
+.sentiment-label.fear { color: #f87171; }
+.sentiment-label.greed { color: #4ade80; }
+.sentiment-label.neutral { color: #fbbf24; }
+
+.trade-counts {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.trade-counts .buys { color: #4ade80; font-weight: 500; }
+.trade-counts .sells { color: #f87171; font-weight: 500; }
+.trade-counts .divider { color: rgba(238, 238, 238, 0.3); }
+
+/* FOMC Card */
+/* .fomc-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex: 1;
+}
+
+.fomc-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    background: rgba(34, 40, 49, 0.6);
+    border-radius: 10px;
+    border: 1px solid rgba(118, 171, 174, 0.08);
+    transition: all 0.2s ease;
+}
+
+.fomc-item.next-meeting {
+    background: rgba(118, 171, 174, 0.1);
+    border-color: rgba(118, 171, 174, 0.25);
+}
+
+.fomc-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 48px;
+}
+
+.fomc-month {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: #76ABAE;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+.fomc-day {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #EEEEEE;
+}
+
+.fomc-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.fomc-label {
+    font-size: 0.8rem;
+    color: #EEEEEE;
+    font-weight: 500;
+}
+
+.fomc-sep-badge {
+    font-size: 0.65rem;
+    background: linear-gradient(135deg, #76ABAE 0%, #5a9a9d 100%);
+    color: #222831;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-weight: 700;
+    width: fit-content;
+    letter-spacing: 0.03em;
+}
+
+.fomc-countdown {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: rgba(238, 238, 238, 0.6);
+    min-width: 50px;
+    text-align: right;
+}
+
+.fomc-countdown.soon {
+    color: #fbbf24;
+} */
+
+/* ===== Economic Calendar Section ===== */
+.calendar-section {
+    flex: 1;
+    min-width: 280px;
+    display: flex;
+    flex-direction: column;
+}
+
+.calendar-card {
+    background: linear-gradient(145deg, #222831 0%, #1a1d24 100%);
+    border-radius: 12px;
+    border: 1px solid rgba(118, 171, 174, 0.15);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    max-height: 320px;
+}
+
+.calendar-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0.75rem;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+
+.calendar-scroll::-webkit-scrollbar {
+    display: none; /* Chrome/Safari/Opera */
+} 
+
+.calendar-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 0.75rem;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    background: rgba(49, 54, 63, 0.5);
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.calendar-item:last-child {
+    margin-bottom: 0;
+}
+
+.calendar-item:hover {
+    background: rgba(118, 171, 174, 0.1);
+    border-color: rgba(118, 171, 174, 0.2);
+}
+
+.calendar-item.is-today {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+.calendar-item.is-tomorrow {
+    background: rgba(245, 158, 11, 0.1);
+    border-color: rgba(245, 158, 11, 0.2);
+}
+
+.calendar-item-left {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.event-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.event-details {
+    min-width: 0;
+}
+
+.event-name {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #EEEEEE;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.event-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.15rem;
+}
+
+.event-for {
+    font-size: 0.7rem;
+    color: rgba(238, 238, 238, 0.5);
+}
+
+.sep-badge {
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.15);
+    padding: 0.1rem 0.3rem;
+    border-radius: 4px;
+}
+
+.calendar-item-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.15rem;
+    flex-shrink: 0;
+    margin-left: 0.5rem;
+}
+
+.event-date {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #76ABAE;
+}
+
+.event-time {
+    font-size: 0.65rem;
+    color: rgba(238, 238, 238, 0.5);
+}
+
+.event-countdown {
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    background: rgba(118, 171, 174, 0.15);
+    color: rgba(238, 238, 238, 0.7);
+}
+
+.event-countdown.countdown-today {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+}
+
+.event-countdown.countdown-tomorrow {
+    background: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+}
+
+.event-countdown.countdown-week {
+    background: rgba(118, 171, 174, 0.15);
+    color: #76ABAE;
+}
+
+/* Quick Stats Card */
+.quick-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    flex: 1;
+    align-content: center;
+}
+
+.quick-stat {
+    text-align: center;
+    padding: 0.75rem;
+    background: rgba(34, 40, 49, 0.6);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.quick-stat:hover {
+    background: rgba(118, 171, 174, 0.15);
+    border-color: rgba(118, 171, 174, 0.2);
+    transform: translateY(-2px);
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #76ABAE;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: #EEEEEE;
+    margin-top: 0.35rem;
+    font-weight: 500;
+}
+
+.stat-sublabel {
+    font-size: 0.7rem;
+    color: rgba(238, 238, 238, 0.5);
+    margin-top: 0.15rem;
+}
+
+/* Section Container */
+.section-container {
+    background: linear-gradient(145deg, #2a303a 0%, #222831 100%);
+    border-radius: 16px;
+    padding: 1.25rem;
+    border: 1px solid rgba(118, 171, 174, 0.15);
+    flex-shrink: 0; /* ADD - prevents section from shrinking */
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(118, 171, 174, 0.1);
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.section-title h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #76ABAE;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+}
+
+.section-icon {
+    font-size: 1.1rem;
+}
+
+/* Market Sentiment Badge */
+.market-sentiment {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.35rem 0.75rem;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.market-sentiment.bullish {
+    background: rgba(74, 222, 128, 0.15);
+    color: #4ade80;
+    border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
+.market-sentiment.bearish {
+    background: rgba(248, 113, 113, 0.15);
+    color: #f87171;
+    border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+.market-sentiment.neutral {
+    background: rgba(251, 191, 36, 0.15);
+    color: #fbbf24;
+    border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+/* Sectors Grid */
+.sectors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.75rem;
+}
+.sectors-section {
+    flex-shrink: 0;
+}
+
+.sector-card {
+    background: rgba(34, 40, 49, 0.6);
+    border-radius: 10px;
+    padding: 0.85rem;
+    text-align: center;
+    border: 1px solid rgba(118, 171, 174, 0.08);
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.sector-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--sector-color, #76ABAE);
+    opacity: 0.8;
+}
+
+.sector-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--sector-color, rgba(118, 171, 174, 0.3));
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.sector-card.positive:hover {
+    background: rgba(74, 222, 128, 0.08);
+}
+
+.sector-card.negative:hover {
+    background: rgba(248, 113, 113, 0.08);
+}
+
+.sector-symbol {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #EEEEEE;
+    margin-bottom: 0.15rem;
+}
+
+.sector-name {
+    font-size: 0.65rem;
+    color: rgba(238, 238, 238, 0.6);
+    margin-bottom: 0.4rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sector-change {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.sector-change.up { color: #4ade80; }
+.sector-change.down { color: #f87171; }
+
+/* ===== Market Overview Section ===== */
+.market-overview-section {
+    margin-bottom: 1.5rem;
+    flex-shrink: 0;
+}
+
+.market-overview-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 0.75rem;
+}
+
+.market-item {
+    background: linear-gradient(145deg, #222831 0%, #1a1d24 100%);
+    border-radius: 10px;
+    padding: 0.75rem;
+    text-align: center;
+    border: 1px solid rgba(118, 171, 174, 0.15);
+    transition: all 0.2s ease;
+}
+
+.market-item:hover {
+    transform: translateY(-2px);
+    border-color: rgba(118, 171, 174, 0.3);
+}
+
+.market-item.positive {
+    border-top: 3px solid #4ade80;
+}
+
+.market-item.negative {
+    border-top: 3px solid #f87171;
+}
+
+.market-item.market-item-error {
+    border-top: 3px solid rgba(118, 171, 174, 0.3);
+    opacity: 0.5;
+}
+
+.market-symbol {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #76ABAE;
+    margin-bottom: 0.25rem;
+    letter-spacing: 0.5px;
+}
+
+.market-price {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #EEEEEE;
+    margin-bottom: 0.2rem;
+}
+
+.market-change {
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.market-change.positive {
+    color: #4ade80;
+}
+
+.market-change.negative {
+    color: #f87171;
+}
+
+/* Responsive: stack on smaller screens */
+@media (max-width: 1400px) {
+    .market-overview-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .market-overview-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Tab Buttons */
+.tab-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.tab-btn {
+    background: rgba(34, 40, 49, 0.6);
+    border: 1px solid rgba(118, 171, 174, 0.15);
+    color: rgba(238, 238, 238, 0.7);
+    padding: 0.4rem 0.85rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tab-btn:hover {
+    background: rgba(118, 171, 174, 0.1);
+    color: #EEEEEE;
+}
+
+.tab-btn.active {
+    background: rgba(118, 171, 174, 0.2);
+    border-color: #76ABAE;
+    color: #76ABAE;
+}
+
+/* Activity Tabs */
+.activity-tab {
+    display: none;
+}
+.activity-section {
+    flex-shrink: 0;
+    margin-bottom: 1rem;
+}
+.activity-tab.active {
+    display: block;
+}
+
+/* Trades Grid */
+.trades-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.75rem;
+    max-height: 400px; /* ADD - limits height */
+    overflow-y: auto; /* ADD - scroll within section if needed */
+    padding-right: 0.5rem; /* ADD - space for scrollbar */
+}
+
+.trade-card {
+    background: rgba(34, 40, 49, 0.6);
+    border-radius: 10px;
+    padding: 0.85rem;
+    cursor: pointer;
+    border: 1px solid rgba(118, 171, 174, 0.08);
+    transition: all 0.2s ease;
+}
+
+.trade-card:hover {
+    background: rgba(118, 171, 174, 0.1);
+    border-color: rgba(118, 171, 174, 0.25);
+    transform: translateY(-2px);
+}
+
+.trade-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.4rem;
+}
+
+.trade-ticker {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #76ABAE;
+}
+
+.trade-type {
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 0.2rem 0.45rem;
+    border-radius: 4px;
+    letter-spacing: 0.03em;
+}
+
+.trade-type.buy {
+    background: rgba(74, 222, 128, 0.2);
+    color: #4ade80;
+}
+
+.trade-type.sell {
+    background: rgba(248, 113, 113, 0.2);
+    color: #f87171;
+}
+
+.trade-count {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #76ABAE;
+    background: rgba(118, 171, 174, 0.15);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+}
+
+.trade-amount {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #EEEEEE;
+    margin-bottom: 0.35rem;
+}
+
+.trade-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    color: rgba(238, 238, 238, 0.5);
+}
+
+.trade-rep {
+    max-width: 70%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.trade-sublabel {
+    color: rgba(238, 238, 238, 0.5);
+}
+
+/* Signal Breakdown */
+.signal-breakdown {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: 0.5rem;
+}
+
+.signal {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.signal.congress {
+    background: rgba(74, 222, 128, 0.15);
+    color: #4ade80;
+}
+
+.signal.lobbying {
+    background: rgba(251, 191, 36, 0.15);
+    color: #fbbf24;
+}
+
+.signal.contracts {
+    background: rgba(96, 165, 250, 0.15);
+    color: #60a5fa;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: rgba(238, 238, 238, 0.4);
+    font-size: 0.9rem;
+}
+
+/* Show More Hint */
+.show-more-hint {
+    text-align: center;
+    padding: 0.75rem;
+    color: rgba(118, 171, 174, 0.6);
+    font-size: 0.8rem;
+    font-style: italic;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1200px) {
+    .stats-row {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .quick-stats-card {
+        grid-column: span 2;
+    }
+    
+    .quick-stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .stats-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .quick-stats-card {
+        grid-column: span 1;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        gap: 0.75rem;
+        align-items: flex-start;
+    }
+    
+    .tab-buttons {
+        width: 100%;
+        overflow-x: auto;
+    }
+    
+    .trades-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+}
+
+.sector-price {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #EEEEEE;
+    margin-bottom: 0.25rem;
+}
+
 /* END OF CUSTOM NON TAILWIND CSS */
 
 *, ::before, ::after {

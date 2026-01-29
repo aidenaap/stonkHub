@@ -12,6 +12,9 @@ let legislatorList = [];
 
 // storage for api calls upon startup
 let homepageData;
+let sectorData;
+let marketOverviewData;
+let economicCalendarData;
 let lobbyingData;
 let congressData;
 let contractData;
@@ -54,8 +57,7 @@ document.addEventListener('DOMContentLoaded', function() { // Initialize filters
     });
 });
 
-async function loadInitialData() { // get all API data on initial load as needed
-
+async function loadInitialData() {
     // show loading until we displayHomePage
     showLoading();
 
@@ -72,7 +74,19 @@ async function loadInitialData() { // get all API data on initial load as needed
     homepageData = await homepageResponse.json();
     console.log('Homepage data loaded:', homepageData);
 
-    // news data
+    // Sector data
+    const sectorResponse = await fetch(`${API_BASE}/sectors`);
+    sectorData = await sectorResponse.json();
+    console.log('Sector data loaded:', sectorData);
+
+    const marketOverviewResponse = await fetch(`${API_BASE}/market-overview`);
+    marketOverviewData = await marketOverviewResponse.json();
+
+    // Economic calendar data (FOMC + BLS releases)
+    const economicCalendarResponse = await fetch(`${API_BASE}/economic-calendar?count=15`);
+    economicCalendarData = await economicCalendarResponse.json();
+
+    // News data
     const newsResponse = await fetch(`${API_BASE}/news`);
     newsData = await newsResponse.json();
 
@@ -82,19 +96,21 @@ async function loadInitialData() { // get all API data on initial load as needed
     const tickers = Object.keys(watchlistData);
 
     // live stockData based on watchlist
-    const stockResponse = await fetch(`${API_BASE}/stocklist`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ stocklist: tickers })
-    });
-    stockData = await stockResponse.json();
+    if (tickers.length > 0) {
+        const stockResponse = await fetch(`${API_BASE}/stocklist`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ stocklist: tickers })
+        });
+        stockData = await stockResponse.json();
+    }
 
     // Populate the top ticker bar
     populateTickerBar();
 
-    // Display lobbying upon startup
-    currentDataType='home';
-    toggleHomePage(); // Changed from displayHomePage()
+    // Display homepage upon startup
+    currentDataType = 'home';
+    toggleHomePage();
 }
 
 // ===== Ticker Bar ===== //
@@ -200,8 +216,8 @@ function setActiveTab(activeButton) { // button styling
     activeButton.classList.add('active-tab', 'bg-[#76ABAE]', 'text-[#222831]');
     activeButton.classList.remove('bg-transparent', 'text-[#EEEEEE]', 'border', 'border-[#76ABAE]/30');
 }
-// For each, set active tab, title above table, currentData, currentDataType, and displayTableData
-async function loadHomePage() { // unique functionality
+// Unique homepage functionality
+async function loadHomePage() {
     try {
         setActiveTab(document.getElementById('home-btn'));
         currentDataType = 'home';
@@ -212,13 +228,10 @@ async function loadHomePage() { // unique functionality
         showError('Failed to load homepage');
     }
 }
-function toggleHomePage() { // homepage toggle on/off
-    console.log("Current Data Type inside of toggleHomePage function")
-    console.log(currentDataType);
+function toggleHomePage() {
     if (currentDataType !== 'home') {
-        console.log("Should be restoring table structure");
         restoreTableStructure();
-        return; // Exit early - don't modify DOM if not on home page
+        return;
     }
     
     const mainContent = document.querySelector('.flex-1.p-6.overflow-hidden > .bg-\\[\\#31363F\\]');
@@ -238,157 +251,176 @@ function toggleHomePage() { // homepage toggle on/off
     const sortedNoticeableTrades = [...noticeableTrades].sort((a, b) => 
         new Date(b.TransactionDate) - new Date(a.TransactionDate)
     );
+
+    // Build calendar section
+    const economicCalendarHTML = buildEconomicCalendarSection();
     
-    // Add actual content
+    // Build market overview section
+    const majorIndicesHTML = buildMarketOverviewSection();
+
+    // Build sectors section
+    const sectorsHTML = buildSectorsSection();
+    
+    // Build the main content
     mainContent.innerHTML = `
-    <div class="bg-[#31363F] rounded-lg shadow-lg h-full overflow-auto p-6">
-        <h1 class="text-3xl font-bold text-[#76ABAE] mb-6">Market Intelligence Dashboard</h1>
-        
-        <!-- Top Stats Row - 4 Columns -->
-        <div class="flex justify-between gap-6" style="margin-bottom: 24px;">
-            <!-- Greed/Fear Index -->
-            <div class="bg-[#222831] rounded-lg p-6">
-                <h2 class="text-lg font-semibold text-[#76ABAE] mb-3">Congressional Greed/Fear Index</h2>
-                <div class="text-center">
-                    <!-- Gauge Chart Container -->
+    <div class="homepage-container">
+        <!-- Top Stats Row -->
+        <div class="stats-row">
+            <!-- Greed/Fear Index Card -->
+            <div class="stat-card greed-fear-card">
+                <div class="card-header">
+                    <span class="card-icon">📊</span>
+                    <h3>Congressional Sentiment</h3>
+                </div>
+                <div class="gauge-container">
                     <div id="greed-fear-gauge"></div>
-                    
-                    <!-- Label -->
-                    <div class="text-lg font-semibold text-[#EEEEEE] mt-2 flex items-center justify-center">
-                        ${greedFearIndex.index <= 3 ? 'Extreme Fear 🐻' : 
-                        greedFearIndex.index <= 4 ? 'Fear 😰' :
-                        greedFearIndex.index <= 6 ? 'Neutral 😐' :
-                        greedFearIndex.index <= 8 ? 'Greed 😊' : 'Extreme Greed 🚀'}
+                    <div class="sentiment-label ${greedFearIndex.index <= 3 ? 'fear' : greedFearIndex.index >= 7 ? 'greed' : 'neutral'}">
+                        ${greedFearIndex.index <= 3 ? '🐻 Extreme Fear' : 
+                          greedFearIndex.index <= 4 ? '😰 Fear' :
+                          greedFearIndex.index <= 6 ? '😐 Neutral' :
+                          greedFearIndex.index <= 8 ? '😊 Greed' : '🚀 Extreme Greed'}
                     </div>
-                    
-                    <!-- Purchases / Sales -->
-                    <div class="flex items-center justify-center gap-4 mt-3 text-sm">
-                        <div class="text-[#4ade80] font-semibold">${greedFearIndex.purchaseCount} buys</div>
-                        <div class="text-[#EEEEEE]/30"> | </div>
-                        <div class="text-[#f87171] font-semibold">${greedFearIndex.saleCount} sales</div>
+                    <div class="trade-counts">
+                        <span class="buys">${greedFearIndex.purchaseCount} buys</span>
+                        <span class="divider">•</span>
+                        <span class="sells">${greedFearIndex.saleCount} sells</span>
                     </div>
                 </div>
             </div>
-            
-            <!-- Large Trades -->
-            <div class="bg-[#222831] rounded-lg p-6">
-                <h3 class="text-lg font-semibold text-[#76ABAE] mb-3">Large Trades</h3>
-                <div class="text-center">
-                    <div class="text-5xl font-bold text-[#EEEEEE] mb-2">${sortedNoticeableTrades.length}</div>
-                    <div class="text-sm text-[#EEEEEE]/70">Trades ≥ $50,001</div>
+
+            <!-- FOMC Calendar Card -->
+            <div class="stat-card fomc-card">
+                <div class="card-header">
+                    <span class="card-icon">🏛️</span>
+                    <h3>Upcoming Events</h3>
                 </div>
+                ${economicCalendarHTML}
             </div>
-            
-            <!-- Frequent Trades -->
-            <div class="bg-[#222831] rounded-lg p-6">
-                <h3 class="text-lg font-semibold text-[#76ABAE] mb-3">Frequent Trades</h3>
-                <div class="text-center">
-                    <div class="text-5xl font-bold text-[#EEEEEE] mb-2">${frequentTrades.length}</div>
-                    <div class="text-sm text-[#EEEEEE]/70">Stocks traded 3+ times</div>
+
+            <!-- Quick Stats Card -->
+            <div class="stat-card quick-stats-card">
+                <div class="card-header">
+                    <span class="card-icon">⚡</span>
+                    <h3>Activity Snapshot</h3>
                 </div>
-            </div>
-            
-            <!-- Hot Stocks -->
-            <div class="bg-[#222831] rounded-lg p-6">
-                <h3 class="text-lg font-semibold text-[#76ABAE] mb-3">Hot Stocks</h3>
-                <div class="text-center">
-                    <div class="text-5xl font-bold text-[#EEEEEE] mb-2">${multipleIndicators.length}</div>
-                    <div class="text-sm text-[#EEEEEE]/70">10+ combined indicators</div>
+                <div class="quick-stats-grid">
+                    <div class="quick-stat" onclick="scrollToSection('notable-trades')">
+                        <div class="stat-value">${sortedNoticeableTrades.length}</div>
+                        <div class="stat-label">Large Trades</div>
+                        <div class="stat-sublabel">≥ $50,001</div>
+                    </div>
+                    <div class="quick-stat" onclick="scrollToSection('frequent-trades')">
+                        <div class="stat-value">${frequentTrades.length}</div>
+                        <div class="stat-label">Hot Tickers</div>
+                        <div class="stat-sublabel">3+ trades/3mo</div>
+                    </div>
+                    <div class="quick-stat" onclick="scrollToSection('multi-indicator')">
+                        <div class="stat-value">${multipleIndicators.length}</div>
+                        <div class="stat-label">Multi-Signal</div>
+                        <div class="stat-sublabel">10+ indicators</div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Three Column Layout for Sections -->
-        <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
-            <!-- Large Trades Section -->
-            <div style="flex: 1; min-width: 300px; display: flex; flex-direction: column;">
-                <h3 class="text-xl font-semibold text-[#76ABAE]" style="margin-bottom: 12px;">Notable Trades (≥ $50,000) - ${sortedNoticeableTrades.length}</h3>
-                <div class="bg-[#222831] rounded-lg p-6" style="flex: 1;">
-                    <div class="overflow-auto" style="max-height: 600px; padding-right: 12px;">
-                        ${sortedNoticeableTrades.length === 0 ? 
-                            '<div class="text-[#EEEEEE]/50 text-center py-4">No large trades found</div>' :
-                            sortedNoticeableTrades.map(trade => `
-                                <div class="border-b border-[#76ABAE]/10 py-3 last:border-0 hover:bg-[#76ABAE]/10 cursor-pointer transition-colors" onclick="openStockFromHomepage('${trade.Ticker}')" style="cursor: pointer;">
-                                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                                        <div style="flex: 1;">
-                                            <div class="font-semibold text-[#76ABAE] text-lg">${trade.Ticker}</div>
-                                            <div class="text-sm text-[#EEEEEE]/70" style="margin-top: 4px;">${trade.Representative}</div>
-                                            <div class="text-xs text-[#EEEEEE]/50" style="margin-top: 4px;">
-                                                ${new Date(trade.TransactionDate + 'T00:00:00Z').toLocaleDateString('en-US', { 
-                                                    timeZone: 'UTC',
-                                                    year: 'numeric', 
-                                                    month: 'short', 
-                                                    day: 'numeric' 
-                                                })}
-                                            </div>
-                                        </div>
-                                        <div style="text-align: right;">
-                                            <div class="font-bold text-[#EEEEEE] text-lg">$${Number(trade.Amount).toLocaleString()}</div>
-                                            <div class="text-sm ${trade.Transaction.toLowerCase().includes('purchase') || trade.Transaction.toLowerCase().includes('buy') ? 'text-[#4ade80]' : 'text-[#f87171]'}" style="margin-top: 4px;">
-                                                ${trade.Transaction}
-                                            </div>
-                                        </div>
-                                    </div>
+        <!-- Major Indices Section -->
+        ${majorIndicesHTML}
+
+        <!-- Sector Performance Section -->
+        <div class="section-container sectors-section">
+            <div class="section-header">
+                <div class="section-title">
+                    <span class="section-icon">📈</span>
+                    <h2>Sector Performance</h2>
+                </div>
+                <div class="market-sentiment ${sectorData?.sectors ? (getSectorSentiment() === 'Bullish' ? 'bullish' : getSectorSentiment() === 'Bearish' ? 'bearish' : 'neutral') : ''}">
+                    ${sectorData?.sectors ? getSectorSentiment() : 'Loading...'}
+                </div>
+            </div>
+            ${sectorsHTML}
+        </div>
+
+        <!-- Activity Details Section (Tabbed) -->
+        <div class="section-container activity-section">
+            <div class="section-header">
+                <div class="section-title">
+                    <span class="section-icon">🔍</span>
+                    <h2>Congressional Activity</h2>
+                </div>
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="switchActivityTab('notable')">Notable Trades</button>
+                    <button class="tab-btn" onclick="switchActivityTab('frequent')">Frequent</button>
+                    <button class="tab-btn" onclick="switchActivityTab('multi')">Multi-Signal</button>
+                </div>
+            </div>
+            
+            <!-- Notable Trades Tab -->
+            <div id="notable-trades" class="activity-tab active">
+                <div class="trades-grid">
+                    ${sortedNoticeableTrades.length === 0 
+                        ? '<div class="empty-state">No large trades found</div>'
+                        : sortedNoticeableTrades.map(trade => `
+                            <div class="trade-card" onclick="openStockFromHomepage('${trade.Ticker}')">
+                                <div class="trade-header">
+                                    <span class="trade-ticker">${trade.Ticker}</span>
+                                    <span class="trade-type ${trade.Transaction.toLowerCase().includes('purchase') || trade.Transaction.toLowerCase().includes('buy') ? 'buy' : 'sell'}">
+                                        ${trade.Transaction.toLowerCase().includes('purchase') || trade.Transaction.toLowerCase().includes('buy') ? 'BUY' : 'SELL'}
+                                    </span>
                                 </div>
-                            `).join('')
-                        }
-                    </div>
+                                <div class="trade-amount">$${Number(trade.Amount).toLocaleString()}</div>
+                                <div class="trade-meta">
+                                    <span class="trade-rep">${trade.Representative.split(' ').slice(0, 2).join(' ')}</span>
+                                    <span class="trade-date">${new Date(trade.TransactionDate + 'T00:00:00Z').toLocaleDateString('en-US', { timeZone: 'UTC', month: 'short', day: 'numeric' })}</span>
+                                </div>
+                            </div>
+                        `).join('')
+                    }
                 </div>
             </div>
 
-            <!-- Frequent Trades Section -->
-            <div style="flex: 1; min-width: 300px; display: flex; flex-direction: column;">
-                <h3 class="text-xl font-semibold text-[#76ABAE]" style="margin-bottom: 12px;">Frequently Traded Stocks (3+) - ${frequentTrades.length}</h3>
-                <div class="bg-[#222831] rounded-lg p-6" style="flex: 1;">
-                    <div class="overflow-auto" style="max-height: 600px; padding-right: 12px;">
-                        ${frequentTrades.length === 0 ? 
-                            '<div class="text-[#EEEEEE]/50 text-center py-4">No frequent trades found</div>' :
-                            frequentTrades.map(item => `
-                                <div class="border-b border-[#76ABAE]/10 py-3 last:border-0 hover:bg-[#76ABAE]/10 cursor-pointer transition-colors" onclick="openStockFromHomepage('${item.ticker}')" style="cursor: pointer;">
-                                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                                        <div>
-                                            <div class="font-semibold text-[#76ABAE] text-lg">${item.ticker}</div>
-                                            <div class="text-sm text-[#EEEEEE]/70" style="margin-top: 4px;">
-                                                ${item.count} trades in past 3 months
-                                            </div>
-                                        </div>
-                                        <div class="text-3xl font-bold text-[#EEEEEE]">${item.count}</div>
-                                    </div>
+            <!-- Frequent Trades Tab -->
+            <div id="frequent-trades" class="activity-tab">
+                <div class="trades-grid">
+                    ${frequentTrades.length === 0 
+                        ? '<div class="empty-state">No frequent trades found</div>'
+                        : frequentTrades.slice(0, 12).map(item => `
+                            <div class="trade-card" onclick="openStockFromHomepage('${item.ticker}')">
+                                <div class="trade-header">
+                                    <span class="trade-ticker">${item.ticker}</span>
+                                    <span class="trade-count">${item.count}x</span>
                                 </div>
-                            `).join('')
-                        }
-                    </div>
+                                <div class="trade-amount">${item.count} trades</div>
+                                <div class="trade-meta">
+                                    <span class="trade-sublabel">Past 3 months</span>
+                                </div>
+                            </div>
+                        `).join('')
+                    }
                 </div>
+                ${frequentTrades.length > 12 ? `<div class="show-more-hint">${frequentTrades.length - 12} more tickers</div>` : ''}
             </div>
 
-            <!-- Multiple Indicators Section -->
-            <div style="flex: 1; min-width: 300px; display: flex; flex-direction: column;">
-                <h3 class="text-xl font-semibold text-[#76ABAE]" style="margin-bottom: 12px;">Stocks with Multiple Indicators (10+) - ${multipleIndicators.length}</h3>
-                <div class="bg-[#222831] rounded-lg p-6" style="flex: 1;">
-                    <div class="overflow-auto" style="max-height: 600px; padding-right: 12px;">
-                        ${multipleIndicators.length === 0 ? 
-                            '<div class="text-[#EEEEEE]/50 text-center py-4">No stocks with multiple indicators</div>' :
-                            multipleIndicators.map(item => `
-                                <div class="border-b border-[#76ABAE]/10 py-3 last:border-0 hover:bg-[#76ABAE]/10 cursor-pointer transition-colors" onclick="openStockFromHomepage('${item.ticker}')" style="cursor: pointer;">
-                                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                                        <div style="flex: 1;">
-                                            <div class="font-semibold text-[#76ABAE] text-lg">${item.ticker}</div>
-                                            <div class="text-sm text-[#EEEEEE]/70" style="margin-top: 4px;">
-                                                <span class="text-[#4ade80]">${item.congressCount} congress</span> · 
-                                                <span class="text-[#fbbf24]">${item.lobbyingCount} lobbying</span> · 
-                                                <span class="text-[#60a5fa]">${item.contractCount} contracts</span>
-                                            </div>
-                                        </div>
-                                        <div style="text-align: right;">
-                                            <div class="text-3xl font-bold text-[#EEEEEE]">${item.totalCount}</div>
-                                            <div class="text-xs text-[#EEEEEE]/50">total activities</div>
-                                        </div>
-                                    </div>
+            <!-- Multi-Signal Tab -->
+            <div id="multi-indicator" class="activity-tab">
+                <div class="trades-grid">
+                    ${multipleIndicators.length === 0 
+                        ? '<div class="empty-state">No multi-signal stocks found</div>'
+                        : multipleIndicators.slice(0, 12).map(item => `
+                            <div class="trade-card" onclick="openStockFromHomepage('${item.ticker}')">
+                                <div class="trade-header">
+                                    <span class="trade-ticker">${item.ticker}</span>
+                                    <span class="trade-count">${item.totalCount}</span>
                                 </div>
-                            `).join('')
-                        }
-                    </div>
+                                <div class="signal-breakdown">
+                                    <span class="signal congress">${item.congressCount} congress</span>
+                                    <span class="signal lobbying">${item.lobbyingCount} lobby</span>
+                                    <span class="signal contracts">${item.contractCount} contract</span>
+                                </div>
+                            </div>
+                        `).join('')
+                    }
                 </div>
+                ${multipleIndicators.length > 12 ? `<div class="show-more-hint">${multipleIndicators.length - 12} more stocks</div>` : ''}
             </div>
         </div>
     </div>
@@ -399,6 +431,201 @@ function toggleHomePage() { // homepage toggle on/off
         renderGreedFearGauge(greedFearIndex.index);
     }, 100);
 }
+function buildEconomicCalendarSection() {
+    if (!economicCalendarData || !economicCalendarData.events || economicCalendarData.events.length === 0) {
+        return `
+            <div class="calendar-section">
+                <h3 class="section-title">📅 Economic Calendar</h3>
+                <div class="calendar-card">
+                    <div class="text-center text-muted">No upcoming events</div>
+                </div>
+            </div>
+        `;
+    }
+    
+    const events = economicCalendarData.events;
+    
+    return `
+        <div class="calendar-section">
+            <h3 class="section-title">📅 Economic Calendar</h3>
+            <div class="calendar-card">
+                <div class="calendar-scroll">
+                    ${events.map(event => `
+                        <div class="calendar-item ${event.isToday ? 'is-today' : ''} ${event.isTomorrow ? 'is-tomorrow' : ''}">
+                            <div class="calendar-item-left">
+                                <span class="event-icon" style="background: ${event.color}20; color: ${event.color};">${event.icon}</span>
+                                <div class="event-details">
+                                    <div class="event-name">${event.name}</div>
+                                    <div class="event-meta">
+                                        ${event.for ? `<span class="event-for">${event.for}</span>` : ''}
+                                        ${event.hasSEP ? '<span class="sep-badge">+SEP</span>' : ''}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="calendar-item-right">
+                                <div class="event-date">${event.formattedDate}</div>
+                                <div class="event-time">${event.formattedTime} ET</div>
+                                <div class="event-countdown ${event.isToday ? 'countdown-today' : event.isTomorrow ? 'countdown-tomorrow' : event.isThisWeek ? 'countdown-week' : ''}">
+                                    ${event.isToday ? 'TODAY' : event.isTomorrow ? 'TOMORROW' : event.daysUntil + 'd'}
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        </div>
+    `;
+}
+function buildSectorsSection() {
+    if (!sectorData || !sectorData.sectors) {
+        return '<div class="empty-state">Loading sector data...</div>';
+    }
+
+    return `
+        <div class="sectors-grid">
+            ${sectorData.sectors.map(sector => `
+                <div class="sector-card ${sector.isPositive ? 'positive' : 'negative'}" style="--sector-color: ${sector.color}">
+                    <div class="sector-symbol">${sector.symbol}</div>
+                    <div class="sector-name">${sector.name}</div>
+                    <div class="sector-change ${sector.isPositive ? 'up' : 'down'}">
+                        ${sector.isPositive ? '▲' : '▼'} ${Math.abs(sector.percentChange).toFixed(2)}%
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+function getSectorSentiment() {
+    if (!sectorData || !sectorData.sectors) return 'Loading';
+    
+    const validSectors = sectorData.sectors.filter(s => s.percentChange !== null);
+    const avgChange = validSectors.reduce((sum, s) => sum + s.percentChange, 0) / validSectors.length;
+    
+    if (avgChange > 0.5) return 'Bullish';
+    if (avgChange < -0.5) return 'Bearish';
+    return 'Neutral';
+}
+function buildMarketOverviewSection() {
+    if (!marketOverviewData || marketOverviewData.length === 0) {
+        return '';
+    }
+    
+    // Calculate dollar health based on DXY
+    const dxy = marketOverviewData.find(item => item.shortName === 'DXY');
+    const dollarHealth = getDollarHealth(dxy);
+    
+    // Sort by absolute change percent (biggest movers first) - optional, or keep original order
+    const sortedData = [...marketOverviewData];
+    
+    return `
+        <div class="sectors-section">
+            <div class="sectors-header">
+                <h3 class="section-title">📈 Market Overview</h3>
+                <span class="market-sentiment-badge ${dollarHealth.class}">${dollarHealth.icon} Dollar: ${dollarHealth.label}</span>
+            </div>
+            <div class="sectors-grid">
+                ${sortedData.map(item => {
+                    if (item.error || item.price === null) {
+                        return `
+                            <div class="sector-card" style="border-top-color: rgba(118, 171, 174, 0.3); opacity: 0.5;">
+                                <div class="sector-symbol">${item.shortName}</div>
+                                <div class="sector-name">${item.name}</div>
+                                <div class="sector-change">--</div>
+                            </div>
+                        `;
+                    }
+                    
+                    const isPositive = item.changePercent >= 0;
+                    const arrow = isPositive ? '▲' : '▼';
+                    const changeClass = isPositive ? 'positive' : 'negative';
+                    const accentColor = isPositive ? '#4ade80' : '#f87171';
+                    
+                    // Format price based on value
+                    let formattedPrice;
+                    if (item.price >= 10000) {
+                        formattedPrice = item.price.toLocaleString('en-US', { maximumFractionDigits: 0 });
+                    } else if (item.price >= 100) {
+                        formattedPrice = item.price.toFixed(2);
+                    } else {
+                        formattedPrice = item.price.toFixed(2);
+                    }
+                    
+                    return `
+                        <div class="sector-card ${changeClass}" style="border-top-color: ${accentColor};">
+                            <div class="sector-symbol">${item.shortName}</div>
+                            <div class="sector-name">${item.name}</div>
+                            <div class="sector-price">${formattedPrice}</div>
+                            <div class="sector-change ${changeClass}">
+                                ${arrow} ${Math.abs(item.changePercent).toFixed(2)}%
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+        </div>
+    `;
+}
+function getDollarHealth(dxy) {
+    if (!dxy || dxy.error || dxy.changePercent === null) {
+        return { label: 'Unknown', class: 'sentiment-neutral', icon: '⚖️' };
+    }
+    
+    const change = dxy.changePercent;
+    
+    if (change >= 0.5) {
+        return { label: 'Strong', class: 'sentiment-bullish', icon: '💪' };
+    } else if (change >= 0.1) {
+        return { label: 'Firm', class: 'sentiment-bullish', icon: '📈' };
+    } else if (change <= -0.5) {
+        return { label: 'Weak', class: 'sentiment-bearish', icon: '📉' };
+    } else if (change <= -0.1) {
+        return { label: 'Soft', class: 'sentiment-bearish', icon: '😟' };
+    } else {
+        return { label: 'Stable', class: 'sentiment-neutral', icon: '⚖️' };
+    }
+}
+function switchActivityTab(tabName) {
+    // Update button states
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    // Update tab visibility
+    document.querySelectorAll('.activity-tab').forEach(tab => tab.classList.remove('active'));
+    
+    switch(tabName) {
+        case 'notable':
+            document.getElementById('notable-trades').classList.add('active');
+            break;
+        case 'frequent':
+            document.getElementById('frequent-trades').classList.add('active');
+            break;
+        case 'multi':
+            document.getElementById('multi-indicator').classList.add('active');
+            break;
+    }
+}
+function scrollToSection(sectionId) {
+    // Switch to the appropriate tab
+    const tabMap = {
+        'notable-trades': 'notable',
+        'frequent-trades': 'frequent',
+        'multi-indicator': 'multi'
+    };
+    
+    // Find and click the appropriate tab button
+    const tabName = tabMap[sectionId];
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    tabBtns.forEach(btn => {
+        if (btn.textContent.toLowerCase().includes(tabName.substring(0, 5))) {
+            btn.click();
+        }
+    });
+    
+    // Scroll to section
+    document.querySelector('.activity-section')?.scrollIntoView({ behavior: 'smooth' });
+}
+
+// For each, set active tab, title above table, currentData, currentDataType, and displayTableData
 async function loadLobbyingPage() {
     try {
         currentDataType = 'lobbying';
@@ -681,7 +908,10 @@ function createTableCell(header, item, isHighlighted, tr) {
 
     // Handle different column types
     if ((header === 'Amount' || header === 'Current' || header === 'Open' || header === 'Prev Close') && value) {
-        value = '$' + Number(value).toLocaleString();
+        value = '$' + Number(value).toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
         if (isHighlighted) {
             td.classList.add('font-bold');
         }

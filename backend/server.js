@@ -15,12 +15,14 @@ const {
 const { fetchNewsData } = require('./services/newsService');
 const { getWatchlist, addToWatchlist, removeFromWatchlist } = require('./services/watchlistService');
 const { fetchRealTimeStockData, getStockData } = require('./services/stockService');
-const { getStockList, getLegislatorList } = require('./services/staticServices');
+const { getStockList, getLegislatorList, getEconomicCalendar } = require('./services/staticServices');
 const { summarizeArticle } = require('./services/openaiService');
 const { generateHomepageCache } = require('./services/homepageService');
+const { fetchSectorData, getSectorData, getSectorSummary, fetchMarketOverview } = require('./services/sectorService');
+
 
 // Caching
-const { getCachedData, setCachedData, getCachedStockData, getCachedIntradayData } = require('./services/cacheService');
+const { getCachedData, setCachedData, getCachedStockData, getCachedIntradayData, isFromToday } = require('./services/cacheService');
 
 // App setup
 const app = express();
@@ -172,7 +174,82 @@ app.post('/api/news/summarize', async (req, res) => { // AI Summary endpoint
     }
 });
 
-// homepage
+// ===== Economic Calendar Endpoints ===== //
+app.get('/api/economic-calendar', async (req, res) => {
+    try {
+        const count = parseInt(req.query.count) || 15;
+        const events = await getEconomicCalendar();
+        res.json({ events: events.slice(0, count) });
+    } catch (error) {
+        console.error('Error fetching economic calendar:', error);
+        res.status(500).json({ error: 'Failed to fetch economic calendar' });
+    }
+});
+
+// ===== Sector Performance Endpoints ===== //
+app.get('/api/sectors', async (req, res) => {
+    try {
+        // Check for cached data first
+        let sectorData = await getSectorData();
+        
+        // Check if cache is from today
+        const needsRefresh = !sectorData || 
+            !sectorData.lastUpdated ||
+            !isFromToday(sectorData.lastUpdated);
+        
+        if (needsRefresh) {
+            console.log('Sector cache stale, fetching fresh data...');
+            sectorData = await fetchSectorData();
+        }
+        
+        if (sectorData) {
+            res.json(sectorData);
+        } else {
+            res.status(503).json({ error: 'Unable to fetch sector data' });
+        }
+    } catch (error) {
+        console.error('Error in sectors endpoint:', error);
+        res.status(500).json({ error: 'Failed to fetch sector data' });
+    }
+});
+app.get('/api/sectors/summary', async (req, res) => {
+    try {
+        const summary = await getSectorSummary();
+        if (summary) {
+            res.json(summary);
+        } else {
+            res.status(503).json({ error: 'Sector data not available' });
+        }
+    } catch (error) {
+        console.error('Error fetching sector summary:', error);
+        res.status(500).json({ error: 'Failed to fetch sector summary' });
+    }
+});
+// Market Overview endpoint
+app.get('/api/market-overview', async (req, res) => {
+    try {
+        // Check cache first (same pattern as sectors - daily refresh)
+        let data = await getCachedData('marketOverview');
+        
+        if (!data) {
+            data = await fetchMarketOverview();
+            if (data) {
+                await setCachedData('marketOverview', data);
+            }
+        }
+        
+        if (data) {
+            res.json(data);
+        } else {
+            res.status(500).json({ error: 'Failed to fetch market overview' });
+        }
+    } catch (error) {
+        console.error('Error in market overview endpoint:', error);
+        res.status(500).json({ error: 'Failed to fetch market overview' });
+    }
+});
+
+// ===== Homepage =====
 app.get('/api/homepage', async (req, res) => {
     try {
         // Check if cached homepage data exists and is valid

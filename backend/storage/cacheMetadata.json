@@ -1,26 +1,38 @@
 {
   "lobbying": {
-    "lastUpdated": "2025-12-02T03:39:51.402Z",
+    "lastUpdated": "2026-01-28T23:10:13.925Z",
     "cacheFile": "lobbyingCache.json"
   },
   "congress": {
-    "lastUpdated": "2025-12-02T03:39:52.830Z",
+    "lastUpdated": "2026-01-28T23:10:15.721Z",
     "cacheFile": "congressCache.json"
   },
   "contracts": {
-    "lastUpdated": "2025-12-02T03:39:53.473Z",
+    "lastUpdated": "2026-01-28T23:10:15.918Z",
     "cacheFile": "contractsCache.json"
   },
   "news": {
-    "lastUpdated": "2025-12-02T03:39:54.238Z",
+    "lastUpdated": "2026-01-28T23:10:19.163Z",
     "cacheFile": "newsCache.json"
   },
   "stockData": {
-    "lastUpdated": "2025-12-02T03:39:56.354Z",
+    "lastUpdated": "2026-01-28T23:10:21.487Z",
     "cacheFile": "stonkData.json"
   },
   "homepage": {
-    "lastUpdated": "2025-12-02T03:39:53.486Z",
+    "lastUpdated": "2026-01-28T23:10:15.931Z",
     "cacheFile": "homepageCache.json"
+  },
+  "intraday": {
+    "lastUpdated": "2026-01-27T01:33:38.485Z",
+    "cacheFile": "intradayCache.json"
+  },
+  "sectors": {
+    "lastUpdated": "2026-01-28T23:10:18.680Z",
+    "cacheFile": "sectorCache.json"
+  },
+  "marketOverview": {
+    "lastUpdated": "2026-01-29T00:04:32.423Z",
+    "cacheFile": "marketOverviewCache.json"
   }
 }
