@@ -72,7 +72,6 @@
 
 .isHighlightedRow {
   background-color: #76ABAE;
-
 }
 
 /* ===== HOMEPAGE REDESIGN STYLES ===== */
@@ -172,7 +171,6 @@
     display: flex;
     flex-direction: column;
 }
-
 .calendar-card {
     background: linear-gradient(145deg, #222831 0%, #1a1d24 100%);
     border-radius: 12px;
@@ -183,7 +181,6 @@
     overflow: hidden;
     max-height: 320px;
 }
-
 .calendar-scroll {
     flex: 1;
     overflow-y: auto;
@@ -191,11 +188,9 @@
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE/Edge */
 }
-
 .calendar-scroll::-webkit-scrollbar {
     display: none; /* Chrome/Safari/Opera */
 } 
-
 .calendar-item {
     display: flex;
     justify-content: space-between;
@@ -207,21 +202,17 @@
     border: 1px solid transparent;
     transition: all 0.2s ease;
 }
-
 .calendar-item:last-child {
     margin-bottom: 0;
 }
-
 .calendar-item:hover {
     background: rgba(118, 171, 174, 0.1);
     border-color: rgba(118, 171, 174, 0.2);
 }
-
 .calendar-item.is-today {
     background: rgba(16, 185, 129, 0.15);
     border-color: rgba(16, 185, 129, 0.3);
 }
-
 .calendar-item.is-tomorrow {
     background: rgba(245, 158, 11, 0.1);
     border-color: rgba(245, 158, 11, 0.2);
@@ -234,7 +225,6 @@
     flex: 1;
     min-width: 0;
 }
-
 .event-icon {
     width: 32px;
     height: 32px;
@@ -245,11 +235,9 @@
     font-size: 1rem;
     flex-shrink: 0;
 }
-
 .event-details {
     min-width: 0;
 }
-
 .event-name {
     font-weight: 600;
     font-size: 0.85rem;
@@ -258,19 +246,16 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
 .event-meta {
     display: flex;
     align-items: center;
     gap: 0.4rem;
     margin-top: 0.15rem;
 }
-
 .event-for {
     font-size: 0.7rem;
     color: rgba(238, 238, 238, 0.5);
 }
-
 .sep-badge {
     font-size: 0.6rem;
     font-weight: 700;
@@ -288,18 +273,15 @@
     flex-shrink: 0;
     margin-left: 0.5rem;
 }
-
 .event-date {
     font-size: 0.75rem;
     font-weight: 600;
     color: #76ABAE;
 }
-
 .event-time {
     font-size: 0.65rem;
     color: rgba(238, 238, 238, 0.5);
 }
-
 .event-countdown {
     font-size: 0.6rem;
     font-weight: 700;
@@ -308,17 +290,14 @@
     background: rgba(118, 171, 174, 0.15);
     color: rgba(238, 238, 238, 0.7);
 }
-
 .event-countdown.countdown-today {
     background: rgba(16, 185, 129, 0.2);
     color: #10b981;
 }
-
 .event-countdown.countdown-tomorrow {
     background: rgba(245, 158, 11, 0.2);
     color: #f59e0b;
 }
-
 .event-countdown.countdown-week {
     background: rgba(118, 171, 174, 0.15);
     color: #76ABAE;
@@ -332,7 +311,6 @@
     flex: 1;
     align-content: center;
 }
-
 .quick-stat {
     text-align: center;
     padding: 0.75rem;
@@ -342,27 +320,23 @@
     transition: all 0.2s ease;
     border: 1px solid transparent;
 }
-
 .quick-stat:hover {
     background: rgba(118, 171, 174, 0.15);
     border-color: rgba(118, 171, 174, 0.2);
     transform: translateY(-2px);
 }
-
 .stat-value {
     font-size: 2rem;
     font-weight: 700;
     color: #76ABAE;
     line-height: 1;
 }
-
 .stat-label {
     font-size: 0.8rem;
     color: #EEEEEE;
     margin-top: 0.35rem;
     font-weight: 500;
 }
-
 .stat-sublabel {
     font-size: 0.7rem;
     color: rgba(238, 238, 238, 0.5);
@@ -377,7 +351,6 @@
     border: 1px solid rgba(118, 171, 174, 0.15);
     flex-shrink: 0; /* ADD - prevents section from shrinking */
 }
-
 .section-header {
     display: flex;
     justify-content: space-between;
@@ -386,13 +359,11 @@
     padding-bottom: 0.75rem;
     border-bottom: 1px solid rgba(118, 171, 174, 0.1);
 }
-
 .section-title {
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
-
 .section-title h2 {
     font-size: 1rem;
     font-weight: 600;
@@ -400,7 +371,6 @@
     letter-spacing: 0.025em;
     text-transform: uppercase;
 }
-
 .section-icon {
     font-size: 1.1rem;
 }
@@ -414,19 +384,16 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
-
 .market-sentiment.bullish {
     background: rgba(74, 222, 128, 0.15);
     color: #4ade80;
     border: 1px solid rgba(74, 222, 128, 0.3);
 }
-
 .market-sentiment.bearish {
     background: rgba(248, 113, 113, 0.15);
     color: #f87171;
     border: 1px solid rgba(248, 113, 113, 0.3);
 }
-
 .market-sentiment.neutral {
     background: rgba(251, 191, 36, 0.15);
     color: #fbbf24;
@@ -453,7 +420,6 @@
     position: relative;
     overflow: hidden;
 }
-
 .sector-card::before {
     content: '';
     position: absolute;
@@ -461,20 +427,17 @@
     left: 0;
     right: 0;
     height: 3px;
-    background: var(--sector-color, #76ABAE);
+    background: var(--sector-color, #000000);
     opacity: 0.8;
 }
-
-.sector-card:hover {
+  .sector-card:hover {
     transform: translateY(-2px);
     border-color: var(--sector-color, rgba(118, 171, 174, 0.3));
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
 }
-
 .sector-card.positive:hover {
     background: rgba(74, 222, 128, 0.08);
 }
-
 .sector-card.negative:hover {
     background: rgba(248, 113, 113, 0.08);
 }
@@ -485,7 +448,6 @@
     color: #EEEEEE;
     margin-bottom: 0.15rem;
 }
-
 .sector-name {
     font-size: 0.65rem;
     color: rgba(238, 238, 238, 0.6);
@@ -494,7 +456,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
 .sector-change {
     font-size: 0.9rem;
     font-weight: 600;
@@ -508,13 +469,11 @@
     margin-bottom: 1.5rem;
     flex-shrink: 0;
 }
-
 .market-overview-grid {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     gap: 0.75rem;
 }
-
 .market-item {
     background: linear-gradient(145deg, #222831 0%, #1a1d24 100%);
     border-radius: 10px;
@@ -523,20 +482,16 @@
     border: 1px solid rgba(118, 171, 174, 0.15);
     transition: all 0.2s ease;
 }
-
 .market-item:hover {
     transform: translateY(-2px);
     border-color: rgba(118, 171, 174, 0.3);
 }
-
 .market-item.positive {
     border-top: 3px solid #4ade80;
 }
-
 .market-item.negative {
     border-top: 3px solid #f87171;
 }
-
 .market-item.market-item-error {
     border-top: 3px solid rgba(118, 171, 174, 0.3);
     opacity: 0.5;

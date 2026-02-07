@@ -518,10 +518,15 @@ function buildMarketOverviewSection() {
     const sortedData = [...marketOverviewData];
     
     return `
-        <div class="sectors-section">
-            <div class="sectors-header">
-                <h3 class="section-title">📈 Market Overview</h3>
-                <span class="market-sentiment-badge ${dollarHealth.class}">${dollarHealth.icon} Dollar: ${dollarHealth.label}</span>
+        <div class="section-container sectors-section">
+            <div class="section-header">
+                <div class="section-title">
+                    <span class="section-icon">📈</span>
+                    <h2>Market Overview</h2>
+                </div>
+                <div class="market-sentiment ${dollarHealth.class}">
+                    ${dollarHealth.icon} Dollar: ${dollarHealth.label}
+                </div>
             </div>
             <div class="sectors-grid">
                 ${sortedData.map(item => {
@@ -538,6 +543,7 @@ function buildMarketOverviewSection() {
                     const isPositive = item.changePercent >= 0;
                     const arrow = isPositive ? '▲' : '▼';
                     const changeClass = isPositive ? 'positive' : 'negative';
+                    const sectorChange = isPositive ? 'up' : 'down';
                     const accentColor = isPositive ? '#4ade80' : '#f87171';
                     
                     // Format price based on value
@@ -555,7 +561,7 @@ function buildMarketOverviewSection() {
                             <div class="sector-symbol">${item.shortName}</div>
                             <div class="sector-name">${item.name}</div>
                             <div class="sector-price">${formattedPrice}</div>
-                            <div class="sector-change ${changeClass}">
+                            <div class="sector-change ${sectorChange}">
                                 ${arrow} ${Math.abs(item.changePercent).toFixed(2)}%
                             </div>
                         </div>
@@ -567,21 +573,21 @@ function buildMarketOverviewSection() {
 }
 function getDollarHealth(dxy) {
     if (!dxy || dxy.error || dxy.changePercent === null) {
-        return { label: 'Unknown', class: 'sentiment-neutral', icon: '⚖️' };
+        return { label: 'Unknown', class: 'neutral', icon: '⚖️' };
     }
     
     const change = dxy.changePercent;
     
     if (change >= 0.5) {
-        return { label: 'Strong', class: 'sentiment-bullish', icon: '💪' };
+        return { label: 'Strong', class: 'bullish', icon: '💪' };
     } else if (change >= 0.1) {
-        return { label: 'Firm', class: 'sentiment-bullish', icon: '📈' };
+        return { label: 'Firm', class: 'bullish', icon: '📈' };
     } else if (change <= -0.5) {
-        return { label: 'Weak', class: 'sentiment-bearish', icon: '📉' };
+        return { label: 'Weak', class: 'bearish', icon: '📉' };
     } else if (change <= -0.1) {
-        return { label: 'Soft', class: 'sentiment-bearish', icon: '😟' };
+        return { label: 'Soft', class: 'bearish', icon: '😟' };
     } else {
-        return { label: 'Stable', class: 'sentiment-neutral', icon: '⚖️' };
+        return { label: 'Stable', class: 'neutral', icon: '⚖️' };
     }
 }
 function switchActivityTab(tabName) {
